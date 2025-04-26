@@ -127,8 +127,10 @@
 
         function submitAnswer() {
             const questionId = document.getElementById('question_id').value;
-            const userCommandInput = document.getElementById('user_command'); // Get the input field
+            const userCommandInput = document.getElementById('user_command'); 
             const userCommand = userCommandInput.value;
+
+            userCommandInput.disabled = true;
 
             fetch('/validate/', {
                 method: 'POST',
@@ -141,17 +143,19 @@
             .then(response => response.json())
             .then(data => {
                 const feedbackElement = document.getElementById('feedback');
-                const livesElement = document.getElementById('lives'); // Get the lives element
+                const livesElement = document.getElementById('lives'); 
 
                 if (data.result === 'correct') {
                     feedbackElement.textContent = 'Correct!';
                     feedbackElement.className = 'feedback correct';
-                    setTimeout(() => window.location.reload(), 1000); // Reload for the next question
+                    setTimeout(() => window.location.reload(), 1000); 
                 } else if (data.result === 'incorrect') {
                     feedbackElement.textContent = 'Incorrect!';
                     feedbackElement.className = 'feedback incorrect';
-                    livesElement.textContent = `Lives: ${data.lives}`; // Update lives in real-time
-                    userCommandInput.value = ''; // Clear the input field
+                    livesElement.textContent = `Lives: ${data.lives}`; 
+                    userCommandInput.value = ''; 
+                    userCommandInput.disabled = false; 
+                    userCommandInput.focus(); // Focus on the input field
                 } else if (data.result === 'game_over') {
                     window.location.href = '/game_over/';
                 }
@@ -159,6 +163,8 @@
             .catch(error => {
                 console.error('Error:', error);
                 alert('An error occurred.');
+                userCommandInput.disabled = false; 
+                userCommandInput.focus(); // Focus on the input field in case of an error
             });
         }
     </script>
