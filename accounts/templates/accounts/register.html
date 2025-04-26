@@ -1,16 +1,27 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
 <head>
     <title>Register</title>
+    <link rel="stylesheet" href="{% static 'accounts/css/style.css' %}">
 </head>
 <body>
     <h1>Register</h1>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form.username.label_tag }} {{ form.username }}<br>
+        {{ form.password1.label_tag }} {{ form.password1 }}<br>
+        {{ form.password2.label_tag }} {{ form.password2 }}<br>
+        {% if form.non_field_errors %}
+            <div class="error">{{ form.non_field_errors }}</div>
+        {% endif %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        {% endfor %}
         <button type="submit">Register</button>
-        <button type="button" onclick="window.location.href='{% url 'login' %}'">Login</button>
-        <a href></a>
+        <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
     </form>
 </body>
 </html>
