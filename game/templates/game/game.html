@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Linux Gamified</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #000;
+            color: #0f0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            height: 100vh;
+        }
+        #header {
+            margin-bottom: 20px;
+        }
+        #header p {
+            margin: 5px 0;
+        }
+        #terminal {
+            background-color: #111;
+            border: 2px solid #0f0;
+            border-radius: 5px;
+            padding: 20px;
+            flex-grow: 1;
+            overflow-y: auto;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        #terminal p {
+            margin: 5px 0;
+        }
+        #prompt {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        #prompt span {
+            margin-right: 10px;
+        }
+        #user_command {
+            background-color: #000;
+            color: #0f0;
+            border: none;
+            outline: none;
+            width: 100%;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+        }
+        #user_command::placeholder {
+            color: #555;
+        }
+        .feedback {
+            margin-top: 10px;
+        }
+        .feedback.correct {
+            color: #4CAF50;
+        }
+        .feedback.incorrect {
+            color: #f44336;
+        }
+    </style>
+    <script>
+        let timer = 60; // 60 seconds timer
+        const mode = "{{ mode }}";
+
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+            const interval = setInterval(() => {
+                if (timer <= 0) {
+                    clearInterval(interval);
+                    alert('Time is up!');
+                    deductLife(); // Deduct a life when time is up
+                } else {
+                    timer--;
+                    timerElement.textContent = `Time Left: ${timer}s`;
+                }
+            }, 1000);
+        }
+
+        function deductLife() {
+            fetch('/time_up/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const livesElement = document.getElementById('lives'); // Get the lives element
+
+                if (data.result === 'game_over') {
+                    window.location.href = '/game_over/';
+                } else if (data.result === 'timeout') {
+                    livesElement.textContent = `Lives: ${data.lives}`; // Update lives in real-time  
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred.');
+            });
+        }
+
+        function disableBackspace(event) {
+            if (mode === 'without_backspace' && event.key === 'Backspace') {
+                event.preventDefault();
+            }
+        }
+
+        function handleKeyDown(event) {
+            if (event.key === 'Enter') {
+                submitAnswer(); // Call the submitAnswer function when Enter is pressed
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            startTimer();
+            if (mode === 'without_backspace') {
+                document.addEventListener('keydown', disableBackspace);
+            }
+        });
+
+        function submitAnswer() {
+            const questionId = document.getElementById('question_id').value;
+            const userCommandInput = document.getElementById('user_command'); // Get the input field
+            const userCommand = userCommandInput.value;
+
+            fetch('/validate/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ question_id: questionId, user_command: userCommand })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const feedbackElement = document.getElementById('feedback');
+                const livesElement = document.getElementById('lives'); // Get the lives element
+
+                if (data.result === 'correct') {
+                    feedbackElement.textContent = 'Correct!';
+                    feedbackElement.className = 'feedback correct';
+                    setTimeout(() => window.location.reload(), 1000); // Reload for the next question
+                } else if (data.result === 'incorrect') {
+                    feedbackElement.textContent = 'Incorrect!';
+                    feedbackElement.className = 'feedback incorrect';
+                    livesElement.textContent = `Lives: ${data.lives}`; // Update lives in real-time
+                    userCommandInput.value = ''; // Clear the input field
+                } else if (data.result === 'game_over') {
+                    window.location.href = '/game_over/';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred.');
+            });
+        }
+    </script>
+</head>
+<body>
+    <div id="header">
+        <p id="timer">Time Left: 60s</p>
+        <p id="score">Score: {{ score }}</p>
+        <p id="lives">Lives: {{ lives }}</p>
+    </div>
+    <div id="terminal">
+        <p><strong>Task:</strong> {{ question.task }}</p>
+        <div id="prompt">
+            <span>{{ player }}@linux-gamified:~$</span>
+            <input type="hidden" id="question_id" value="{{ question.id }}">
+            <input type="text" id="user_command" placeholder="Type your command here" autocomplete="off" onkeydown="handleKeyDown(event)" autofocus>
+        </div>
+        <p id="feedback" class="feedback"></p>
+    </div>
+</body>
+</html>
