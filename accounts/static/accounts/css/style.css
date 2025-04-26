@@ -15,14 +15,12 @@ h1 {
     text-align: center;
     margin-bottom: 40px; /* Increased spacing */
     padding-right: 40px;
-    text-shadow: 0 0 10px #0f0;
 }
 
 form {
     background: #111;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
     width: 300px;
     color: #0f0;
 }
@@ -37,7 +35,6 @@ button {
     margin-top: 10px;
     width: 100%;
     font-size: 16px;
-    text-shadow: 0 0 5px #0f0;
 }
 
 button:hover {
@@ -51,7 +48,6 @@ a {
     margin-top: 10px;
     color: #0f0;
     text-decoration: none;
-    text-shadow: 0 0 5px #0f0;
 }
 
 a:hover {

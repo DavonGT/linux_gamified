@@ -9,9 +9,18 @@
     <h1>Login</h1>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form.username.label_tag }} {{ form.username }}<br>
+        {{ form.password.label_tag }} {{ form.password }}<br>
+        {% if form.non_field_errors %}
+            <div class="error">{{ form.non_field_errors }}</div>
+        {% endif %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        {% endfor %}
         <button type="submit">Login</button>
-        <button type="button" onclick="window.location.href='{% url 'register' %}'">Sign Up</button>
+        <p>Don't have an account? <a href="{% url 'register' %}">Signup</a></p>
     </form>
 </body>
 </html>
