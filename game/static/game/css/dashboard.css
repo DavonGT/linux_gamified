@@ -1,0 +1,51 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #000;
+    color: #0f0;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #0f0;
+    margin-bottom: 20px;
+}
+
+.stats {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+button {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: 1px solid #0f0;
+    background-color: #000;
+    color: #0f0;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #111;
+}
+
+table.leaderboard {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    color: #0f0;
+}
+
+table.leaderboard th, table.leaderboard td {
+    border: 1px solid #0f0;
+    padding: 8px;
+    text-align: center;
+}
+
+table.leaderboard th {
+    background-color: #111;
+    color: #0f0;
+}

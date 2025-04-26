@@ -123,3 +123,30 @@ def game_over(request):
     return render(request, 'game/game_over.html', {
         'score': final_score
     })
+
+@login_required
+def practice_mode(request):
+    question = random.choice(Question.objects.all())  # Get a random question
+    return render(request, 'game/practice.html', {
+        'question': question,
+        'player': request.user.username,
+    })
+
+@csrf_exempt
+def validate_practice_answer(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            question_id = int(data.get('question_id'))
+            user_command = data.get('user_command', '').strip()
+
+            if not question_id or not user_command:
+                return JsonResponse({'error': 'Missing or invalid question_id or user_command'}, status=400)
+
+            question = Question.objects.get(id=question_id)
+            if question.is_correct(user_command):
+                return JsonResponse({'result': 'correct'})
+            return JsonResponse({'result': 'incorrect'})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)

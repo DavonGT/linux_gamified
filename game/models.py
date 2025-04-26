@@ -10,7 +10,7 @@ class Question(models.Model):
     task = models.TextField()  # The task/question for the player
     correct_commands = models.TextField()  # Store multiple correct commands as a comma-separated list
     difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES, default='easy')  # Difficulty level
-
+    hint = models.TextField(default='No hints for this task', blank=True)  # Optional hint for the question
     def __str__(self):
         return self.task
 

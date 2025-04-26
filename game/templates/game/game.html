@@ -1,69 +1,9 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
 <head>
     <title>Linux Gamified</title>
-    <style>
-        body {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #000;
-            color: #0f0;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            height: 100vh;
-        }
-        #header {
-            margin-bottom: 20px;
-        }
-        #header p {
-            margin: 5px 0;
-        }
-        #terminal {
-            background-color: #111;
-            border: 2px solid #0f0;
-            border-radius: 5px;
-            padding: 20px;
-            flex-grow: 1;
-            overflow-y: auto;
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        #terminal p {
-            margin: 5px 0;
-        }
-        #prompt {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
-        }
-        #prompt span {
-            margin-right: 10px;
-        }
-        #user_command {
-            background-color: #000;
-            color: #0f0;
-            border: none;
-            outline: none;
-            width: 100%;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1rem;
-        }
-        #user_command::placeholder {
-            color: #555;
-        }
-        .feedback {
-            margin-top: 10px;
-        }
-        .feedback.correct {
-            color: #4CAF50;
-        }
-        .feedback.incorrect {
-            color: #f44336;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'game/css/game.css' %}">
     <script>
         let timer = 60; // 60 seconds timer
         const mode = "{{ mode }}";
@@ -74,7 +14,7 @@
                 if (timer <= 0) {
                     clearInterval(interval);
                     alert('Time is up!');
-                    deductLife(); // Deduct a life when time is up
+                    deductLife();
                 } else {
                     timer--;
                     timerElement.textContent = `Time Left: ${timer}s`;
@@ -92,12 +32,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                const livesElement = document.getElementById('lives'); // Get the lives element
-
+                const livesElement = document.getElementById('lives');
                 if (data.result === 'game_over') {
                     window.location.href = '/game_over/';
                 } else if (data.result === 'timeout') {
-                    livesElement.textContent = `Lives: ${data.lives}`; // Update lives in real-time  
+                    livesElement.textContent = `Lives: ${data.lives}`;
                 }
             })
             .catch(error => {
@@ -114,7 +53,7 @@
 
         function handleKeyDown(event) {
             if (event.key === 'Enter') {
-                submitAnswer(); // Call the submitAnswer function when Enter is pressed
+                submitAnswer();
             }
         }
 
@@ -127,7 +66,7 @@
 
         function submitAnswer() {
             const questionId = document.getElementById('question_id').value;
-            const userCommandInput = document.getElementById('user_command'); 
+            const userCommandInput = document.getElementById('user_command');
             const userCommand = userCommandInput.value;
 
             userCommandInput.disabled = true;
@@ -143,19 +82,19 @@
             .then(response => response.json())
             .then(data => {
                 const feedbackElement = document.getElementById('feedback');
-                const livesElement = document.getElementById('lives'); 
+                const livesElement = document.getElementById('lives');
 
                 if (data.result === 'correct') {
                     feedbackElement.textContent = 'Correct!';
                     feedbackElement.className = 'feedback correct';
-                    setTimeout(() => window.location.reload(), 1000); 
+                    setTimeout(() => window.location.reload(), 1000);
                 } else if (data.result === 'incorrect') {
                     feedbackElement.textContent = 'Incorrect!';
                     feedbackElement.className = 'feedback incorrect';
-                    livesElement.textContent = `Lives: ${data.lives}`; 
-                    userCommandInput.value = ''; 
-                    userCommandInput.disabled = false; 
-                    userCommandInput.focus(); // Focus on the input field
+                    livesElement.textContent = `Lives: ${data.lives}`;
+                    userCommandInput.value = '';
+                    userCommandInput.disabled = false;
+                    userCommandInput.focus();
                 } else if (data.result === 'game_over') {
                     window.location.href = '/game_over/';
                 }
@@ -163,8 +102,8 @@
             .catch(error => {
                 console.error('Error:', error);
                 alert('An error occurred.');
-                userCommandInput.disabled = false; 
-                userCommandInput.focus(); // Focus on the input field in case of an error
+                userCommandInput.disabled = false;
+                userCommandInput.focus();
             });
         }
     </script>

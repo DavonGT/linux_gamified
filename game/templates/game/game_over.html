@@ -1,40 +1,9 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
 <head>
     <title>Game Over</title>
-    <style>
-        body {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #000;
-            color: #0f0;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        h1 {
-            color: #f44336;
-        }
-        p {
-            font-size: 1.2rem;
-        }
-        button {
-            padding: 10px 20px;
-            margin-top: 20px;
-            border: 2px solid #0f0;
-            border-radius: 4px;
-            font-size: 1rem;
-            cursor: pointer;
-            background-color: #111;
-            color: #0f0;
-        }
-        button:hover {
-            background-color: #222;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'game/css/game_over.css' %}">
 </head>
 <body>
     <h1>Game Over</h1>

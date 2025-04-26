@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <title>Practice Mode</title>
+    <link rel="stylesheet" href="{% static 'game/css/prac_style.css' %}">
+    <script>
+        function showHint() {
+            document.getElementById('hint').style.display = 'block';
+        }
+
+        function submitPracticeAnswer() {
+            const questionId = document.getElementById('question_id').value;
+            const userCommandInput = document.getElementById('user_command');
+            const userCommand = userCommandInput.value.trim();
+
+            if (!userCommand) {
+                document.getElementById('feedback').textContent = 'Command cannot be empty!';
+                document.getElementById('feedback').className = 'feedback incorrect';
+                userCommandInput.focus();
+                return;
+            }
+
+            userCommandInput.disabled = true;
+
+            fetch('/validate_practice_answer/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ question_id: questionId, user_command: userCommand })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const feedbackElement = document.getElementById('feedback');
+                if (data.result === 'correct') {
+                    feedbackElement.textContent = 'Correct!';
+                    feedbackElement.className = 'feedback correct';
+                    setTimeout(() => window.location.reload(), 1000);
+                } else {
+                    feedbackElement.textContent = 'Incorrect! Try again.';
+                    feedbackElement.className = 'feedback incorrect';
+                    userCommandInput.value = '';
+                    userCommandInput.disabled = false;
+                    userCommandInput.focus();
+                }
+            })
+            .catch(() => {
+                alert('An error occurred.');
+                userCommandInput.disabled = false;
+                userCommandInput.focus();
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('user_command').focus();
+        });
+    </script>
+</head>
+<body>
+    <div id="terminal">
+        <p><strong>Task:</strong> {{ question.task }}</p>
+        <div id="prompt">
+            <span>{{ player }}@linux-gamified:~$</span>
+            <input type="hidden" id="question_id" value="{{ question.id }}">
+            <input type="text" id="user_command" placeholder="Type your command here" autofocus autocomplete=off onkeydown="if(event.key === 'Enter') submitPracticeAnswer()">
+        </div>
+        <p id="feedback" class="feedback"></p>
+        <button id="hint-button" onclick="showHint()">Show Hint</button>
+        <p id="hint" style="display: none;">Hint: {{ question.hint }}</p>
+    </div>
+</body>
+</html>

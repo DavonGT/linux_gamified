@@ -1,74 +1,9 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
 <head>
     <title>Dashboard</title>
-    <style>
-        body {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #000;
-            color: #0f0;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            min-height: 100vh;
-        }
-        h1 {
-            color: #4CAF50;
-            margin-bottom: 20px;
-        }
-        p {
-            font-size: 1.2rem;
-            margin: 10px 0;
-        }
-        a, button {
-            color: #0f0;
-            text-decoration: none;
-            font-weight: bold;
-            background-color: #111;
-            border: 2px solid #0f0;
-            border-radius: 4px;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 1rem;
-            margin: 10px;
-        }
-        a:hover, button:hover {
-            background-color: #222;
-        }
-        .leaderboard {
-            margin-top: 30px;
-            width: 80%;
-            max-width: 600px;
-            border-collapse: collapse;
-            border: 2px solid #0f0;
-            background-color: #111;
-        }
-        .leaderboard th, .leaderboard td {
-            border: 1px solid #0f0;
-            padding: 10px;
-            text-align: center;
-        }
-        .leaderboard th {
-            background-color: #222;
-            color: #0f0;
-        }
-        .leaderboard tr:nth-child(even) {
-            background-color: #111;
-        }
-        .leaderboard tr:hover {
-            background-color: #222;
-        }
-        .leaderboard td {
-            font-size: 1rem;
-        }
-        .stats {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'game/css/dashboard.css' %}">
 </head>
 <body>
     <h1>Welcome, {{ player.username }}</h1>
