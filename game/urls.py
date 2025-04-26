@@ -2,8 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.select_mode, name='select_mode'),
-    path('dashboard/', views.dashboard, name='dashboard'),
+    path('select_mode/', views.select_mode, name='select_mode'),
+    path('', views.dashboard, name='dashboard'),
     path('set_mode/<str:mode>/', views.set_mode, name='set_mode'),
     path('game/', views.game_view, name='game'),
     path('validate/', views.validate_answer, name='validate_answer'),
