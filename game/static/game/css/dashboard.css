@@ -15,6 +15,10 @@ h1 {
 .stats {
     text-align: center;
     margin-bottom: 20px;
+    background-color: #111;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #0f0;
 }
 
 button {
@@ -49,4 +53,12 @@ table.leaderboard th, table.leaderboard td {
 table.leaderboard th {
     background-color: #111;
     color: #0f0;
+}
+
+table.leaderboard tr:nth-child(even) {
+    background-color: #111;
+}
+
+table.leaderboard tr:nth-child(odd) {
+    background-color: #000;
 }

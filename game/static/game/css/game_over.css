@@ -8,8 +8,17 @@ body {
 }
 
 h1 {
-    font-size: 36px;
-    margin-bottom: 20px;
+    font-size: 48px;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        color: #4CAF50;
+    }
+    50% {
+        color: #0f0;
+    }
 }
 
 p {

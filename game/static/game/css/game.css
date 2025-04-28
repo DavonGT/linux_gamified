@@ -53,6 +53,8 @@ body {
 
 .feedback {
     margin-top: 10px;
+    font-weight: bold;
+    animation: fadeIn 0.5s ease;
 }
 
 .feedback.correct {
@@ -61,4 +63,13 @@ body {
 
 .feedback.incorrect {
     color: #f44336;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
