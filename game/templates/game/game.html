@@ -60,8 +60,30 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             startTimer();
+
             if (mode === 'without_backspace') {
+                // Disable backspace
                 document.addEventListener('keydown', disableBackspace);
+
+                // Disable text selection
+                const userCommandInput = document.getElementById('user_command');
+                userCommandInput.addEventListener('selectstart', (event) => event.preventDefault());
+
+                // Disable pasting
+                userCommandInput.addEventListener('paste', (event) => event.preventDefault());
+
+                // Prevent replacing highlighted text
+                userCommandInput.addEventListener('mousedown', (event) => {
+                    if (window.getSelection().toString()) {
+                        event.preventDefault(); // Prevent highlighting
+                    }
+                });
+
+                userCommandInput.addEventListener('keydown', (event) => {
+                    if (window.getSelection().toString().length > 0) {
+                        event.preventDefault(); // Prevent replacing highlighted text only if text is selected
+                    }
+                });
             }
         });
 
