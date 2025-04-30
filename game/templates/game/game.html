@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{% static 'game/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'game/css/game.css' %}">
     <script>
-        let timer = 60; // 60 seconds timer
+        let timer = {{ time }}; // Timer for time-based modes
         const mode = "{{ mode }}";
 
         function startTimer() {
@@ -14,8 +14,16 @@
             const interval = setInterval(() => {
                 if (timer <= 0) {
                     clearInterval(interval);
-                    alert('Time is up!');
-                    deductLife();
+                    if (mode.includes('time_attack')) {
+                        alert('Time is up! Game over.');
+                        window.location.href = '/game_over/';
+                    } else {
+                        deductLife();
+                        alert('Time is up! You lost a life.');
+                        timer = 10; // Reset timer
+                        timerElement.textContent = `Time Left: ${timer}s`;
+                        startTimer(); // Restart timer
+                    }
                 } else {
                     timer--;
                     timerElement.textContent = `Time Left: ${timer}s`;
@@ -47,7 +55,7 @@
         }
 
         function disableBackspace(event) {
-            if (mode === 'without_backspace' && event.key === 'Backspace') {
+            if ((mode === 'hardcore_time_attack' || mode === 'hardcore_survival') && event.key === 'Backspace') {
                 event.preventDefault();
             }
         }
@@ -61,7 +69,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             startTimer();
 
-            if (mode === 'without_backspace') {
+            if (mode === 'hardcore_time_attack' || mode === 'hardcore_survival') {
                 // Disable backspace
                 document.addEventListener('keydown', disableBackspace);
 
@@ -133,9 +141,15 @@
 </head>
 <body>
     <div id="header">
-        <p id="timer">Time Left: 60s</p>
+        {% if time != None %}
+            <p id="timer">Time Left: {{ time }}s</p>
+        {% endif %}
+        
         <p id="score">Score: {{ score }}</p>
-        <p id="lives">Lives: {{ lives }}</p>
+
+        {% if lives != None  %}
+            <p id="lives">Lives: {{ lives }}</p>
+        {% endif %}
     </div>
     <div id="terminal">
         <p><strong>Task:</strong> {{ question.task }}</p>

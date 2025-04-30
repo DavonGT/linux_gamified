@@ -10,8 +10,14 @@
     <form method="post">
         {% csrf_token %}
         {{ form.username.label_tag }} {{ form.username }}<br>
+        {{ form.email.label_tag }} {{ form.email }}<br>
         {{ form.password1.label_tag }} {{ form.password1 }}<br>
         {{ form.password2.label_tag }} {{ form.password2 }}<br>
+        {{ form.first_name.label_tag }} {{ form.first_name }}<br>
+        {{ form.middle_name.label_tag }} {{ form.middle_name }}<br>
+        {{ form.last_name.label_tag }} {{ form.last_name }}<br>
+        {{ form.student_id.label_tag }} {{ form.student_id }}<br>
+        {{ form.year_level.label_tag }} {{ form.year_level }}<br>
         {% if form.non_field_errors %}
             <div class="error">{{ form.non_field_errors }}</div>
         {% endif %}

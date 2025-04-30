@@ -7,7 +7,11 @@ def register(request):
     if request.method == 'POST':
         form = PlayerRegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            user = form.save(commit=False)
+            user.middle_name = form.cleaned_data.get('middle_name')
+            user.student_id = form.cleaned_data.get('student_id')
+            user.year_level = form.cleaned_data.get('year_level')
+            user.save()
             login(request, user)
             return redirect('dashboard')  # Redirect to the dashboard
     else:

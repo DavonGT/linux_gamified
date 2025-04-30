@@ -36,55 +36,62 @@ def select_mode(request):
     return render(request, 'game/select_mode.html')
 
 def set_mode(request, mode):
-    # Set the gameplay mode (with or without backspace)
-    if mode in ['with_backspace', 'without_backspace']:
+    # Set the gameplay mode based on the selected option
+    if mode in ['survival', 'time_attack', 'hardcore_survival', 'hardcore_time_attack']:
         request.session['mode'] = mode
         request.session['score'] = 0  # Reset the score
-        request.session['lives'] = 3  # Initialize lives
-    return redirect('game')
+        if 'survival' in mode:
+            request.session['lives'] = 3  # Initialize lives for survival modes
+        else:
+            request.session['lives'] = None  # No lives for time attack modes
+        return redirect('game')
+    return redirect('select_mode')  # Redirect to mode selection if invalid mode
 
 @login_required
 def game_view(request):
+    # Set default time for time-based modes
+    time = 20 if 'time_attack' in request.session['mode'] else None
+
     # Ensure the mode is set before starting the game
     if 'mode' not in request.session:
         return redirect('select_mode')
 
-    if request.session['lives'] <= 0:
-        return redirect('game_over')  # Redirect to game over if no lives left
+    # Check for game over conditions
+    if request.session['mode'] in ['survival', 'hardcore_survival'] and request.session['lives'] <= 0:
+        return redirect('game_over')
 
     question = random.choice(Question.objects.all())  # Get a random question
     mode = request.session['mode']
-    print(request.user.username)
     return render(request, 'game/game.html', {
+        'time': time,
         'question': question,
         'score': request.session['score'],
-        'lives': request.session['lives'],  # Pass lives to the template
+        'lives': request.session.get('lives'),  # Pass lives to the template
         'mode': mode,
         'player': request.user.username,
     })
 
-@csrf_exempt  # Temporarily disable CSRF for testing (remove this in production)
+@csrf_exempt
 def validate_answer(request):
     if request.method == 'POST':
         try:
-            data = json.loads(request.body)  # Parse JSON data
+            data = json.loads(request.body)
             question_id = data.get('question_id')
             user_command = data.get('user_command')
 
             question = Question.objects.get(id=question_id)
             if question.is_correct(user_command):
-                # Update the player's score
                 points = question.get_points()
-                if request.session.get('mode') == 'without_backspace':
-                    points += 10  # Bonus points for "without backspace" mode
+                if 'hardcore' in request.session.get('mode', ''):
+                    points += 10  # Bonus points for hardcore modes
                 request.session['score'] = request.session.get('score', 0) + points
-                return JsonResponse({'result': 'correct', 'score': request.session['score'], 'lives': request.session['lives']})
+                return JsonResponse({'result': 'correct', 'score': request.session['score'], 'lives': request.session.get('lives')})
             else:
-                # Deduct a life for a wrong answer
-                request.session['lives'] -= 1
-                if request.session['lives'] <= 0:
-                    return JsonResponse({'result': 'game_over', 'score': request.session['score'], 'lives': 0})
-                return JsonResponse({'result': 'incorrect', 'score': request.session['score'], 'lives': request.session['lives']})
+                if 'survival' in request.session.get('mode', ''):
+                    request.session['lives'] -= 1
+                    if request.session['lives'] <= 0:
+                        return JsonResponse({'result': 'game_over', 'score': request.session['score'], 'lives': 0})
+                return JsonResponse({'result': 'incorrect', 'score': request.session['score'], 'lives': request.session.get('lives')})
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
     return JsonResponse({'error': 'Invalid request method'}, status=405)
@@ -92,15 +99,13 @@ def validate_answer(request):
 @login_required
 def time_up(request):
     if request.method == 'POST':
-        # Deduct a life from the player
-        request.session['lives'] = request.session.get('lives', 3) - 1
-
-        # Check if the player has no lives left
-        if request.session['lives'] <= 0:
-            return JsonResponse({'result': 'game_over', 'score': request.session.get('score', 0), 'lives': 0})
-
-        # Return the updated lives count
-        return JsonResponse({'result': 'timeout', 'lives': request.session['lives']})
+        if 'time_attack' in request.session.get('mode', ''):
+            return JsonResponse({'result': 'timeout', 'score': request.session.get('score', 0)})
+        elif 'survival' in request.session.get('mode', ''):
+            request.session['lives'] -= 1
+            if request.session['lives'] <= 0:
+                return JsonResponse({'result': 'game_over', 'score': request.session.get('score', 0), 'lives': 0})
+            return JsonResponse({'result': 'timeout', 'lives': request.session['lives']})
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 def game_over(request):

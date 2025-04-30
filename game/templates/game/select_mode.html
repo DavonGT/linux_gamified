@@ -8,8 +8,25 @@
 </head>
 <body>
     <h1>Select Gameplay Mode</h1>
-    <button class="with-backspace" onclick="window.location.href='/practice/'">Practice Mode</button>
-    <button class="with-backspace" onclick="window.location.href='/set_mode/with_backspace/'">With Backspace</button>
-    <button class="without-backspace" onclick="window.location.href='/set_mode/without_backspace/'">Without Backspace</button>
+    <div class="tooltip">
+        <button class="practice" onclick="window.location.href='/set_mode/practice/'">Practice</button>
+        <span class="tooltiptext">Practice mode allows you to play without any time limits or penalties. HINTS INCLUDED</span>
+    </div>
+    <div class="tooltip">
+        <button class="survival" onclick="window.location.href='/set_mode/survival/'">Survival</button>
+        <span class="tooltiptext">Survival mode challenges you to survive as long as possible with limited lives.</span>
+    </div>
+    <div class="tooltip">
+        <button class="time-attack" onclick="window.location.href='/set_mode/time_attack/'">Time Attack</button>
+        <span class="tooltiptext">Time Attack mode requires you to complete levels as quickly as possible.</span>
+    </div>
+    <div class="tooltip">
+        <button class="hardcore-survival" onclick="window.location.href='/set_mode/hardcore_survival/'">Hardcore Survival</button>
+        <span class="tooltiptext">Hardcore Survival mode is a challenging version of Survival mode without backspace.</span>
+    </div>
+    <div class="tooltip">
+        <button class="hardcore-time-attack" onclick="window.location.href='/set_mode/hardcore_time_attack/'">Hardcore Time Attack</button>
+        <span class="tooltiptext">Hardcore Time Attack mode is a challenging version of Time Attack mode without backspace.</span>
+    </div>
 </body>
 </html>
