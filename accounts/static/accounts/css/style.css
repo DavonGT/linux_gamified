@@ -78,5 +78,10 @@ input:focus {
 
 .error {
     color: red;
-    
+
+}
+
+li {
+    list-style-type: none;
+    color: red;
 }
