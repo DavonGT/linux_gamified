@@ -65,6 +65,10 @@ body {
     color: #f44336;
 }
 
+.feedback.error {
+    color: #f4f136;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

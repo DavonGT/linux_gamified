@@ -5,150 +5,28 @@
     <title>Linux Gamified</title>
     <link rel="stylesheet" href="{% static 'game/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'game/css/game.css' %}">
-    <script>
-        let timer = {{ time }}; // Timer for time-based modes
-        const mode = "{{ mode }}";
-
-        function startTimer() {
-            const timerElement = document.getElementById('timer');
-            const interval = setInterval(() => {
-                if (timer <= 0) {
-                    clearInterval(interval);
-                    if (mode.includes('time_attack')) {
-                        alert('Time is up! Game over.');
-                        window.location.href = '/game_over/';
-                    } else {
-                        deductLife();
-                        alert('Time is up! You lost a life.');
-                        timer = 10; // Reset timer
-                        timerElement.textContent = `Time Left: ${timer}s`;
-                        startTimer(); // Restart timer
-                    }
-                } else {
-                    timer--;
-                    timerElement.textContent = `Time Left: ${timer}s`;
-                }
-            }, 1000);
+    <style>
+        .feedback.incorrect {
+            color: #ff0000;
+            font-weight: bold;
         }
-
-        function deductLife() {
-            fetch('/time_up/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                const livesElement = document.getElementById('lives');
-                if (data.result === 'game_over') {
-                    window.location.href = '/game_over/';
-                } else if (data.result === 'timeout') {
-                    livesElement.textContent = `Lives: ${data.lives}`;
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred.');
-            });
+        .game-over {
+            color: #ff0000;
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 50px;
         }
-
-        function disableBackspace(event) {
-            if ((mode === 'hardcore_time_attack' || mode === 'hardcore_survival') && event.key === 'Backspace') {
-                event.preventDefault();
-            }
-        }
-
-        function handleKeyDown(event) {
-            if (event.key === 'Enter') {
-                submitAnswer();
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            startTimer();
-
-            if (mode === 'hardcore_time_attack' || mode === 'hardcore_survival') {
-                // Disable backspace
-                document.addEventListener('keydown', disableBackspace);
-
-                // Disable text selection
-                const userCommandInput = document.getElementById('user_command');
-                userCommandInput.addEventListener('selectstart', (event) => event.preventDefault());
-
-                // Disable pasting
-                userCommandInput.addEventListener('paste', (event) => event.preventDefault());
-
-                // Prevent replacing highlighted text
-                userCommandInput.addEventListener('mousedown', (event) => {
-                    if (window.getSelection().toString()) {
-                        event.preventDefault(); // Prevent highlighting
-                    }
-                });
-
-                userCommandInput.addEventListener('keydown', (event) => {
-                    if (window.getSelection().toString().length > 0) {
-                        event.preventDefault(); // Prevent replacing highlighted text only if text is selected
-                    }
-                });
-            }
-        });
-
-        function submitAnswer() {
-            const questionId = document.getElementById('question_id').value;
-            const userCommandInput = document.getElementById('user_command');
-            const userCommand = userCommandInput.value;
-
-            userCommandInput.disabled = true;
-
-            fetch('/validate/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: JSON.stringify({ question_id: questionId, user_command: userCommand })
-            })
-            .then(response => response.json())
-            .then(data => {
-                const feedbackElement = document.getElementById('feedback');
-                const livesElement = document.getElementById('lives');
-
-                if (data.result === 'correct') {
-                    feedbackElement.textContent = 'Correct!';
-                    feedbackElement.className = 'feedback correct';
-                    setTimeout(() => window.location.reload(), 1000);
-                } else if (data.result === 'incorrect') {
-                    feedbackElement.textContent = 'Incorrect!';
-                    feedbackElement.className = 'feedback incorrect';
-                    livesElement.textContent = `Lives: ${data.lives}`;
-                    userCommandInput.value = '';
-                    userCommandInput.disabled = false;
-                    userCommandInput.focus();
-                } else if (data.result === 'game_over') {
-                    window.location.href = '/game_over/';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred.');
-                userCommandInput.disabled = false;
-                userCommandInput.focus();
-            });
-        }
-    </script>
+    </style>
 </head>
 <body>
     <div id="header">
         {% if time != None %}
-            <p id="timer">Time Left: {{ time }}s</p>
+            <p id="timer">Time Left: <span id="time-value">{{ time }}</span>s</p>
         {% endif %}
-        
         <p id="score">Score: {{ score }}</p>
-
-        {% if lives != None  %}
-            <p id="lives">Lives: {{ lives }}</p>
+        {% if lives != None %}
+            <p id="lives">Lives: <span id="lives-value">{{ lives }}</span></p>
         {% endif %}
     </div>
     <div id="terminal">
@@ -156,9 +34,182 @@
         <div id="prompt">
             <span>{{ player }}@linux-gamified:~$</span>
             <input type="hidden" id="question_id" value="{{ question.id }}">
-            <input type="text" id="user_command" placeholder="Type your command here" autocomplete="off" onkeydown="handleKeyDown(event)" autofocus>
+            <input type="text" id="user_command" 
+                   placeholder="Type your command here" 
+                   autocomplete="off" 
+                   autofocus>
         </div>
-        <p id="feedback" class="feedback"></p>
+        <div id="feedback-container">
+            <p id="feedback" class="feedback"></p>
+            <p id="game-over-message" class="game-over" style="display: none;">GAME OVER</p>
+        </div>
     </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            timer: null,
+            timeLeft: {{ time|default_if_none:0 }},
+            mode: "{{ mode }}",
+            csrfToken: "{{ csrf_token }}",
+            isGameOver: false
+        };
+
+        // DOM elements
+        const elements = {
+            timer: document.getElementById('time-value'),
+            score: document.getElementById('score'),
+            lives: document.getElementById('lives-value'),
+            userCommand: document.getElementById('user_command'),
+            feedback: document.getElementById('feedback'),
+            gameOverMsg: document.getElementById('game-over-message'),
+            terminal: document.getElementById('terminal')
+        };
+
+        // Initialize game
+        function initGame() {
+            if (gameState.timeLeft > 0) {
+                startTimer();
+            }
+            setupEventListeners();
+        }
+
+        function startTimer() {
+            gameState.timer = setInterval(() => {
+                gameState.timeLeft--;
+                elements.timer.textContent = gameState.timeLeft;
+                
+                if (gameState.timeLeft <= 0) {
+                    clearInterval(gameState.timer);
+                    handleTimeUp();
+                }
+            }, 1000);
+        }
+
+        function setupEventListeners() {
+            elements.userCommand.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !gameState.isGameOver) {
+                    submitAnswer();
+                }
+            });
+        }
+
+        async function submitAnswer() {
+            if (gameState.isGameOver) return;
+            
+            const command = elements.userCommand.value.trim();
+            if (!command) return;
+
+            disableInput();
+            
+            try {
+                const response = await fetch('/validate/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': gameState.csrfToken
+                    },
+                    body: JSON.stringify({
+                        question_id: document.getElementById('question_id').value,
+                        user_command: command,
+                        current_time: gameState.timeLeft
+                    })
+                });
+                
+                const data = await response.json();
+                handleResponse(data);
+            } catch (error) {
+                console.error('Error:', error);
+                showFeedback("An error occurred", 'error');
+                enableInput();
+            }
+        }
+
+        function handleResponse(data) {
+            if (data.result === 'correct') {
+                handleCorrectAnswer(data);
+            } else if (data.result === 'incorrect') {
+                handleIncorrectAnswer(data);
+            } else if (data.result === 'game_over') {
+                handleGameOver(data);
+            }
+        }
+
+        function handleCorrectAnswer(data) {
+            showFeedback('Correct!', 'success');
+            setTimeout(() => {
+                if (data.time !== undefined) {
+                    gameState.timeLeft = data.time;
+                    elements.timer.textContent = gameState.timeLeft;
+                }
+                location.reload();
+            }, 1000);
+        }
+
+        function handleIncorrectAnswer(data) {
+            showFeedback('Incorrect!', 'incorrect');
+            if (elements.lives && data.lives !== undefined) {
+                elements.lives.textContent = data.lives;
+            }
+            setTimeout(() => {
+                elements.userCommand.value = '';
+                enableInput();
+                if (data.time !== undefined) {
+                    gameState.timeLeft = data.time;
+                    elements.timer.textContent = gameState.timeLeft;
+                }
+            }, 1000);
+        }
+
+        function handleGameOver(data) {
+            gameState.isGameOver = true;
+            clearInterval(gameState.timer);
+            elements.feedback.style.display = 'none';
+            elements.gameOverMsg.style.display = 'block';
+            if (elements.lives) {
+                elements.lives.textContent = '0';
+            }
+            disableInput();
+            
+            setTimeout(() => {
+                location.href = '/game_over/';
+            }, 2000);
+        }
+
+        function handleTimeUp() {
+            fetch('/time_up/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': gameState.csrfToken
+                },
+                body: JSON.stringify({ current_time: gameState.timeLeft })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.result === 'game_over') {
+                    handleGameOver(data);
+                }
+            })
+            .catch(console.error);
+        }
+
+        function disableInput() {
+            elements.userCommand.disabled = true;
+        }
+
+        function enableInput() {
+            elements.userCommand.disabled = false;
+            elements.userCommand.focus();
+        }
+
+        function showFeedback(message, type) {
+            elements.feedback.textContent = message;
+            elements.feedback.className = `feedback ${type}`;
+            elements.feedback.style.display = 'block';
+        }
+
+        document.addEventListener('DOMContentLoaded', initGame);
+    </script>
 </body>
 </html>

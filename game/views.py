@@ -42,8 +42,9 @@ def set_mode(request, mode):
         request.session['score'] = 0  # Reset the score
         if 'survival' in mode:
             request.session['lives'] = 3  # Initialize lives for survival modes
-        else:
-            request.session['lives'] = None  # No lives for time attack modes
+        elif 'time_attack' in mode:
+            request.session['time'] = 20
+            request.session['lives'] = None
         return redirect('game')
     return redirect('select_mode')  # Redirect to mode selection if invalid mode
 
@@ -51,6 +52,8 @@ def set_mode(request, mode):
 def game_view(request):
     # Set default time for time-based modes
     time = 20 if 'time_attack' in request.session['mode'] else None
+    if time != None and request.session['time'] > time :
+        time = request.session.get('time')
 
     # Ensure the mode is set before starting the game
     if 'mode' not in request.session:
@@ -78,34 +81,97 @@ def validate_answer(request):
             data = json.loads(request.body)
             question_id = data.get('question_id')
             user_command = data.get('user_command')
+            current_time = data.get('current_time', None)
 
             question = Question.objects.get(id=question_id)
             if question.is_correct(user_command):
                 points = question.get_points()
                 if 'hardcore' in request.session.get('mode', ''):
-                    points += 10  # Bonus points for hardcore modes
+                    points += 10
                 request.session['score'] = request.session.get('score', 0) + points
-                return JsonResponse({'result': 'correct', 'score': request.session['score'], 'lives': request.session.get('lives')})
+                return JsonResponse({
+                    'result': 'correct',
+                    'score': request.session['score'],
+                    'time': current_time,
+                    'lives': request.session.get('lives')  # Added lives to response
+                })
             else:
                 if 'survival' in request.session.get('mode', ''):
                     request.session['lives'] -= 1
                     if request.session['lives'] <= 0:
-                        return JsonResponse({'result': 'game_over', 'score': request.session['score'], 'lives': 0})
-                return JsonResponse({'result': 'incorrect', 'score': request.session['score'], 'lives': request.session.get('lives')})
+                        return JsonResponse({
+                            'result': 'game_over',
+                            'score': request.session['score'],
+                            'lives': 0  # Ensure lives is sent
+                        })
+                return JsonResponse({
+                    'result': 'incorrect',
+                    'score': request.session['score'],
+                    'lives': request.session.get('lives'),  # Send updated lives
+                    'time': current_time
+                })
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 @login_required
+@csrf_exempt
 def time_up(request):
     if request.method == 'POST':
-        if 'time_attack' in request.session.get('mode', ''):
-            return JsonResponse({'result': 'timeout', 'score': request.session.get('score', 0)})
-        elif 'survival' in request.session.get('mode', ''):
-            request.session['lives'] -= 1
-            if request.session['lives'] <= 0:
-                return JsonResponse({'result': 'game_over', 'score': request.session.get('score', 0), 'lives': 0})
-            return JsonResponse({'result': 'timeout', 'lives': request.session['lives']})
+        try:
+            data = json.loads(request.body)
+            current_time = data.get('current_time', None)
+            
+            if 'time_attack' in request.session.get('mode', ''):
+                return JsonResponse({
+                    'result': 'game_over',
+                    'score': request.session.get('score', 0),
+                    'lives': 0  # Ensure lives is sent
+                })
+            elif 'survival' in request.session.get('mode', ''):
+                request.session['lives'] -= 1
+                if request.session['lives'] <= 0:
+                    return JsonResponse({
+                        'result': 'game_over',
+                        'score': request.session.get('score', 0),
+                        'lives': 0  # Ensure lives is sent
+                    })
+                return JsonResponse({
+                    'result': 'timeout',
+                    'lives': request.session['lives'],  # Send updated lives
+                    'time': current_time
+                })
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+@login_required
+@csrf_exempt
+def time_up(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            current_time = data.get('current_time', None)
+            
+            if 'time_attack' in request.session.get('mode', ''):
+                return JsonResponse({
+                    'result': 'game_over',
+                    'score': request.session.get('score', 0)
+                })
+            elif 'survival' in request.session.get('mode', ''):
+                request.session['lives'] -= 1
+                if request.session['lives'] <= 0:
+                    return JsonResponse({
+                        'result': 'game_over',
+                        'score': request.session.get('score', 0)
+                    })
+                return JsonResponse({
+                    'result': 'timeout',
+                    'lives': request.session['lives'],
+                    'time': current_time  # Return the same time for continuation
+                })
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 def game_over(request):

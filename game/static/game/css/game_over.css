@@ -14,10 +14,10 @@ h1 {
 
 @keyframes pulse {
     0%, 100% {
-        color: #4CAF50;
+        color: #af4c4c;
     }
     50% {
-        color: #0f0;
+        color: rgb(255, 0, 0);
     }
 }
 
