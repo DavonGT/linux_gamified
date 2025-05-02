@@ -69,6 +69,19 @@ body {
     color: #f4f136;
 }
 
+.g-u-button {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.game-over {
+    color: #ff0000;
+    font-size: 2em;
+    font-weight: bold;
+    text-align: right;
+    margin-top: 50px;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

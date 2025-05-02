@@ -46,6 +46,8 @@ def set_mode(request, mode):
             request.session['time'] = 20
             request.session['lives'] = None
         return redirect('game')
+    elif 'practice' in mode:
+        return redirect('practice_mode')
     return redirect('select_mode')  # Redirect to mode selection if invalid mode
 
 @login_required

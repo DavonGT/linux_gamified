@@ -43,6 +43,9 @@
             <p id="feedback" class="feedback"></p>
             <p id="game-over-message" class="game-over" style="display: none;">GAME OVER</p>
         </div>
+        <div class="g-u-button">
+            <a href='{% url "game_over" %}' class="give-up">Give Up?</a>
+        </div>
     </div>
 
     <script>
@@ -138,12 +141,9 @@
         function handleCorrectAnswer(data) {
             showFeedback('Correct!', 'success');
             setTimeout(() => {
-                if (data.time !== undefined) {
-                    gameState.timeLeft = data.time;
-                    elements.timer.textContent = gameState.timeLeft;
-                }
                 location.reload();
             }, 1000);
+            
         }
 
         function handleIncorrectAnswer(data) {
@@ -154,10 +154,6 @@
             setTimeout(() => {
                 elements.userCommand.value = '';
                 enableInput();
-                if (data.time !== undefined) {
-                    gameState.timeLeft = data.time;
-                    elements.timer.textContent = gameState.timeLeft;
-                }
             }, 1000);
         }
 
