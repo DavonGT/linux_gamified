@@ -62,3 +62,17 @@ table.leaderboard tr:nth-child(even) {
 table.leaderboard tr:nth-child(odd) {
     background-color: #000;
 }
+
+.leaderboards-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.leaderboards-container h3 {
+    margin-bottom: 10px;
+}
+
+.leaderboards-container table {
+    margin-bottom: 20px;
+}

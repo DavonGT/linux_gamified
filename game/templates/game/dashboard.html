@@ -10,30 +10,100 @@
     <h1>Welcome, {{ player.username }}</h1>
     <div class="stats">
         <p><strong>Your Stats:</strong></p>
-        <p>Score: <strong>{{ player.score }}</strong></p>
+        {% comment %} <p>Score: <strong>{{ player.score }}</strong></p> {% endcomment %}
         <p>Games Played: <strong>{{ player.games_played }}</strong></p>
         <button onclick="window.location.href='{% url 'logout' %}'">Logout</button>
         <button onclick="window.location.href='{% url 'select_mode' %}'">Play Game</button>
     </div>
 
-    <h2>Leaderboard</h2>
-    <table class="leaderboard">
-        <thead>
-            <tr>
-                <th>Rank</th>
-                <th>Player</th>
-                <th>Score</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for entry in leaderboard %}
-            <tr>
-                <td>{{ entry.rank }}</td>
-                <td>{{ entry.username }}</td>
-                <td>{{ entry.score }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <h2>Leaderboards</h2>
+
+    <div class="leaderboards-container">
+        <h3>Survival Mode</h3>
+        <table class="leaderboard">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in survival_leaderboard %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ entry.username }}</td>
+                    <td>{{ entry.survival_score }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Time Attack Mode</h3>
+        <table class="leaderboard">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in time_attack_leaderboard %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ entry.username }}</td>
+                    <td>{{ entry.time_attack_score }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Hardcore Survival Mode</h3>
+        <table class="leaderboard">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in hardcore_survival_leaderboard %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ entry.username }}</td>
+                    <td>{{ entry.ha_score }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Hardcore Time Attack Mode</h3>
+        <table class="leaderboard">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Player</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in hardcore_time_attack_leaderboard %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ entry.username }}</td>
+                    <td>{{ entry.hta_score }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
+
+
+
+
+
+

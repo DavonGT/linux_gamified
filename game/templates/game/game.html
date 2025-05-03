@@ -24,7 +24,12 @@
         {% if time != None %}
             <p id="timer">Time Left: <span id="time-value">{{ time }}</span>s</p>
         {% endif %}
-        <p id="score">Score: {{ score }}</p>
+        {% if mode == 'survival' %}
+            <p id="survival_score">Score: {{ survival_score }}</p>
+        {% elif mode == 'time_attack' %}
+            <p id="time_attack_score">Score: {{ time_attack_score }}</p>
+
+        {% endif %}
         {% if lives != None %}
             <p id="lives">Lives: <span id="lives-value">{{ lives }}</span></p>
         {% endif %}
@@ -61,7 +66,10 @@
         // DOM elements
         const elements = {
             timer: document.getElementById('time-value'),
-            score: document.getElementById('score'),
+            survival_score: document.getElementById('survival_score'),
+            time_attack_score: document.getElementById('time_attack_score'),
+            hs_score: document.getElementById('hs_score'),
+            hta_score: document.getElementById('hta_score'),
             lives: document.getElementById('lives-value'),
             userCommand: document.getElementById('user_command'),
             feedback: document.getElementById('feedback'),
