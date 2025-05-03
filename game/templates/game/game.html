@@ -28,8 +28,12 @@
             <p id="survival_score">Score: {{ survival_score }}</p>
         {% elif mode == 'time_attack' %}
             <p id="time_attack_score">Score: {{ time_attack_score }}</p>
-
+        {% elif mode == 'hardcore_survival' %}
+            <p id="ha_score">Score: {{ ha_score }}</p>
+        {% elif mode == 'hardcore_time_attack' %}
+            <p id="hta_score">Score: {{ hta_score }}</p>
         {% endif %}
+
         {% if lives != None %}
             <p id="lives">Lives: <span id="lives-value">{{ lives }}</span></p>
         {% endif %}

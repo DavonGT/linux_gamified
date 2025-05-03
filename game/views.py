@@ -106,7 +106,7 @@ def game_view(request):
         'question': question,
         'survival_score': request.session['score'],
         'time_attack_score': request.session['score'],
-        'hs_score': request.session['score'],
+        'ha_score': request.session['score'],
         'hta_score': request.session['score'],
         'lives': request.session.get('lives'),  # Pass lives to the template
         'mode': mode,
