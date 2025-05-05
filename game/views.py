@@ -76,7 +76,7 @@ def set_mode(request, mode):
         if 'survival' in mode:
             request.session['lives'] = 3  # Initialize lives for survival modes
         elif 'time_attack' in mode:
-            request.session['time'] = 20
+            request.session['time'] = 60
             request.session['lives'] = None
         return redirect('game')
     elif 'practice' in mode:
@@ -85,9 +85,8 @@ def set_mode(request, mode):
 
 @login_required
 def game_view(request):
-    print(request.session.items())
     # Set default time for time-based modes
-    time = 20 if 'time_attack' in request.session['mode'] else None
+    time = request.session.get('time') if 'time_attack' in request.session['mode'] else None
     if time != None and request.session['time'] > time :
         time = request.session.get('time')
 
@@ -121,7 +120,7 @@ def validate_answer(request):
             question_id = data.get('question_id')
             user_command = data.get('user_command')
             current_time = data.get('current_time', None)
-
+            request.session['time'] = current_time
             question = Question.objects.get(id=question_id)
             if question.is_correct(user_command):
                 points = question.get_points()

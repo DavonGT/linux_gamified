@@ -151,6 +151,7 @@
         }
 
         function handleCorrectAnswer(data) {
+            console.log('Correct');
             showFeedback('Correct!', 'success');
             setTimeout(() => {
                 location.reload();
@@ -159,6 +160,7 @@
         }
 
         function handleIncorrectAnswer(data) {
+            console.log('Incorrect');
             showFeedback('Incorrect!', 'incorrect');
             if (elements.lives && data.lives !== undefined) {
                 elements.lives.textContent = data.lives;

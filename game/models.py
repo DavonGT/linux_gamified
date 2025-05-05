@@ -18,8 +18,7 @@ class Question(models.Model):
     def is_correct(self, user_command):
         # Check if the user's command matches any of the correct commands
         correct_commands_list = [cmd.strip() for cmd in self.correct_commands.split(',')]
-        user_command = user_command.replace('"', '').replace("'", '')  # Remove quotes
-        print(f"User command: {user_command}, Correct commands: {correct_commands_list}")
+        user_command = user_command.replace('"', '').replace("'", '')  # Remove quotes\
         return user_command.strip() in correct_commands_list
 
     def get_points(self):
