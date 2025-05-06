@@ -37,6 +37,13 @@ button:hover {
     box-shadow: 0 0 10px #0f0;
 }
 
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: auto;
+}
+
 table.leaderboard {
     width: 100%;
     border-collapse: collapse;
@@ -65,8 +72,10 @@ table.leaderboard tr:nth-child(odd) {
 
 .leaderboards-container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: start;
+    gap: 20px;
 }
 
 .leaderboards-container h3 {
@@ -75,4 +84,11 @@ table.leaderboard tr:nth-child(odd) {
 
 .leaderboards-container table {
     margin-bottom: 20px;
+    max-width: 400px;
+}
+
+.leaderboard-box {
+    padding: 10px;
+    border: 1px solid #0f0;
+    border-radius: 2%;
 }

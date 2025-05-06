@@ -69,9 +69,10 @@ body {
     color: #f4f136;
 }
 
-.g-u-button {
+.g-u-button  {
     text-align: right;
     margin-top: 10px;
+    color:#ff0000
 }
 
 .game-over {
@@ -80,6 +81,13 @@ body {
     font-weight: bold;
     text-align: right;
     margin-top: 50px;
+}
+
+.give-up:hover {
+    font-weight: bold;
+    text-align: right;
+    margin-top: 50px;
+    color: red;
 }
 
 @keyframes fadeIn {
