@@ -74,7 +74,7 @@ table.leaderboard tr:nth-child(odd) {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    align-content: start;
+    justify-content: center;
     gap: 20px;
 }
 
@@ -84,7 +84,7 @@ table.leaderboard tr:nth-child(odd) {
 
 .leaderboards-container table {
     margin-bottom: 20px;
-    max-width: 400px;
+    min-width: 500px;
 }
 
 .leaderboard-box {
