@@ -224,7 +224,7 @@ def game_over(request):
     elif request.session['mode'] == 'time_attack':
         player.time_attack_score = max(player.time_attack_score, final_score)
     elif request.session['mode'] == 'hardcore_survival':
-        player.hs_score = max(player.hs_score, final_score)
+        player.ha_score = max(player.ha_score, final_score)
     elif request.session['mode'] == 'hardcore_time_attack':
         player.hta_score = max(player.hta_score, final_score)
 
