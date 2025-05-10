@@ -54,19 +54,23 @@ body {
 .feedback {
     margin-top: 10px;
     font-weight: bold;
+    text-align: center;
     animation: fadeIn 0.5s ease;
 }
 
 .feedback.correct {
     color: #4CAF50;
+    font-weight: bold;
 }
 
 .feedback.incorrect {
     color: #f44336;
+    font-weight: bold;
 }
 
 .feedback.error {
     color: #f4f136;
+    font-weight: bold;
 }
 
 .g-u-button  {
@@ -79,7 +83,7 @@ body {
     color: #ff0000;
     font-size: 2em;
     font-weight: bold;
-    text-align: right;
+    text-align: center;
     margin-top: 50px;
 }
 

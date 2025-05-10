@@ -6,17 +6,7 @@
     <link rel="stylesheet" href="{% static 'game/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'game/css/game.css' %}">
     <style>
-        .feedback.incorrect {
-            color: #ff0000;
-            font-weight: bold;
-        }
-        .game-over {
-            color: #ff0000;
-            font-size: 2em;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 50px;
-        }
+       
     </style>
 </head>
 <body>
@@ -50,7 +40,7 @@
         </div>
         <div id="feedback-container">
             <p id="feedback" class="feedback"></p>
-            <p id="game-over-message" class="game-over" style="display: none;">GAME OVER</p>
+            <p id="game-over-message" class="game-over" style="display: none; text-align: center;">GAME OVER</p>
         </div>
         <div class="g-u-button">
             <a href='{% url "game_over" %}' class="give-up">Give Up?</a>
