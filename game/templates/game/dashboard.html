@@ -1,115 +1,180 @@
 <!DOCTYPE html>
 {% load static %}
-<html>
+<html lang="en">
 <head>
-    <title>Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Dashboard - {{ player.username }}</title>
     <link rel="stylesheet" href="{% static 'game/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'game/css/dashboard.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="main-content">
-        <h1>Welcome, {{ player.username }}</h1>
-        <div class="stats">
-            <p><strong>Your Stats:</strong></p>
-            {% comment %} <p>Score: <strong>{{ player.score }}</strong></p> {% endcomment %}
-            <p>Games Played: <strong>{{ player.games_played }}</strong></p>
-            <button onclick="window.location.href='{% url 'logout' %}'">Logout</button>
-            <button onclick="window.location.href='{% url 'select_mode' %}'">Play Game</button>
-        </div>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="player-info">
+                <h1>Welcome, {{ player.username }}</h1>
+                <div class="player-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-gamepad"></i>
+                        <span>Games Played: {{ player.games_played }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>Survival Score: {{ player.survival_score }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Time Attack Score: {{ player.time_attack_score }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <div class="button-group">
+                    <button class="play-button" onclick="window.location.href='{% url 'select_mode' %}'">
+                        <i class="fas fa-play"></i> Play Game
+                    </button>
+                </div>
+                <div class="button-group">
+                    <button class="logout-button" onclick="window.location.href='{% url 'logout' %}'">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </header>
 
-        <h2>Leaderboards</h2>
-
-        <div class="leaderboards-container">
+        <!-- Leaderboards Section -->
+        <main class="leaderboards-section">
+            <h2 class="section-title">Leaderboards</h2>
             
-            <div class="leaderboard-box">
-                <h3>Survival Mode</h3>
-                <table class="leaderboard">
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Player</th>
-                            <th>Score</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for entry in survival_leaderboard %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ entry.username }}</td>
-                            <td>{{ entry.survival_score }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div class="leaderboard-tabs">
+                <button class="tab-btn active" data-tab="survival">Survival Mode</button>
+                <button class="tab-btn" data-tab="time-attack">Time Attack Mode</button>
+                <button class="tab-btn" data-tab="hc-survival">Hardcore Survival</button>
+                <button class="tab-btn" data-tab="hc-time-attack">Hardcore Time Attack</button>
             </div>
 
-            <div class="leaderboard-box">
-                <h3>Time Attack Mode</h3>
-                <table class="leaderboard">
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Player</th>
-                            <th>Score</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for entry in time_attack_leaderboard %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ entry.username }}</td>
-                            <td>{{ entry.time_attack_score }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+            <div class="leaderboard-content">
+                <!-- Survival Mode Leaderboard -->
+                <div id="survival" class="leaderboard-box active">
+                    <h3>Survival Mode</h3>
+                    <div class="leaderboard-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Player</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in survival_leaderboard %}
+                                <tr class="{% if entry.username == player.username %}highlight-row{% endif %}">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ entry.username }}</td>
+                                    <td>{{ entry.survival_score }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-            <div class="leaderboard-box">
-                <h3>Hardcore Survival Mode</h3>
-                <table class="leaderboard">
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Player</th>
-                            <th>Score</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for entry in hardcore_survival_leaderboard %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ entry.username }}</td>
-                            <td>{{ entry.ha_score }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                <!-- Time Attack Leaderboard -->
+                <div id="time-attack" class="leaderboard-box">
+                    <h3>Time Attack Mode</h3>
+                    <div class="leaderboard-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Player</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in time_attack_leaderboard %}
+                                <tr class="{% if entry.username == player.username %}highlight-row{% endif %}">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ entry.username }}</td>
+                                    <td>{{ entry.time_attack_score }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-            <div class="leaderboard-box">
-                <h3>Hardcore Time Attack Mode</h3>
-                <table class="leaderboard">
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Player</th>
-                            <th>Score</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for entry in hardcore_time_attack_leaderboard %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ entry.username }}</td>
-                            <td>{{ entry.hta_score }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <!-- Hardcore Survival Leaderboard -->
+                <div id="hc-survival" class="leaderboard-box">
+                    <h3>Hardcore Survival Mode</h3>
+                    <div class="leaderboard-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Player</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in hardcore_survival_leaderboard %}
+                                <tr class="{% if entry.username == player.username %}highlight-row{% endif %}">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ entry.username }}</td>
+                                    <td>{{ entry.ha_score }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Hardcore Time Attack Leaderboard -->
+                <div id="hc-time-attack" class="leaderboard-box">
+                    <h3>Hardcore Time Attack Mode</h3>
+                    <div class="leaderboard-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Player</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for entry in hardcore_time_attack_leaderboard %}
+                                <tr class="{% if entry.username == player.username %}highlight-row{% endif %}">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ entry.username }}</td>
+                                    <td>{{ entry.hta_score }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div>
+        </main>
     </div>
+
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const tab = button.getAttribute('data-tab');
+                
+                // Remove active class from all buttons and boxes
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.leaderboard-box').forEach(box => box.classList.remove('active'));
+                
+                // Add active class to selected button and corresponding box
+                button.classList.add('active');
+                document.getElementById(tab).classList.add('active');
+            });
+        });
+    </script>
 </body>
 </html>
 
