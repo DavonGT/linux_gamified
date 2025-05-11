@@ -1,30 +1,217 @@
+/* Base styles */
 body {
     font-family: 'Courier New', Courier, monospace;
     background-color: #000;
     color: #0f0;
     margin: 0;
     padding: 20px;
+    min-height: 100vh;
 }
 
-#terminal {
-    background-color: #111;
-    border: 2px solid #0f0;
-    border-radius: 5px;
-    padding: 20px;
-    overflow-y: auto;
-    width: 100%;
-    max-width: 800px;
+/* Practice container */
+.practice-container {
+    max-width: 1400px;
     margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-#terminal p {
-    margin: 5px 0;
+/* Header styles */
+.practice-header {
+    background-color: #111;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #0f0;
 }
 
-#prompt {
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.player-info {
     display: flex;
     align-items: center;
+    gap: 20px;
+}
+
+.username {
+    font-size: 20px;
+    color: #0f0;
+}
+
+.back-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 1px solid #0f0;
+    background-color: #111;
+    color: #0f0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #222;
+    box-shadow: 0 0 10px #0f0;
+}
+
+/* Main content */
+.practice-main {
+    display: flex;
+    gap: 20px;
+    flex: 1;
+}
+
+/* Sidebar styles */
+.practice-sidebar {
+    width: 300px;
+    background-color: #111;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #0f0;
+}
+
+.task-info {
+    margin-bottom: 20px;
+}
+
+.task-description {
+    margin: 10px 0;
+    color: #0f0;
+    opacity: 0.9;
+}
+
+
+
+/* Help section */
+.help-section {
+    margin-top: 20px;
+}
+
+.hint-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #0f0;
+    background-color: #111;
+    color: #0f0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    animation: glow 1.5s infinite;
+}
+
+.hint-button:hover {
+    background-color: #222;
+    box-shadow: 0 0 10px #0f0;
+}
+
+.hint-text {
     margin-top: 10px;
+    color: #FFA500;
+    padding: 10px;
+    background-color: #000;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 165, 0, 0.3);
+}
+
+.command-help {
+    margin-top: 20px;
+}
+
+.command-list {
+    margin-top: 10px;
+}
+
+.command-item {
+    display: flex;
+    gap: 10px;
+    padding: 8px;
+    background-color: #000;
+    border: 1px solid rgba(0, 255, 0, 0.2);
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+.command-item code {
+    color: #0f0;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.command-item span {
+    color: #0f0;
+    opacity: 0.8;
+}
+
+/* Terminal styles */
+.terminal-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #111;
+    border-radius: 8px;
+    border: 1px solid #0f0;
+}
+
+.terminal-header {
+    padding: 10px;
+    background-color: #111;
+    border-bottom: 1px solid #0f0;
+}
+
+.terminal-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.control-btn {
+    padding: 4px 8px;
+    background-color: #111;
+    color: #0f0;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.control-btn:hover {
+    background-color: #222;
+}
+
+.terminal-window {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.terminal-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.command-prompt {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.username {
+    color: #0f0;
+}
+
+.path {
+    color: #0f0;
+    opacity: 0.8;
 }
 
 #user_command {
@@ -35,38 +222,114 @@ body {
     width: 100%;
     font-family: 'Courier New', Courier, monospace;
     font-size: 1rem;
+    padding: 5px;
+    border-radius: 3px;
 }
 
-
-#hint {
-    margin-top: 10px;
-    color: #FFA500;
-    display: none;
-}
-
-#hint-button {
-    margin-top: 10px;
-    background-color: #000;
-    color: #0f0;
+#user_command:focus {
     border: 1px solid #0f0;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-size: 1rem;
-    border-radius: 5px;
-    animation: glow 1.5s infinite;
-
 }
 
-#hint-button:hover {
+.feedback {
+    margin-top: 10px;
+    color: #0f0;
+    opacity: 0.9;
+}
+
+/* Footer styles */
+.practice-footer {
     background-color: #111;
-    box-shadow: 0 0 10px #0f0;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #0f0;
 }
 
+.footer-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.exit-button {
+    padding: 12px 24px;
+    font-size: 16px;
+    border: 1px solid #f00;
+    background-color: #111;
+    color: #f00;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.exit-button:hover {
+    background-color: #222;
+    box-shadow: 0 0 10px #f00;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 10px;
+    background-color: #000;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background-color: #0f0;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    margin-left: 20px;
+    color: #0f0;
+    opacity: 0.8;
+}
+
+/* Animations */
 @keyframes glow {
     0%, 100% {
         box-shadow: 0 0 5px #0f0;
     }
     50% {
         box-shadow: 0 0 15px #4CAF50;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 1024px) {
+    .practice-main {
+        flex-direction: column;
+    }
+    
+    .practice-sidebar {
+        width: 100%;
+    }
+    
+    .terminal-container {
+        margin-top: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .practice-container {
+        padding: 10px;
+    }
+    
+    .practice-header {
+        padding: 15px;
+    }
+    
+    .terminal-container {
+        margin-top: 15px;
+    }
+    
+    .command-item {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
