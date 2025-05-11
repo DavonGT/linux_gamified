@@ -1,29 +1,199 @@
+/* Base styles */
 body {
     font-family: 'Courier New', Courier, monospace;
     background-color: #000;
     color: #0f0;
-    text-align: center;
     margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+/* Mode container */
+.mode-container {
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
 }
 
-h1 {
+/* Header styles */
+.mode-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.mode-header h1 {
     font-size: 36px;
+    margin-bottom: 20px;
+    color: #0f0;
+    text-shadow: 0 0 10px #0f0;
+}
+
+.player-info {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.username {
+    font-size: 20px;
+    color: #0f0;
+}
+
+.back-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: 1px solid #0f0;
+    background-color: #111;
+    color: #0f0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #222;
+    box-shadow: 0 0 10px #0f0;
+}
+
+/* Mode grid */
+.mode-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Mode card styles */
+.mode-card {
+    background-color: #111;
+    border: 1px solid #0f0;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.mode-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 255, 0, 0.2);
+}
+
+.mode-icon {
+    font-size: 48px;
+    color: #0f0;
+    margin-bottom: 15px;
+}
+
+.mode-card h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #0f0;
+}
+
+.mode-description {
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #0f0;
+    opacity: 0.9;
+}
+
+.mode-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
     margin-bottom: 20px;
 }
 
-button {
-    margin: 10px;
-    padding: 15px 30px;
-    font-size: 18px;
-    cursor: pointer;
-    border: 1px solid #0f0;
+.feature {
     background-color: #000;
     color: #0f0;
+    padding: 5px 10px;
     border-radius: 5px;
+    font-size: 14px;
+    border: 1px solid rgba(0, 255, 0, 0.2);
 }
 
-button:hover {
+.select-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #0f0;
     background-color: #111;
+    color: #0f0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.select-button:hover {
+    background-color: #222;
     box-shadow: 0 0 10px #0f0;
+}
+
+.select-button i {
+    font-size: 18px;
+}
+
+/* Mode-specific styles */
+.mode-card.practice {
+    border-color: #0f0;
+}
+
+.mode-card.survival {
+    border-color: #0f0;
+}
+
+.mode-card.time-attack {
+    border-color: #0f0;
+}
+
+.mode-card.hardcore-survival {
+    border-color: #f00;
+}
+
+.mode-card.hardcore-time-attack {
+    border-color: #f00;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .mode-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .mode-card {
+        padding: 15px;
+    }
+    
+    .mode-icon {
+        font-size: 36px;
+    }
+    
+    .mode-card h2 {
+        font-size: 20px;
+    }
+    
+    .mode-description {
+        font-size: 14px;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.mode-card {
+    animation: fadeIn 0.5s ease-in;
 }
