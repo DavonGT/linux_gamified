@@ -5,59 +5,7 @@
     <title>Practice Mode</title>
     <link rel="stylesheet" href="{% static 'game/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'game/css/prac_style.css' %}">
-    <script>
-        function showHint() {
-            document.getElementById('hint').style.display = 'block';
-        }
-
-        function submitPracticeAnswer() {
-            const questionId = document.getElementById('question_id').value;
-            const userCommandInput = document.getElementById('user_command');
-            const userCommand = userCommandInput.value.trim();
-
-            if (!userCommand) {
-                document.getElementById('feedback').textContent = 'Command cannot be empty!';
-                document.getElementById('feedback').className = 'feedback incorrect';
-                userCommandInput.focus();
-                return;
-            }
-
-            userCommandInput.disabled = true;
-
-            fetch('/validate_practice_answer/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: JSON.stringify({ question_id: questionId, user_command: userCommand })
-            })
-            .then(response => response.json())
-            .then(data => {
-                const feedbackElement = document.getElementById('feedback');
-                if (data.result === 'correct') {
-                    feedbackElement.textContent = 'Correct!';
-                    feedbackElement.className = 'feedback correct';
-                    setTimeout(() => window.location.reload(), 1000);
-                } else {
-                    feedbackElement.textContent = 'Incorrect! Try again.';
-                    feedbackElement.className = 'feedback incorrect';
-                    userCommandInput.value = '';
-                    userCommandInput.disabled = false;
-                    userCommandInput.focus();
-                }
-            })
-            .catch(() => {
-                alert('An error occurred.');
-                userCommandInput.disabled = false;
-                userCommandInput.focus();
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('user_command').focus();
-        });
-    </script>
+    <script src="{% static 'game/js/practice.js' %}"></script>
 </head>
 <body>
     <div id="terminal">
@@ -69,6 +17,7 @@
         </div>
         <p id="feedback" class="feedback"></p>
         <button id="hint-button" onclick="showHint()">Show Hint</button>
+        <button onclick="window.location.href='/'">Exit</button>
         <p id="hint" style="display: none;">Hint: {{ question.hint }}</p>
     </div>
 </body>

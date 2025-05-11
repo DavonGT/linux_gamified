@@ -9,12 +9,6 @@ from accounts.models import Player
 from django.db.models import Max
 from django.db import models
 
-
-def test(request):
-    # Test view to check if the server is running
-    return render(request, 'game/test.html',)
-
-
 @login_required
 def dashboard(request):
     # Fetch the highest score for each player in each game mode
