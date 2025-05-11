@@ -1,50 +1,100 @@
 <!DOCTYPE html>
 {% load static %}
-<html>
+<html lang="en">
 <head>
-    <title>Linux Gamified</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ mode|title }} Mode - {{ player.username }}</title>
     <link rel="stylesheet" href="{% static 'game/css/base.css' %}">
     <link rel="stylesheet" href="{% static 'game/css/game.css' %}">
-    <style>
-       
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div id="header">
-        {% if time != None %}
-            <p id="timer">Time Left: <span id="time-value">{{ time }}</span>s</p>
-        {% endif %}
-        {% if mode == 'survival' %}
-            <p id="survival_score">Score: {{ survival_score }}</p>
-        {% elif mode == 'time_attack' %}
-            <p id="time_attack_score">Score: {{ time_attack_score }}</p>
-        {% elif mode == 'hardcore_survival' %}
-            <p id="ha_score">Score: {{ ha_score }}</p>
-        {% elif mode == 'hardcore_time_attack' %}
-            <p id="hta_score">Score: {{ hta_score }}</p>
-        {% endif %}
+    <div class="game-container">
+        <!-- Game Header -->
+        <header class="game-header">
+            <div class="header-content">
+                <h1>{{ mode|title }} Mode</h1>
+                <div class="player-info">
+                    <span class="username">{{ player.username }}</span>
+                    <button class="back-button" onclick="window.location.href='{% url 'select_mode' %}'">
+                        <i class="fas fa-arrow-left"></i> Back to Modes
+                    </button>
+                </div>
+            </div>
+            <div class="game-stats">
+                {% if time != None %}
+                    <div class="stat-item">
+                        <i class="fas fa-clock"></i>
+                        <span>Time Left: <span id="time-value">{{ time }}</span>s</span>
+                    </div>
+                {% endif %}
+                {% if mode == 'survival' or mode == 'hardcore_survival' %}
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>Score: {{ survival_score|default_if_none:0 }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-heart"></i>
+                        <span>Lives: <span id="lives-value">{{ lives }}</span></span>
+                    </div>
+                {% elif mode == 'time_attack' or mode == 'hardcore_time_attack' %}
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <span>Score: {{ time_attack_score|default_if_none:0 }}</span>
+                    </div>
+                {% endif %}
+            </div>
+        </header>
 
-        {% if lives != None %}
-            <p id="lives">Lives: <span id="lives-value">{{ lives }}</span></p>
-        {% endif %}
-    </div>
-    <div id="terminal">
-        <p><strong>Task:</strong> {{ question.task }}</p>
-        <div id="prompt">
-            <span>{{ player }}@linux-gamified:~$</span>
-            <input type="hidden" id="question_id" value="{{ question.id }}">
-            <input type="text" id="user_command" 
-                   placeholder="Type your command here" 
-                   autocomplete="off" 
-                   autofocus>
-        </div>
-        <div id="feedback-container">
-            <p id="feedback" class="feedback"></p>
-            <p id="game-over-message" class="game-over" style="display: none; text-align: center;">GAME OVER</p>
-        </div>
-        <div class="g-u-button">
-            <a href='{% url "game_over" %}' class="give-up">Give Up?</a>
-        </div>
+        <!-- Main Game Content -->
+        <main class="game-main">
+            <div class="task-section">
+                <h2>Current Task</h2>
+                <p class="task-description">{{ question.task }}</p>
+            </div>
+
+            <div class="terminal-container">
+                <div class="terminal-header">
+                    <div class="terminal-controls">
+                        <button class="control-btn" onclick="minimizeTerminal()">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button class="control-btn" onclick="maximizeTerminal()">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                        <button class="control-btn" onclick="closeTerminal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="terminal" class="terminal-window">
+                    <div class="terminal-content">
+                        <div class="command-prompt">
+                            <span class="username">{{ player }}@linux-gamified</span>
+                            <span class="path">:~$</span>
+                            <input type="hidden" id="question_id" value="{{ question.id }}">
+                            <input type="text" id="user_command" 
+                                   placeholder="Type your command here..." 
+                                   autocomplete="off" 
+                                   autofocus>
+                        </div>
+                        <div id="feedback-container">
+                            <p id="feedback" class="feedback"></p>
+                            <p id="game-over-message" class="game-over" style="display: none;">
+                                <i class="fas fa-skull-crossbones"></i> GAME OVER
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-section">
+                <button class="give-up-button" onclick="window.location.href='{% url 'game_over' %}'">
+                    <i class="fas fa-flag-white"></i> Give Up?
+                </button>
+            </div>
+        </main>
     </div>
 
     <script src="{% static 'game/js/game.js' %}"></script>
@@ -61,16 +111,16 @@
         // DOM elements
         const elements = {
             timer: document.getElementById('time-value'),
-            survival_score: document.getElementById('survival_score'),
-            time_attack_score: document.getElementById('time_attack_score'),
-            hs_score: document.getElementById('hs_score'),
-            hta_score: document.getElementById('hta_score'),
+            survival_score: document.querySelector('.stat-item:has(i.fas.fa-trophy) span'),
+            time_attack_score: document.querySelector('.stat-item:has(i.fas.fa-trophy) span'),
             lives: document.getElementById('lives-value'),
             userCommand: document.getElementById('user_command'),
             feedback: document.getElementById('feedback'),
             gameOverMsg: document.getElementById('game-over-message'),
             terminal: document.getElementById('terminal')
         };
+
+        // Initialize game
         document.addEventListener('DOMContentLoaded', initGame);
     </script>
 </body>
