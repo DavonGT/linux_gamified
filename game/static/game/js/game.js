@@ -135,3 +135,5 @@ function showFeedback(message, type) {
     elements.feedback.className = `feedback ${type}`;
     elements.feedback.style.display = 'block';
 }
+
+

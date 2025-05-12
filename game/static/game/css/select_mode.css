@@ -166,13 +166,40 @@ body {
 }
 
 /* Responsive design */
+@media (max-width: 1200px) {
+    .mode-container {
+        padding: 15px;
+    }
+    
+    .mode-header h1 {
+        font-size: 32px;
+    }
+    
+    .mode-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
 @media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .mode-container {
+        padding: 10px;
+    }
+    
     .mode-grid {
         grid-template-columns: 1fr;
+        gap: 15px;
     }
     
     .mode-card {
         padding: 15px;
+    }
+    
+    .mode-header {
+        padding: 10px;
     }
     
     .mode-icon {
@@ -185,15 +212,81 @@ body {
     
     .mode-description {
         font-size: 14px;
+        line-height: 1.4;
+    }
+    
+    .mode-features {
+        gap: 8px;
+    }
+    
+    .feature {
+        font-size: 13px;
+        padding: 4px 8px;
+    }
+    
+    .select-button {
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    .select-button i {
+        font-size: 16px;
+    }
+    
+    .player-info {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .back-button {
+        padding: 8px 15px;
+        font-size: 14px;
     }
 }
 
-/* Animations */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.mode-card {
-    animation: fadeIn 0.5s ease-in;
+@media (max-width: 480px) {
+    .mode-header h1 {
+        font-size: 28px;
+    }
+    
+    .mode-card {
+        padding: 12px;
+    }
+    
+    .mode-icon {
+        font-size: 32px;
+    }
+    
+    .mode-card h2 {
+        font-size: 18px;
+    }
+    
+    .mode-description {
+        font-size: 13px;
+    }
+    
+    .mode-features {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .feature {
+        font-size: 12px;
+        padding: 3px 6px;
+        margin: 5px 0;
+    }
+    
+    .select-button {
+        padding: 8px;
+        font-size: 13px;
+    }
+    
+    .select-button i {
+        font-size: 14px;
+    }
+    
+    .username {
+        font-size: 18px;
+    }
 }

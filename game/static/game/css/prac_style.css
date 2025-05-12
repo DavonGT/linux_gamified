@@ -301,6 +301,32 @@ body {
 }
 
 /* Responsive design */
+@media (max-width: 1200px) {
+    .practice-container {
+        padding: 15px;
+    }
+    
+    .practice-header {
+        padding: 15px;
+    }
+    
+    .task-info {
+        padding: 15px;
+    }
+    
+    .command-item {
+        padding: 6px;
+    }
+    
+    .hint-button {
+        padding: 10px;
+    }
+    
+    .terminal-container {
+        padding: 10px;
+    }
+}
+
 @media (max-width: 1024px) {
     .practice-main {
         flex-direction: column;
@@ -313,23 +339,177 @@ body {
     .terminal-container {
         margin-top: 20px;
     }
+    
+    .terminal-controls {
+        justify-content: center;
+    }
 }
 
 @media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
     .practice-container {
         padding: 10px;
     }
     
     .practice-header {
-        padding: 15px;
+        padding: 12px;
     }
     
-    .terminal-container {
+    .player-info {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .username {
+        font-size: 18px;
+    }
+    
+    .back-button {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+    
+    .task-info {
+        padding: 12px;
+    }
+    
+    .task-description {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    
+    .command-list {
         margin-top: 15px;
     }
     
     .command-item {
+        padding: 6px;
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+    
+    .command-item code {
+        font-size: 13px;
+    }
+    
+    .command-item span {
+        font-size: 12px;
+    }
+    
+    .help-section {
+        margin-top: 15px;
+    }
+    
+    .hint-button {
+        padding: 8px;
+        font-size: 14px;
+    }
+    
+    .hint-button i {
+        font-size: 16px;
+    }
+    
+    .hint-text {
+        font-size: 13px;
+        padding: 8px;
+    }
+    
+    .terminal-container {
+        padding: 10px;
+    }
+    
+    .terminal-controls {
+        gap: 5px;
+    }
+    
+    .control-btn {
+        padding: 3px 6px;
+        font-size: 12px;
+    }
+    
+    .command-prompt {
+        gap: 4px;
+    }
+    
+    #user_command {
+        font-size: 14px;
+        padding: 8px;
+    }
+    
+    .feedback {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .practice-header {
+        padding: 10px;
+    }
+    
+    .username {
+        font-size: 16px;
+    }
+    
+    .back-button {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+    
+    .task-info {
+        padding: 10px;
+    }
+    
+    .task-description {
+        font-size: 13px;
+    }
+    
+    .command-item {
+        padding: 5px;
+        font-size: 12px;
+    }
+    
+    .command-item code {
+        font-size: 12px;
+    }
+    
+    .command-item span {
+        font-size: 11px;
+    }
+    
+    .hint-button {
+        padding: 6px;
+        font-size: 13px;
+    }
+    
+    .hint-button i {
+        font-size: 14px;
+    }
+    
+    .hint-text {
+        font-size: 12px;
+        padding: 6px;
+    }
+    
+    .terminal-controls {
         flex-direction: column;
-        align-items: flex-start;
+        gap: 3px;
+    }
+    
+    .control-btn {
+        padding: 2px 4px;
+        font-size: 11px;
+    }
+    
+    #user_command {
+        font-size: 13px;
+        padding: 6px;
+    }
+    
+    .feedback {
+        font-size: 13px;
     }
 }

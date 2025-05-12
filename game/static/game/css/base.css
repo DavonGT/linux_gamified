@@ -1,3 +1,4 @@
+/* Base styles */
 body {
     font-family: 'Courier New', Courier, monospace;
     background-color: #000;
@@ -5,14 +6,34 @@ body {
     margin: 0;
     padding: 20px;
     line-height: 1.6;
+    min-height: 100vh;
 }
 
+/* Typography */
 h1, h2, h3 {
     color: #4CAF50;
     text-align: center;
     margin-bottom: 20px;
+    line-height: 1.2;
 }
 
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+p {
+    margin: 10px 0;
+}
+
+/* Buttons and Links */
 button, a {
     background-color: #111;
     color: #0f0;
@@ -23,6 +44,10 @@ button, a {
     text-decoration: none;
     cursor: pointer;
     transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
 }
 
 button:hover, a:hover {
@@ -30,14 +55,15 @@ button:hover, a:hover {
     box-shadow: 0 0 10px #0f0;
 }
 
+/* Inputs */
 input {
     background: none;
     border: none;
     border-bottom: 2px solid #0f0;
     color: #0f0;
     width: 100%;
-    padding: 5px;
-    font-size: 16px;
+    padding: 10px;
+    font-size: 1rem;
     outline: none;
     margin-bottom: 20px;
     transition: border-color 0.3s ease;
@@ -47,46 +73,63 @@ input:focus {
     border-bottom: 2px solid #4CAF50;
 }
 
+/* Tables */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
     color: #0f0;
+    overflow-x: auto;
 }
 
 table th, table td {
     border: 1px solid #0f0;
-    padding: 8px;
+    padding: 12px;
     text-align: center;
+    min-width: 120px;
 }
 
 table th {
     background-color: #111;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
+/* Feedback */
 .feedback {
     margin-top: 10px;
     font-weight: bold;
     animation: fadeIn 0.5s ease;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #111;
 }
 
 .feedback.correct {
     color: #4CAF50;
+    border: 1px solid #4CAF50;
 }
 
 .feedback.incorrect {
     color: #f44336;
+    border: 1px solid #f44336;
 }
 
+/* Animations */
 @keyframes fadeIn {
     from {
         opacity: 0;
+        transform: translateY(10px);
     }
     to {
         opacity: 1;
+        transform: translateY(0);
     }
 }
 
+/* Tooltips */
 .tooltip {
     position: relative;
     display: inline-block;
@@ -98,19 +141,16 @@ table th {
     background-color: #111;
     color: #0f0;
     text-align: center;
-    padding: 5px 0;
+    padding: 8px;
     border-radius: 6px;
-
-    /* Position the tooltip */
     position: absolute;
     z-index: 1;
     top: 100%;
     left: 50%;
     margin-left: -100px;
-
-    /* Fade in tooltip */
     opacity: 0;
     transition: opacity 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .tooltip .tooltiptext::after {
@@ -127,4 +167,75 @@ table th {
 .tooltip:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.2rem;
+    }
+
+    button, a {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+
+    input {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+
+    .tooltip .tooltiptext {
+        width: 180px;
+        margin-left: -90px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    h2 {
+        font-size: 1.25rem;
+    }
+
+    h3 {
+        font-size: 1rem;
+    }
+
+    button, a {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+
+    input {
+        padding: 6px;
+        font-size: 0.8rem;
+    }
+
+    table {
+        font-size: 0.8rem;
+    }
+
+    .tooltip .tooltiptext {
+        width: 160px;
+        margin-left: -80px;
+    }
 }
