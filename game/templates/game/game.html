@@ -91,12 +91,30 @@
             </div>
 
             <div class="action-section">
-                <button class="give-up-button" onclick="window.location.href='{% url 'game_over' %}'">
+                <button class="give-up-button" onclick="showGiveUpModal()">
                     <i class="fas fa-flag-white"></i> Give Up?
                 </button>
             </div>
         </main>
 
+        <!-- Give Up Modal -->
+        <div id="giveUpModal" class="modal">
+            <div class="modal-content">
+                <button class="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="modal-header">
+                    <h2>Are you sure?</h2>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to give up? All progress will be lost.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-button cancel">Cancel</button>
+                    <button class="modal-button confirm" onclick="confirmGiveUp()">Give Up</button>
+                </div>
+            </div>
+        </div>
 
     </div>
 

@@ -6,6 +6,59 @@ function initGame() {
     setupEventListeners();
 }
 
+// Initialize modal elements after DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('giveUpModal');
+    const closeButtons = document.querySelectorAll('.close-modal');
+
+    // Close modal when clicking the close button
+    function closeModal() {
+        modal.style.display = 'none';
+    }
+
+    closeButtons.forEach(button => {
+        button.addEventListener('click', closeModal);
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Show give up modal
+    window.showGiveUpModal = () => {
+        modal.style.display = 'block';
+    }
+});
+
+// Handle give up confirmation
+async function confirmGiveUp() {
+    // Clean up game state
+    gameState.isGameOver = true;
+    clearInterval(gameState.timer);
+    disableInput();
+    
+    // Show game over message with fade effect
+    elements.feedback.style.display = 'none';
+    elements.gameOverMsg.style.display = 'block';
+    elements.gameOverMsg.style.opacity = '0';
+    
+    // Fade in game over message
+    setTimeout(() => {
+        elements.gameOverMsg.style.opacity = '1';
+    }, 100);
+    
+    // Navigate to game over page after a brief delay
+    setTimeout(() => {
+        window.location.href = "/game_over/";
+    }, 1000);
+    
+    // Close the modal
+    closeModal();
+}
+
 function startTimer() {
     gameState.timer = setInterval(() => {
         gameState.timeLeft--;
