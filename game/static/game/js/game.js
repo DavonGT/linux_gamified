@@ -138,6 +138,7 @@ function handleIncorrectAnswer(data) {
     setTimeout(() => {
         elements.userCommand.value = '';
         enableInput();
+        location.reload();
     }, 1000);
 }
 
