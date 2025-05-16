@@ -1,16 +1,15 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ mode|title }} Mode - {{ player.username }}</title>
-    <link rel="stylesheet" href="{% static 'game/css/base.css' %}">
+
+{% block extra_css %}
     <link rel="stylesheet" href="{% static 'game/css/game.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block extra_js %}
     <script src="{% static 'game/js/game.js' %}"></script>
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
     <div class="game-container">
         <!-- Game Header -->
         <header class="game-header">
@@ -18,9 +17,6 @@
                 <h1>{{ mode|title }} Mode</h1>
                 <div class="player-info">
                     <span class="username">{{ player.username }}</span>
-                    <button class="back-button" onclick="window.location.href='{% url 'select_mode' %}'">
-                        <i class="fas fa-arrow-left"></i> Back to Modes
-                    </button>
                 </div>
             </div>
             <div class="game-stats">
@@ -143,5 +139,4 @@
         // Initialize game
         document.addEventListener('DOMContentLoaded', initGame);
     </script>
-</body>
-</html>
+{% endblock %}
