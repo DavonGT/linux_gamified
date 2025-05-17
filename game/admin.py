@@ -7,7 +7,7 @@ from openpyxl import load_workbook
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('task', 'difficulty')  # Display task and difficulty
+    list_display = ('task', 'difficulty', 'category')  # Display task and difficulty
     change_list_template = "admin/game/question_changelist.html"
 
     def get_urls(self):
@@ -40,7 +40,8 @@ class QuestionAdmin(admin.ModelAdmin):
                     Question.objects.create(
                         task=row[header_indices['task']],
                         correct_commands=row[header_indices['correct_commands']],
-                        difficulty=row[header_indices['difficulty']]
+                        difficulty=row[header_indices['difficulty']],
+                        category='other' if 'category' not in header_indices else row[header_indices['category']]
                     )
 
                 messages.success(request, "Tasks have been successfully uploaded!")

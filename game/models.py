@@ -1,11 +1,28 @@
 from django.db import models
 
 class Question(models.Model):
-    DIFFICULTY_CHOICES = [
-        ('easy', 10),
-        ('medium', 20),
-        ('hard', 30),
+    CATEGORY_CHOICES = [
+        ('file_operations', 'File Operations'),
+        ('process_management', 'Process Management'),
+        ('networking', 'Networking'),
+        ('permissions', 'Permissions'),
+        ('text_processing', 'Text Processing'),
+        ('system_info', 'System Information'),
+        ('other', 'Other'),
     ]
+    
+    DIFFICULTY_CHOICES = [
+        ('easy', '10'),
+        ('medium', '20'),
+        ('hard', '30'),
+    ]
+    
+    category = models.CharField(
+        max_length=20,
+        choices=CATEGORY_CHOICES,
+        default='other',
+        help_text='Category of the question'
+    )
 
     task = models.TextField()  # The task/question for the player
     correct_commands = models.TextField()  # Store multiple correct commands as a comma-separated list
