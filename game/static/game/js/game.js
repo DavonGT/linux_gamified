@@ -71,10 +71,26 @@ function startTimer() {
     }, 1000);
 }
 
+function preventBackspaceInHardcore(event) {
+    // Check if the pressed key is backspace and if we're in a hardcore mode
+    if ((event.key === 'Backspace' || event.keyCode === 8) && 
+        (gameState.mode === 'hardcore_survival' || gameState.mode === 'hardcore_time_attack')) {
+        event.preventDefault();
+        return false;
+    }
+    return true;
+}
+
 function setupEventListeners() {
     elements.userCommand.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !gameState.isGameOver) {
             submitAnswer();
+        }
+        // Prevent backspace in hardcore modes
+        if ((e.key === 'Backspace' || e.keyCode === 8) && 
+            (gameState.mode === 'hardcore_survival' || gameState.mode === 'hardcore_time_attack')) {
+            e.preventDefault();
+            return false;
         }
     });
 }

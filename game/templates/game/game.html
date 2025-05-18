@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}{{ mode|title }} Mode{% endblock %}
+
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'game/css/game.css' %}">
 {% endblock %}
@@ -50,38 +52,22 @@
                 <h2>Current Task</h2>
                 <p class="task-description">{{ question.task }}</p>
             </div>
-
-            <div class="terminal-container">
-                <div class="terminal-header">
-                    <div class="terminal-controls">
-                        <button class="control-btn" onclick="minimizeTerminal()">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <button class="control-btn" onclick="maximizeTerminal()">
-                            <i class="fas fa-expand"></i>
-                        </button>
-                        <button class="control-btn" onclick="closeTerminal()">
-                            <i class="fas fa-times"></i>
-                        </button>
+            <div id="terminal" class="terminal-window">
+                <div class="terminal-content">
+                    <div class="command-prompt">
+                        <span class="username">{{ player }}@linux-gamified</span>
+                        <span class="path">:~$</span>
+                        <input type="hidden" id="question_id" value="{{ question.id }}">
+                        <input type="text" id="user_command" 
+                                placeholder="Type your command here..." 
+                                autocomplete="off" 
+                                autofocus>
                     </div>
-                </div>
-                <div id="terminal" class="terminal-window">
-                    <div class="terminal-content">
-                        <div class="command-prompt">
-                            <span class="username">{{ player }}@linux-gamified</span>
-                            <span class="path">:~$</span>
-                            <input type="hidden" id="question_id" value="{{ question.id }}">
-                            <input type="text" id="user_command" 
-                                   placeholder="Type your command here..." 
-                                   autocomplete="off" 
-                                   autofocus>
-                        </div>
-                        <div id="feedback-container">
-                            <p id="feedback" class="feedback"></p>
-                            <p id="game-over-message" class="game-over" style="display: none;">
-                                <i class="fas fa-skull-crossbones"></i> GAME OVER
-                            </p>
-                        </div>
+                    <div id="feedback-container">
+                        <p id="feedback" class="feedback"></p>
+                        <p id="game-over-message" class="game-over" style="display: none;">
+                            <i class="fas fa-skull-crossbones"></i> GAME OVER
+                        </p>
                     </div>
                 </div>
             </div>
