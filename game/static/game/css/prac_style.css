@@ -161,30 +161,6 @@ body {
     border: 1px solid #0f0;
 }
 
-.terminal-header {
-    padding: 10px;
-    background-color: #111;
-    border-bottom: 1px solid #0f0;
-}
-
-.terminal-controls {
-    display: flex;
-    gap: 10px;
-}
-
-.control-btn {
-    padding: 4px 8px;
-    background-color: #111;
-    color: #0f0;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.control-btn:hover {
-    background-color: #222;
-}
 
 .terminal-window {
     flex: 1;

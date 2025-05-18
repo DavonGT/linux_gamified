@@ -19,6 +19,9 @@
                 <h1>{{ mode|title }} Mode</h1>
                 <div class="player-info">
                     <span class="username">{{ player.username }}</span>
+                    <button class="back-button" onclick="window.location.href='{% url 'select_mode' %}'">
+                        <i class="fas fa-arrow-left"></i> Back to Modes
+                    </button>
                 </div>
             </div>
             <div class="game-stats">
@@ -48,36 +51,42 @@
 
         <!-- Main Game Content -->
         <main class="game-main">
-            <div class="task-section">
-                <h2>Current Task</h2>
-                <p class="task-description">{{ question.task }}</p>
+            <div class="game-sidebar">
+                <div class="task-info">
+                    <h2>Current Task</h2>
+                    <p class="task-description">{{ question.task }}</p>
+                </div>
             </div>
-            <div id="terminal" class="terminal-window">
-                <div class="terminal-content">
-                    <div class="command-prompt">
-                        <span class="username">{{ player }}@linux-gamified</span>
-                        <span class="path">:~$</span>
-                        <input type="hidden" id="question_id" value="{{ question.id }}">
-                        <input type="text" id="user_command" 
-                                placeholder="Type your command here..." 
-                                autocomplete="off" 
-                                autofocus>
-                    </div>
-                    <div id="feedback-container">
-                        <p id="feedback" class="feedback"></p>
-                        <p id="game-over-message" class="game-over" style="display: none;">
-                            <i class="fas fa-skull-crossbones"></i> GAME OVER
-                        </p>
+            <div class="terminal-container">
+                <div id="terminal" class="terminal-window">
+                    <div class="terminal-content">
+                        <div class="command-prompt">
+                            <span class="username">{{ player }}@linux-gamified</span>
+                            <span class="path">:~$</span>
+                            <input type="hidden" id="question_id" value="{{ question.id }}">
+                            <input type="text" id="user_command" 
+                                    placeholder="Type your command here..." 
+                                    autocomplete="off" 
+                                    autofocus>
+                        </div>
+                        <div id="feedback-container">
+                            <p id="feedback" class="feedback"></p>
+                            <p id="game-over-message" class="game-over" style="display: none;">
+                                <i class="fas fa-skull-crossbones"></i> GAME OVER
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
+        </main>
 
-            <div class="action-section">
+        <footer class="game-footer">
+            <div class="footer-content">
                 <button class="give-up-button" onclick="showGiveUpModal()">
                     <i class="fas fa-flag-white"></i> Give Up?
                 </button>
             </div>
-        </main>
+        </footer>
 
         <!-- Give Up Modal -->
         <div id="giveUpModal" class="modal">

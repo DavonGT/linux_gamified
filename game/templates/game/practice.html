@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}Practice Mode{% endblock %}
+
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'game/css/prac_style.css' %}">
 {% endblock %}
@@ -11,6 +13,7 @@
 
 {% block content %}
     <div class="practice-container">
+
         <header class="practice-header">
             <div class="header-content">
                 <h1>Practice Mode</h1>
@@ -23,56 +26,23 @@
             </div>
         </header>
 
+
+
         <main class="practice-main">
             <div class="practice-sidebar">
                 <div class="task-info">
                     <h2>Current Task</h2>
                     <p class="task-description">{{ question.task }}</p>
-
                 </div>
                 <div class="help-section">
                     <button id="hint-button" class="hint-button" onclick="showHint()">
                         <i class="fas fa-lightbulb"></i> Show Hint
                     </button>
                     <p id="hint" class="hint-text" style="display: none;">Hint: {{ question.hint }}</p>
-                    <div class="command-help">
-                        <h3>Common Commands</h3>
-                        <div class="command-list">
-                            <div class="command-item">
-                                <code>ls</code>
-                                <span>List directory contents</span>
-                            </div>
-                            <div class="command-item">
-                                <code>cd</code>
-                                <span>Change directory</span>
-                            </div>
-                            <div class="command-item">
-                                <code>pwd</code>
-                                <span>Show current directory</span>
-                            </div>
-                            <div class="command-item">
-                                <code>cat</code>
-                                <span>View file contents</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
             <div class="terminal-container">
-                <div class="terminal-header">
-                    <div class="terminal-controls">
-                        <button class="control-btn" onclick="minimizeTerminal()">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <button class="control-btn" onclick="maximizeTerminal()">
-                            <i class="fas fa-expand"></i>
-                        </button>
-                        <button class="control-btn" onclick="closeTerminal()">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                </div>
                 <div id="terminal" class="terminal-window">
                     <div class="terminal-content">
                         <div class="command-prompt">
@@ -96,10 +66,6 @@
                 <button class="exit-button" onclick="window.location.href='{% url 'select_mode' %}'">
                     <i class="fas fa-times-circle"></i> Exit Practice
                 </button>
-                <div class="progress-bar">
-                    <div class="progress" id="progress"></div>
-                </div>
-                <span class="progress-text">Progress: <span id="progress-text">0%</span></span>
             </div>
         </footer>
     </div>
