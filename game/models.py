@@ -41,4 +41,4 @@ class Question(models.Model):
 
     def get_points(self):
         # Return points based on difficulty
-        return dict(self.DIFFICULTY_CHOICES).get(self.difficulty, 10)
+        return int(dict(self.DIFFICULTY_CHOICES).get(self.difficulty, 10))
