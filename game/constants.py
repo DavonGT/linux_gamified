@@ -1,5 +1,3 @@
-"""Constants used throughout the game application."""
-
 # Game Modes
 SURVIVAL_MODE = 'survival'
 TIME_ATTACK_MODE = 'time_attack'
@@ -19,27 +17,3 @@ DEFAULT_LIVES = 3
 DEFAULT_TIME = 60
 DEFAULT_SCORE = 0
 
-# Point System
-POINTS = {
-    'easy': 10,
-    'medium': 20,
-    'hard': 30,
-}
-
-# Categories
-CATEGORY_CHOICES = [
-    ('file_operations', 'File Operations'),
-    ('process_management', 'Process Management'),
-    ('networking', 'Networking'),
-    ('permissions', 'Permissions'),
-    ('text_processing', 'Text Processing'),
-    ('system_info', 'System Information'),
-    ('other', 'Other'),
-]
-
-# Difficulty Levels
-DIFFICULTY_CHOICES = [
-    ('easy', '10'),
-    ('medium', '20'),
-    ('hard', '30'),
-]

@@ -1,11 +1,9 @@
-"""Views for the game application."""
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpRequest
 from django.views.decorators.csrf import csrf_exempt
 import json
 import random
-from typing import Dict, Any, Union
 from .models import Question
 from accounts.models import Player
 from django.db import models
@@ -73,16 +71,7 @@ def select_mode(request):
     # Render the mode selection screen
     return render(request, 'game/select_mode.html')
 
-def set_mode(request: HttpRequest, mode: str) -> HttpRequest:
-    """Set the gameplay mode and initialize session variables.
-    
-    Args:
-        request: The HTTP request
-        mode: The game mode to set
-        
-    Returns:
-        Redirect to appropriate game view
-    """
+def set_mode(request, mode):
     if mode in GAME_MODES:
         initialize_game_session(request.session, mode)
         return redirect('game')
@@ -91,15 +80,8 @@ def set_mode(request: HttpRequest, mode: str) -> HttpRequest:
     return redirect('select_mode')
 
 @login_required
-def game_view(request: HttpRequest) -> HttpRequest:
-    """Handle the main game view.
+def game_view(request):
     
-    Args:
-        request: The HTTP request
-        
-    Returns:
-        Rendered game view or redirect
-    """
     # Ensure the mode is set before starting the game
     if 'mode' not in request.session:
         return redirect('select_mode')
@@ -132,15 +114,8 @@ def game_view(request: HttpRequest) -> HttpRequest:
     return render(request, 'game/game.html', context)
 
 @csrf_exempt
-def validate_answer(request: HttpRequest) -> JsonResponse:
-    """Validate the user's answer and update game state.
+def validate_answer(request):
     
-    Args:
-        request: The HTTP request containing the answer data
-        
-    Returns:
-        JSON response with validation results
-    """
     if request.method != 'POST':
         return JsonResponse({'error': 'Invalid request method'}, status=405)
     
@@ -230,15 +205,8 @@ def time_up(request):
 
 @login_required
 @csrf_exempt
-def time_up(request: HttpRequest) -> JsonResponse:
-    """Handle time-up events in the game.
+def time_up(request):
     
-    Args:
-        request: The HTTP request
-        
-    Returns:
-        JSON response with game state update
-    """
     if request.method != 'POST':
         return JsonResponse({'error': 'Invalid request method'}, status=405)
         
@@ -277,15 +245,7 @@ def time_up(request: HttpRequest) -> JsonResponse:
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
 
-def game_over(request: HttpRequest) -> HttpRequest:
-    """Handle game over state and update player statistics.
-    
-    Args:
-        request: The HTTP request
-        
-    Returns:
-        Rendered game over view
-    """
+def game_over(request):
     player = request.user
     final_score = get_session_score(request.session)
     mode = request.session.get('mode')
@@ -310,15 +270,7 @@ def game_over(request: HttpRequest) -> HttpRequest:
     return render(request, 'game/game_over.html', {'score': final_score})
 
 @login_required
-def practice_mode(request: HttpRequest) -> HttpRequest:
-    """Handle practice mode view.
-    
-    Args:
-        request: The HTTP request
-        
-    Returns:
-        Rendered practice mode view
-    """
+def practice_mode(request):
     question = random.choice(Question.objects.all())
     return render(request, 'game/practice.html', {
         'question': question,
@@ -326,15 +278,7 @@ def practice_mode(request: HttpRequest) -> HttpRequest:
     })
 
 @csrf_exempt
-def validate_practice_answer(request: HttpRequest) -> JsonResponse:
-    """Validate answers in practice mode.
-    
-    Args:
-        request: The HTTP request containing the answer
-        
-    Returns:
-        JSON response with validation result
-    """
+def validate_practice_answer(request):
     if request.method != 'POST':
         return JsonResponse({'error': 'Invalid request method'}, status=405)
         
