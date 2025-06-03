@@ -304,3 +304,8 @@ def validate_practice_answer(request):
         return JsonResponse({'error': 'Invalid input format'}, status=400)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
+
+
+
+def story_mode(request):
+    return render(request,'game/story_mode.html')
