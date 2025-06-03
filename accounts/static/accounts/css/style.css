@@ -1,6 +1,6 @@
 body {
-    font-family: 'Courier New', Courier, monospace;
-    background-color: #000;
+    font-family: 'VT323', monospace;
+    background-color: #231949;
     color: #0f0;
     margin: 0;
     padding: 0;
@@ -10,75 +10,127 @@ body {
     height: 100vh;
 }
 
-h1 {
-    color: #0f0;
+.container {
+    display: inline-block;
+    padding: 0;
+    border: 3px solid #f130ee;
+    box-shadow: 0 0 25px #f130ee;
+    border-radius: 30px;
     text-align: center;
-    margin-bottom: 40px; /* Increased spacing */
-    padding-right: 40px;
+    background-color: transparent;
 }
 
-form {
-    background: #111;
-    padding: 20px;
-    border-radius: 8px;
+.toggle-btns {
+    display: flex;
+    justify-content: space-between;
+    font-size: 25px;
+    margin: 0;
+}
+
+.toggle-btns a {
+    flex: 1;
+    padding: 12px 0;
+    border: none;
+    text-decoration: none;
+    transition: 0.3s;
+    color: #ccc;
+    background-color: transparent;
+    border: 2px solid #f130ee;
+}
+
+.toggle-btns a:first-child {
+    border-top-left-radius: 27px;
+}
+
+.toggle-btns a:last-child {
+    border-top-right-radius: 27px;
+}
+
+.toggle-btns a.active {
+    background-color: #f130ee;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* Login button (first) active */
+.toggle-btns a.active:first-child {
+    border-top-left-radius: 25px;
+    border-top-right-radius: 0;
+}
+
+/* Register button (second) active */
+.toggle-btns a.active:last-child {
+    border-top-right-radius: 25px;
+    border-top-left-radius: 0;
+}
+
+.form-container {
+    padding: 20px 30px 0px 30px;
+    margin: 50px;
     width: 300px;
-    color: #0f0;
+    background-color: transparent;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 18px;
+}
+
+.form-group input {
+    width: 100%;
+    font-size: 20px;
+    padding: 15px 0 5px 0;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #f130ee;
+    color: #fff;
+    outline: none;
+    font-family: 'VT323', monospace;
+    font-size: 25px;
+}
+
+.form-group label {
+    position: absolute;
+    top: 15px;
+    left: 0;
+    color: #fff;
+    font-size: 22px;
+    pointer-events: none;
+    transition: 0.2s ease all;
+}
+
+.form-group input:focus + label,
+.form-group input:not(:placeholder-shown) + label {
+    top: -5px;
+    font-size: 18px;
+    color: #f130ee;
 }
 
 button {
-    background-color: #000;
-    color: #0f0;
-    border: 1px solid #0f0;
-    padding: 10px 15px;
-    border-radius: 4px;
+    background-color: #ffffff;
+    color: #f130ee;
+    border: none;
+    border-radius: 25px;
     cursor: pointer;
-    margin-top: 10px;
-    width: 100%;
-    font-size: 16px;
+    width: 150px;
+    height: 45px;
+    font-size: 25px;
+    margin-top: 30px;
+    font-family: 'VT323', monospace;
 }
 
 button:hover {
-    background-color: #111;
-    box-shadow: 0 0 10px #0f0;
-}
-
-a {
-    display: block;
-    text-align: center;
-    margin-top: 10px;
-    color: #0f0;
-    text-decoration: none;
+    background-color: #f130ee;
+    color: #fff;
+    box-shadow: 0 0 8px white;
 }
 
 a:hover {
     text-decoration: underline;
-    color: #0f0;
-}
-
-input {
-    background: none;
-    border: none;
-    border-bottom: 2px solid #0f0;
-    color: #0f0;
-    width: 100%;
-    padding: 5px;
-    font-size: 16px;
-    outline: none;
-    margin-bottom: 20px;
-}
-
-input::placeholder {
-    color: #0f0;
-    opacity: 0.7;
-}
-
-input:focus {
-    border-bottom: 2px solid #4CAF50; /* Slightly brighter green on focus */
 }
 
 .error {
     color: red;
-
 }
 
 li {

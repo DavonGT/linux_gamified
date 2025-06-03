@@ -1,292 +1,133 @@
-/* Base styles */
 body {
-    font-family: 'Courier New', Courier, monospace;
-    background-color: #000;
-    color: #0f0;
-    margin: 0;
-    padding: 20px;
-    min-height: 100vh;
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #000;
+  color: #0f0;
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
 }
 
-/* Mode container */
 .mode-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-/* Header styles */
 .mode-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 40px;
-    text-align: center;
+  text-align: center;
+  margin-bottom: 40px;
 }
 
 .mode-header h1 {
-    font-size: 36px;
-    margin-bottom: 20px;
-    color: #0f0;
-    text-shadow: 0 0 10px #0f0;
+  font-size: 36px;
+  color: #0f0;
+  text-shadow: 0 0 10px #0f0;
+  margin-bottom: 20px;
 }
 
 .player-info {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 }
 
 .username {
-    font-size: 20px;
-    color: #0f0;
+  font-size: 20px;
 }
 
 .back-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    border: 1px solid #0f0;
-    background-color: #111;
-    color: #0f0;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: 1px solid #0f0;
+  background-color: #111;
+  color: #0f0;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .back-button:hover {
-    background-color: #222;
-    box-shadow: 0 0 10px #0f0;
+  background-color: #222;
+  box-shadow: 0 0 10px #0f0;
 }
 
-/* Mode grid */
 .mode-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
 }
 
-/* Mode card styles */
 .mode-card {
-    background-color: #111;
-    border: 1px solid #0f0;
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    position: relative;
-    overflow: hidden;
+  border: none;
+  background: none;
 }
 
-.mode-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 255, 0, 0.2);
+.mode-button {
+  position: relative;
+  height: 60px;
+  width: 180px;
+  overflow: hidden;
+  padding: 20px;
+  background-color: #111;
+  border: 1px solid #0f0;
+  color: #0f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-.mode-icon {
-    font-size: 48px;
-    color: #0f0;
-    margin-bottom: 15px;
+.mode-button:hover {
+  height: auto;
+  min-height: 200px;
+  background-color: #222;
+  box-shadow: 0 0 10px #0f0;
 }
 
-.mode-card h2 {
-    font-size: 24px;
-    margin-bottom: 10px;
-    color: #0f0;
+/* Hidden by default */
+.mode-title,
+.mode-description {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  transition: opacity 0.3s ease;
+  padding: 0;
+}
+
+.mode-title {
+  opacity: 1;
 }
 
 .mode-description {
-    font-size: 16px;
-    margin-bottom: 15px;
-    color: #0f0;
-    opacity: 0.9;
+  opacity: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  white-space: normal;
 }
 
-.mode-features {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 20px;
+/* Hover logic */
+.mode-button:hover .mode-title {
+  opacity: 0;
 }
 
-.feature {
-    background-color: #000;
-    color: #0f0;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 14px;
-    border: 1px solid rgba(0, 255, 0, 0.2);
+.mode-button:hover .mode-description {
+  opacity: 1;
 }
 
-.select-button {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    border: 1px solid #0f0;
-    background-color: #111;
-    color: #0f0;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+/* Hardcore color adjustment */
+.mode-card.hardcore-survival .mode-button,
+.mode-card.hardcore-time-attack .mode-button {
+  border-color: #f00;
+  color: #f00;
 }
 
-.select-button:hover {
-    background-color: #222;
-    box-shadow: 0 0 10px #0f0;
-}
-
-.select-button i {
-    font-size: 18px;
-}
-
-/* Mode-specific styles */
-.mode-card.practice {
-    border-color: #0f0;
-}
-
-.mode-card.survival {
-    border-color: #0f0;
-}
-
-.mode-card.time-attack {
-    border-color: #0f0;
-}
-
-.mode-card.hardcore-survival {
-    border-color: #f00;
-}
-
-.mode-card.hardcore-time-attack {
-    border-color: #f00;
-}
-
-/* Responsive design */
-@media (max-width: 1200px) {
-    .mode-container {
-        padding: 15px;
-    }
-    
-    .mode-header h1 {
-        font-size: 32px;
-    }
-    
-    .mode-grid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    }
-}
-
-@media (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
-    
-    .mode-container {
-        padding: 10px;
-    }
-    
-    .mode-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
-    
-    .mode-card {
-        padding: 15px;
-    }
-    
-    .mode-header {
-        padding: 10px;
-    }
-    
-    .mode-icon {
-        font-size: 36px;
-    }
-    
-    .mode-card h2 {
-        font-size: 20px;
-    }
-    
-    .mode-description {
-        font-size: 14px;
-        line-height: 1.4;
-    }
-    
-    .mode-features {
-        gap: 8px;
-    }
-    
-    .feature {
-        font-size: 13px;
-        padding: 4px 8px;
-    }
-    
-    .select-button {
-        padding: 10px;
-        font-size: 14px;
-    }
-    
-    .select-button i {
-        font-size: 16px;
-    }
-    
-    .player-info {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
-    
-    .back-button {
-        padding: 8px 15px;
-        font-size: 14px;
-    }
-}
-
-@media (max-width: 480px) {
-    .mode-header h1 {
-        font-size: 28px;
-    }
-    
-    .mode-card {
-        padding: 12px;
-    }
-    
-    .mode-icon {
-        font-size: 32px;
-    }
-    
-    .mode-card h2 {
-        font-size: 18px;
-    }
-    
-    .mode-description {
-        font-size: 13px;
-    }
-    
-    .mode-features {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .feature {
-        font-size: 12px;
-        padding: 3px 6px;
-        margin: 5px 0;
-    }
-    
-    .select-button {
-        padding: 8px;
-        font-size: 13px;
-    }
-    
-    .select-button i {
-        font-size: 14px;
-    }
-    
-    .username {
-        font-size: 18px;
-    }
+.mode-card.hardcore-survival .mode-button:hover,
+.mode-card.hardcore-time-attack .mode-button:hover {
+  box-shadow: 0 0 10px #f00;
+  background-color: #200;
 }
