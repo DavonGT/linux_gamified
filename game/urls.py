@@ -11,4 +11,5 @@ urlpatterns = [
     path('game_over/', views.game_over, name='game_over'),
     path('practice/', views.practice_mode, name='practice_mode'),
     path('validate_practice_answer/', views.validate_practice_answer, name='validate_practice_answer'),
+    path('story_mode/', views.story_mode, name='story_mode'),
 ]
