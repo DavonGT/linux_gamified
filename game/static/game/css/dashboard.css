@@ -1,3 +1,5 @@
+
+
 /* Menu section styles */
 .menu-section {
     display: flex;
@@ -115,3 +117,55 @@
     overflow-y: auto;
     max-height: 90vh;
 }
+
+.animation-stack {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.text-base {
+  font-size: 150px;
+  text-align: center;
+  color: rgb(255, 255, 255); /* match your aesthetic */
+  position: relative;
+  z-index: 1;
+  padding: 40px 0;
+  opacity: 0.6;
+}
+
+#trace {
+  position: absolute;
+  top: 30px;
+  left: 115px;
+  color: rgb(255, 0, 225);
+  background: transparent;
+  font-family: monospace;
+  width: 100%;
+  white-space: pre;
+  overflow: hidden;
+  z-index: 2;
+  animation: glowPulse 1.5s infinite ease-in-out;
+  pointer-events: none; /* Allows clicks to pass through */
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow:
+      0 0 5px #fcef1d,
+      0 0 10px #4bf8d9,
+      0 0 20px #ff6600,
+      0 0 40px #FF0C81;
+  }
+  50% {
+    text-shadow:
+      0 0 4px #FF0C81,
+      0 0 8px #fcef1d,
+      0 0 16px #4bf8d9,
+      0 0 32px #FF0C81;
+  }
+}
+
+
