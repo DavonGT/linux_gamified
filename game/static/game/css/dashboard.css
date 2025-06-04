@@ -184,14 +184,103 @@
 /*----------------------------------------
   Leaderboard Tabs
 -----------------------------------------*/
-.leaderboard-tabs {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.modal-content-leaderboard {
+  padding: 20px;
+  border: 5px solid #9c49f7;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 860px;
+  box-shadow: 0 0 10px #4bf8d9;
+  color: #0f0;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+  font-family: 'VT323', monospace;
 }
 
-.tab-btn {
-  margin: 10px;
+.modal-content-leaderboard h2 {
+  color: #4bf8d9;
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: 'Brick Sans', sans-serif;
+  color: #9c49f7;
+}
+
+/* Leaderboard Tabs */
+.modal-content-leaderboard .leaderboard-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.modal-content-leaderboard .leaderboard-tabs button {
+  background-color: transparent;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  color: #f130ee;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  font-size: 16px;
+  font-family: 'VT323', monospace;
+}
+
+.modal-content-leaderboard .leaderboard-tabs button:hover {
+  color: white;
+}
+
+.modal-content-leaderboard .leaderboard-tabs button.active {
+  color: white;
+  font-weight: bold;
+}
+
+/* Leaderboard Tables */
+.modal-content-leaderboard table {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.modal-content-leaderboard th {
+  padding: 10px;
+  text-align: left; /* keep header centered */
+  font-size: 18px;
+  color: #4bf8d9;
+  font-weight: bold;
+}
+
+.modal-content-leaderboard td {
+  padding: 10px;
+  text-align: left; /* align table body left */
+  font-size: 18px;
+  color: #fff;
+}
+
+
+.modal-content-leaderboard th {
+  color: #4bf8d9;
+  font-weight: bold;
+}
+
+/* .modal-content-leaderboard tbody tr:nth-child(even) {
+  background-color: rgba(75, 248, 217, 0.1);
+} */
+
+.modal-content-leaderboard tbody tr:hover {
+  background-color: rgba(75, 248, 217, 0.2);
+}
+
+/* Close Button */
+.modal-content-leaderboard .close {
+  color: #4bf8d9 !important;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
 }
 
 /*----------------------------------------
@@ -208,6 +297,7 @@
   justify-content: center;
   align-items: center;
   z-index: 999;
+  backdrop-filter: blur(5px);
 }
 
 .modal-content {
@@ -247,18 +337,57 @@
     color: #f130ee;
 }
 
+
+
 .modal-content-score {
-  background-color: #000;
-  padding: 30px;
-  border: 2px solid #0f0;
+  background-color: none;
+  padding: 10px;
+  border: 5px solid #4bf8d9;
   border-radius: 10px;
-  width: 90%;
-  max-width: 300px;
-  box-shadow: 0 0 20px #0f0;
+  width: 50%;
+  max-width: 350px;
+  box-shadow: 0 0 10px #4bf8d9;
   color: #0f0;
   position: relative;
   max-height: 90vh;
   overflow-y: auto;
+  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-content-score h2 {
+  color: #4bf8d9;
+  font-family: 'Brick Sans', sans-serif;
+  padding: 20px;
+  text-align: center;
+}
+
+.modal-content-score .stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+  color: white;
+  width: 80%;            /* keeps them consistent and centered */
+  max-width: 300px;
+}
+
+.modal-content-score .label {
+  text-align: left;
+  flex: 1;
+  white-space: nowrap; 
+}
+
+.modal-content-score .value {
+  text-align: right;
+  flex: 1;
+}
+
+
+.modal-content-score .close {
+  color: #4bf8d9 !important;
 }
 
 .modal-content h1 {
@@ -290,11 +419,6 @@
   display: none;
 }
 
-/* Scrollable leaderboard modal content */
-.scrollable {
-  overflow-y: auto;
-  max-height: 90vh;
-}
 
 /*----------------------------------------
   Animation Section
@@ -310,7 +434,7 @@
 .text-base {
   font-size: 150px;
   text-align: center;
-  color: rgb(255, 255, 255);
+  color: #4bf8d9;
   position: relative;
   z-index: 1;
   padding: 40px 0;
@@ -319,8 +443,8 @@
 
 #trace {
   position: absolute;
-  top: 30px;
-  left: 115px;
+  top: 50px;
+  left: 200px;
   color: rgb(255, 0, 225);
   background: transparent;
   font-family: monospace;
@@ -331,6 +455,17 @@
   animation: glowPulse 1.5s infinite ease-in-out;
   pointer-events: none;
 }
+
+
+.dashboard-header {
+  text-align: center;
+  margin-top: 20px;
+  padding-right: 100px;
+}
+
+
+
+
 
 @keyframes glowPulse {
   0%, 100% {
