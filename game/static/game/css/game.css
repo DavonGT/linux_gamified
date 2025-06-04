@@ -1,11 +1,16 @@
 /* Base styles */
 body {
-    font-family: 'Courier New', Courier, monospace;
-    background-color: #000;
-    color: #0f0;
-    margin: 0;
-    padding: 20px;
-    min-height: 100vh;
+    font-family: 'VT323', monospace;
+    background-color: #231949;
+    margin: 50px 80px; /* your margin here */
+    padding: 30px;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px pink;
+    box-shadow: 0 0 10px #ffffff;
+    border-radius: 20px;
 }
 
 /* Game container */
@@ -20,21 +25,31 @@ body {
 
 /* Game header */
 .game-header {
-    background-color: #111;
+    display: flex;
     padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #0f0;
+    flex-direction: row;
+    margin: 0 auto; /* Remove this if you added it earlier! */
+    width: 100%;
+    box-sizing: border-box; /* ensures padding doesn’t exceed width */
+
+    justify-content: space-between; /* spreads children evenly with space between */
+    align-items: baseline; /* vertically center children */
+    font-family: 'Brick Sans', sans-serif;
 }
 
 .header-content {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+}
+
+.header-content h1 {
+    font-size: 50px;
+    color: #f130ee;
 }
 
 .game-stats {
     display: flex;
-    gap: 15px;
+    gap: 100px;
     flex-wrap: wrap;
 }
 
@@ -43,29 +58,22 @@ body {
     align-items: center;
     gap: 8px;
     padding: 8px;
-    background-color: #000;
-    border: 1px solid rgba(0, 255, 0, 0.2);
-    border-radius: 4px;
+    font-size: 35px;
 }
 
 .stat-item i {
     color: #0f0;
 }
 
-.back-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    border: 1px solid #0f0;
-    background-color: #111;
-    color: #0f0;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.back-button:hover {
-    background-color: #222;
-    box-shadow: 0 0 10px #0f0;
+.stat-icon,
+.life-icon {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    display: inline-block;
+    vertical-align: middle;
+    margin: -5px;
+    padding: 0;
 }
 
 /* Main game content */
@@ -73,28 +81,42 @@ body {
     display: flex;
     gap: 20px;
     flex: 1;
+    flex-direction: column;
 }
 
 /* Sidebar styles */
 .game-sidebar {
-    width: 300px;
-    background-color: #111;
-    border-radius: 8px;
+    display: flex;
     padding: 20px;
-    border: 1px solid #0f0;
+    flex-direction: row;
+    align-items: baseline;
+}
+
+.task-icon {
+    width: 80px;  /* Adjust as needed */
+    height: auto;
+    vertical-align: middle;  /* Align with text nicely */
+    margin-bottom: 8px;  /* Add spacing if desired */
+    object-fit: contain;
+    display: inline-block;
 }
 
 .task-info {
-    margin-bottom: 20px;
+    display: flex;        /* lay out children horizontally */
+    flex-direction: row;  /* default; but explicit here for clarity */
+    align-items: center;  /* vertically align icon and text */
+    gap: 10px;            /* optional: space between icon and text */
 }
+
 
 .task-description {
     margin: 10px 0;
-    color: #0f0;
+    color: #4bf8d9;
     opacity: 0.9;
+    font-size: 50px;
+    line-height: 1;
 }
-
-
+/* 
 /* Modal Styles */
 .modal {
     display: none;
@@ -103,79 +125,75 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
     z-index: 1000;
 }
 
 .modal-content {
     position: relative;
-    background-color: #111;
-    border: 1px solid #0f0;
+    background-color: #9c49f7;
+    border: 2px solid #9c49f7;
     margin: 15% auto;
     padding: 20px;
     border-radius: 8px;
     width: 90%;
     max-width: 500px;
-    max-height: 90vh;
-    overflow-y: auto;
+    max-height: 100vh;
+    text-align: center;
 }
 
 .modal-header {
-    display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: -10px;
     padding-bottom: 10px;
-    border-bottom: 1px solid #111;
 }
 
 .modal-header h2 {
-    margin: 0;
-    color: #333;
-}
-
-.close-modal {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    padding: 5px;
-    color: #666;
+    margin: 10px;
+    color: #4bf8d9;
+    font-family: 'Brick Sans', sans-serif;
+    font-size: 35px;
 }
 
 .modal-body {
     margin-bottom: 20px;
+    color: #ffffff;
+    font-size: 25px;
 }
 
 .modal-footer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     gap: 10px;
     padding-top: 10px;
-    border-top: 1px solid #111;
 }
 
 .modal-button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
+    padding: 12px 24px;
+    /* border: none; */
+    border-radius: 25px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 18px;
+    font-family: 'VT323', monospace;
 }
 
 .modal-button.cancel {
-    background-color: #00ff00;
-    color: #333;
+    border: 2px solid #e00e32;
+    background-color: transparent; 
+    color: white;
 }
 
 .modal-button.confirm {
-    background-color: #dc3545;
+    background-color: #f130ee;
     color: white;
+    border: none;
 }
 
 .modal-button:hover {
     opacity: 0.9;
-}
+    box-shadow: 0 0 10px white;
+} 
 
 /* Task section */
 .task-section {
@@ -192,33 +210,25 @@ body {
     margin-bottom: 15px;
 }
 
-.task-description {
-    color: #0f0;
-    opacity: 0.9;
-    line-height: 1.4;
-}
 
 /* Terminal styles */
 .terminal-container {
-    flex: 1;
+
     display: flex;
     flex-direction: column;
-    background-color: #111;
-    border-radius: 8px;
-    border: 1px solid #0f0;
+    border-radius: 20px;
+    height: 60px;
+    border: 3px solid #4bf8d9;
 }
 
-
 .terminal-window {
-    flex: 1;
     display: flex;
     flex-direction: column;
 }
 
 .terminal-content {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
+    padding: 5px 30px;
+    align-items: baseline;
 }
 
 .command-prompt {
@@ -226,32 +236,31 @@ body {
     align-items: center;
     gap: 5px;
     margin-bottom: 10px;
+    align-items: baseline;
 }
 
 .username {
-    color: #0f0;
+    color: #4bf8d9;
+    white-space: nowrap;
+    font-size: 25px;
 }
 
 .path {
-    color: #0f0;
+    color: #4bf8d9;
     opacity: 0.8;
+    font-size: 25px;
 }
 
 #user_command {
-    background-color: #000;
-    color: #0f0;
+    color: #4bf8d9;
     border: none;
     outline: none;
-    width: 100%;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 1rem;
+    width: 70%;
+    font-family: 'VT323', monospace;
+    font-size: 25px;
     padding: 5px;
-    border-radius: 3px;
 }
 
-#user_command:focus {
-    border: 1px solid #0f0;
-}
 
 .feedback {
     margin-top: 10px;
@@ -261,35 +270,36 @@ body {
 
 /* Footer styles */
 .game-footer {
-    background-color: #111;
     padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #0f0;
+    margin-top: 100px;
 }
 
 .footer-content {
     display: flex;
     align-items: center;
     gap: 20px;
+    justify-content: center;
 }
 
 .give-up-button {
     padding: 12px 24px;
-    font-size: 16px;
-    border: 1px solid #f00;
-    background-color: #111;
-    color: #f00;
-    border-radius: 5px;
+    font-size: 20px;
+    background-color: #f130ee;
+    border: none;
+    color: rgb(255, 255, 255);
+    border-radius: 25px;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     gap: 10px;
+    font-family: 'VT323', monospace;
 }
 
 .give-up-button:hover {
-    background-color: #222;
-    box-shadow: 0 0 10px #f00;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px #f130ee;
+    color: #f130ee;
 }
 
 /* Animations */
@@ -302,180 +312,18 @@ body {
     }
 }
 
-/* Responsive design */
-@media (max-width: 1200px) {
-    .game-container {
-        padding: 15px;
-    }
-    
-    .game-header {
-        padding: 15px;
-    }
-    
-    .task-info {
-        padding: 15px;
-    }
-    
-    .command-item {
-        padding: 6px;
-    }
-    
-    .terminal-container {
-        padding: 10px;
-    }
-}
 
-@media (max-width: 1024px) {
-    .game-main {
-        flex-direction: column;
-    }
-    
-    .game-sidebar {
-        width: 100%;
-    }
-    
-    .terminal-container {
-        margin-top: 20px;
-    }
-    
-    .terminal-controls {
-        justify-content: center;
-    }
-}
 
-@media (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
-    
-    .game-container {
-        padding: 10px;
-    }
-    
-    .game-header {
-        padding: 12px;
-    }
-    
-    .player-info {
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-    }
-    
-    .username {
-        font-size: 18px;
-    }
-    
-    .back-button {
-        padding: 8px 15px;
-        font-size: 14px;
-    }
-    
-    .task-info {
-        padding: 12px;
-    }
-    
-    .task-description {
-        font-size: 14px;
-        line-height: 1.4;
-    }
-    
-    .command-list {
-        margin-top: 15px;
-    }
-    
-    .command-item {
-        padding: 6px;
-        font-size: 13px;
-        margin-bottom: 4px;
-    }
-    
-    .command-item code {
-        font-size: 13px;
-    }
-    
-    .command-item span {
-        font-size: 12px;
-    }
-    
-    .terminal-container {
-        padding: 10px;
-    }
-    
-    .terminal-controls {
-        gap: 5px;
-    }
-    
-    .control-btn {
-        padding: 3px 6px;
-        font-size: 12px;
-    }
-    
-    .command-prompt {
-        gap: 4px;
-    }
-    
-    #user_command {
-        font-size: 14px;
-        padding: 8px;
-    }
-    
-    .feedback {
-        font-size: 14px;
-    }
-}
-
-@media (max-width: 480px) {
-    .game-header {
-        padding: 10px;
-    }
-    
-    .username {
-        font-size: 16px;
-    }
-    
-    .back-button {
-        padding: 6px 12px;
-        font-size: 13px;
-    }
-    
-    .task-info {
-        padding: 10px;
-    }
-    
-    .task-description {
-        font-size: 13px;
-    }
-    
-    .command-item {
-        padding: 5px;
-        font-size: 12px;
-    }
-    
-    .command-item code {
-        font-size: 12px;
-    }
-    
-    .command-item span {
-        font-size: 11px;
-    }
-    
-    .terminal-controls {
-        flex-direction: column;
-        gap: 3px;
-    }
-    
-    .control-btn {
-        padding: 2px 4px;
-        font-size: 11px;
-    }
-    
-    #user_command {
-        font-size: 13px;
-        padding: 6px;
-    }
-    
-    .feedback {
-        font-size: 13px;
-    }
+/* === New rule: Make major containers 80% viewport width === */
+.game-container,
+.game-header,
+.task-section,
+.game-sidebar,
+.terminal-container,
+.game-footer {
+    width: 80vw !important;
+    max-width: 80vw !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    box-sizing: border-box;
 }

@@ -8,17 +8,15 @@
   <link rel="stylesheet" href="{% static 'game/css/base.css' %}" />
   <link rel="stylesheet" href="{% static 'game/css/select_mode.css' %}" />
   <link rel="stylesheet" href="{% static 'game/libs/fontawesome/css/all.min.css' %}" />
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="mode-container">
     <header class="mode-header">
       <h1>Choose Your Game Mode</h1>
-      <div class="player-info">
-        <span class="username">{{ player.username }}</span>
         <button class="back-button" onclick="window.location.href='{% url 'dashboard' %}'">
           <i class="fas fa-arrow-left"></i> Back to Dashboard
         </button>
-      </div>
     </header>
 
     <main class="mode-grid">

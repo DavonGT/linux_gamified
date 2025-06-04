@@ -30,53 +30,96 @@ from .utils import (
     update_session_score, decrement_session_lives
 )
 
+
 @login_required
 def dashboard(request):
-    # Fetch the highest score for each player in each game mode
+    players = Player.objects.all()
+
     survival_leaderboard = Player.objects.values('username').annotate(
         survival_score=models.F('survival_score')
-    ).order_by('-survival_score')[:10]
+    ).order_by('-survival_score', 'games_played')[:10]
 
     time_attack_leaderboard = Player.objects.values('username').annotate(
         time_attack_score=models.F('time_attack_score')
-    ).order_by('-time_attack_score')[:10]
+    ).order_by('-time_attack_score', 'games_played')[:10]
 
     hardcore_survival_leaderboard = Player.objects.values('username').annotate(
         ha_score=models.F('ha_score')
-    ).order_by('-ha_score')[:10]
+    ).order_by('-ha_score', 'games_played')[:10]
 
     hardcore_time_attack_leaderboard = Player.objects.values('username').annotate(
         hta_score=models.F('hta_score')
-    ).order_by('-hta_score')[:10]
+    ).order_by('-hta_score', 'games_played')[:10]
 
-    # Add rank to each player in each leaderboard
-    survival_leaderboard = [
-        {'rank': idx + 1, 'username': entry['username'], 'survival_score': entry['survival_score']}
-        for idx, entry in enumerate(survival_leaderboard)
-    ]
+    def assign_ranks(leaderboard, score_field):
+        ranked = []
+        current_rank = 1
+        for idx, entry in enumerate(leaderboard):
+            if idx > 0:
+                prev = leaderboard[idx - 1]
+                if (entry[score_field] == prev[score_field] and
+                        entry.get('games_played', 0) == prev.get('games_played', 0)):
+                    entry['rank'] = ranked[-1]['rank']
+                else:
+                    entry['rank'] = current_rank
+            else:
+                entry['rank'] = current_rank
+            ranked.append(entry)
+            current_rank += 1
+        return ranked
 
-    time_attack_leaderboard = [
-        {'rank': idx + 1, 'username': entry['username'], 'time_attack_score': entry['time_attack_score']}
-        for idx, entry in enumerate(time_attack_leaderboard)
-    ]
+    survival_leaderboard = assign_ranks(list(survival_leaderboard), 'survival_score')
+    time_attack_leaderboard = assign_ranks(list(time_attack_leaderboard), 'time_attack_score')
+    hardcore_survival_leaderboard = assign_ranks(list(hardcore_survival_leaderboard), 'ha_score')
+    hardcore_time_attack_leaderboard = assign_ranks(list(hardcore_time_attack_leaderboard), 'hta_score')
 
-    hardcore_survival_leaderboard = [
-        {'rank': idx + 1, 'username': entry['username'], 'ha_score': entry['ha_score']}
-        for idx, entry in enumerate(hardcore_survival_leaderboard)
-    ]
+    overall_data = []
+    for player in players:
+        overall_score = (
+            player.survival_score +
+            player.time_attack_score +
+            player.ha_score +
+            player.hta_score
+        )
+        overall_data.append({
+            'username': player.username,
+            'overall_score': overall_score,
+            'games_played': player.games_played,
+        })
 
-    hardcore_time_attack_leaderboard = [
-        {'rank': idx + 1, 'username': entry['username'], 'hta_score': entry['hta_score']}
-        for idx, entry in enumerate(hardcore_time_attack_leaderboard)
-    ]
+    # Sort overall by score DESC, games played ASC
+    overall_sorted = sorted(
+        overall_data,
+        key=lambda x: (-x['overall_score'], x['games_played'])
+    )
 
-    return render(request, 'game/dashboard.html', {
+    # Assign ranks with ties
+    ranked_overall_leaderboard = []
+    current_rank = 1
+    for idx, entry in enumerate(overall_sorted):
+        if idx > 0:
+            prev = overall_sorted[idx - 1]
+            if (entry['overall_score'] == prev['overall_score'] and
+                    entry['games_played'] == prev['games_played']):
+                entry['rank'] = ranked_overall_leaderboard[-1]['rank']
+            else:
+                entry['rank'] = current_rank
+        else:
+            entry['rank'] = current_rank
+        ranked_overall_leaderboard.append(entry)
+        current_rank += 1
+
+    context = {
         'player': request.user,
         'survival_leaderboard': survival_leaderboard,
         'time_attack_leaderboard': time_attack_leaderboard,
         'hardcore_survival_leaderboard': hardcore_survival_leaderboard,
         'hardcore_time_attack_leaderboard': hardcore_time_attack_leaderboard,
-    })
+        'overall_leaderboard': ranked_overall_leaderboard,
+    }
+
+    return render(request, 'game/dashboard.html', context)
+
 
 @login_required
 def select_mode(request):
