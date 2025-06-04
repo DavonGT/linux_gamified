@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 {% load static %}
-{% load filters %}
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -9,45 +8,91 @@
   <link rel="stylesheet" href="{% static 'game/css/base.css' %}">
   <link rel="stylesheet" href="{% static 'game/css/dashboard.css' %}">
   <link rel="stylesheet" href="{% static 'game/libs/fontawesome/css/all.min.css' %}">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Brick Sans';
+      src: url("{% static 'game/fonts/NTBrickSans.otf' %}") format('opentype');
+      font-weight: bold;
+      font-style: normal;
+    }
+
+    .text-base {
+      font-family: 'Brick Sans', sans-serif;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
 
 <div class="dashboard-container">
   <header class="dashboard-header">
     <div class="animation-stack">
-      <div class="text-base">LINUX</div>
-      <style>
-        @font-face {
-          font-family: 'Brick Sans';
-          src: url("{% static 'game/fonts/BrickSans-Bold.otf' %}") format('opentype');
-          font-weight: bold;
-          font-style: normal;
-        }
-
-        .text-base {
-          font-family: 'Brick Sans', sans-serif;
-          font-weight: bold;
-        }
-      </style>
-
+      <div class="text-base">ARGHH</div>
       <pre id="trace"><span id="trace-chars"></span></pre>
     </div>
   </header>
 
   <main class="menu-section">
-    <button onclick="location.href='{% url 'select_mode' %}'">
-      <i class="fas fa-play"></i> Play Game
+    <button onclick="toggleModal('selectModeModal')">
+      Play Game
     </button>
     <button onclick="toggleModal('scoresModal')">
-      <i class="fas fa-chart-line"></i> My Scores
+      My Scores
     </button>
     <button onclick="toggleModal('leaderboardModal')">
-      <i class="fas fa-list-ol"></i> Leaderboard
+      Leaderboard
     </button>
     <button onclick="location.href='{% url 'logout' %}'">
-      <i class="fas fa-sign-out-alt"></i> Exit
+      Exit
     </button>
   </main>
+</div>
+
+<!-- Game Mode Selection Modal -->
+<div id="selectModeModal" class="modal hidden">
+  <div class="modal-content-modes">
+    <span class="close" onclick="toggleModal('selectModeModal')">&times;</span>
+    <h1>Choose Your Game Mode</h1>
+    <div class="mode-grid">
+      <div class="mode-card practice">
+        <button class="mode-button" onclick="window.location.href='/set_mode/practice/'">
+          <span class="mode-title">Practice</span>
+          <span class="mode-description">Practice without time limits or penalties. Perfect for learning and building confidence.</span>
+        </button>
+      </div>
+      <div class="mode-card survival">
+        <button class="mode-button" onclick="window.location.href='/set_mode/survival/'">
+          <span class="mode-title">Survival</span>
+          <span class="mode-description">Survive as long as possible with limited lives. Test your endurance and skill.</span>
+        </button>
+      </div>
+      <div class="mode-card hardcore-survival">
+        <button class="mode-button" onclick="window.location.href='/set_mode/hardcore_survival/'">
+          <span class="mode-title">Hardcore Survival</span>
+          <span class="mode-description">The ultimate challenge - no backspace allowed. Only the bravest dare to play.</span>
+        </button>
+      </div>
+      <div class="mode-card story">
+        <button class="mode-button" onclick="window.location.href='/story_mode/'">
+          <span class="mode-title">Story</span>
+          <span class="mode-description">Embark on an epic journey through the game’s storyline. Experience the narrative and challenges.</span>
+        </button>
+      </div>
+      <div class="mode-card time-attack">
+        <button class="mode-button" onclick="window.location.href='/set_mode/time_attack/'">
+          <span class="mode-title">Time Attack</span>
+          <span class="mode-description">Complete levels as quickly as possible. Race against the clock for high scores.</span>
+        </button>
+      </div>
+      <div class="mode-card hardcore-time-attack">
+        <button class="mode-button" onclick="window.location.href='/set_mode/hardcore_time_attack/'">
+          <span class="mode-title">Hardcore Time Attack</span>
+          <span class="mode-description">The ultimate speed challenge - no backspace allowed. Race against the clock with no mercy.</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- My Scores Modal -->
@@ -58,6 +103,8 @@
     <div class="stat-item"><i class="fas fa-gamepad"></i> Games Played: {{ player.games_played }}</div>
     <div class="stat-item"><i class="fas fa-trophy"></i> Survival Score: {{ player.survival_score }}</div>
     <div class="stat-item"><i class="fas fa-clock"></i> Time Attack Score: {{ player.time_attack_score }}</div>
+    <div class="stat-item"><i class="fas fa-skull-crossbones"></i> Hardcore Survival Score: {{ player.ha_score }}</div>
+    <div class="stat-item"><i class="fas fa-bolt"></i> Hardcore Time Attack Score: {{ player.hta_score }}</div>
   </div>
 </div>
 
@@ -75,9 +122,125 @@
       <button class="tab-btn" data-tab="hc-time-attack">Hardcore Time Attack</button>
     </div>
 
-    <!-- Leaderboard sections (unchanged) -->
-    <!-- ... all leaderboard content remains as-is ... -->
-    {% comment %} The leaderboard tables remain unchanged from your version {% endcomment %}
+    <!-- Overall Leaderboard -->
+    <div id="overall" class="leaderboard-box">
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>Total Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for player in overall_leaderboard %}
+          <tr>
+            <td>{{ player.rank }}</td>
+            <td>{{ player.username }}</td>
+            <td>{{ player.overall_score }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="3">No scores available.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Survival Leaderboard -->
+    <div id="survival" class="leaderboard-box hidden">
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>Survival Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for player in survival_leaderboard %}
+          <tr>
+            <td>{{ player.rank }}</td>
+            <td>{{ player.username }}</td>
+            <td>{{ player.survival_score }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="3">No scores available.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Time Attack Leaderboard -->
+    <div id="time-attack" class="leaderboard-box hidden">
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>Time Attack Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for player in time_attack_leaderboard %}
+          <tr>
+            <td>{{ player.rank }}</td>
+            <td>{{ player.username }}</td>
+            <td>{{ player.time_attack_score }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="3">No scores available.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Hardcore Survival Leaderboard -->
+    <div id="hc-survival" class="leaderboard-box hidden">
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>HC Survival Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for player in hardcore_survival_leaderboard %}
+          <tr>
+            <td>{{ player.rank }}</td>
+            <td>{{ player.username }}</td>
+            <td>{{ player.ha_score }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="3">No scores available.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Hardcore Time Attack Leaderboard -->
+    <div id="hc-time-attack" class="leaderboard-box hidden">
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>HC Time Attack Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for player in hardcore_time_attack_leaderboard %}
+          <tr>
+            <td>{{ player.rank }}</td>
+            <td>{{ player.username }}</td>
+            <td>{{ player.hta_score }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="3">No scores available.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
@@ -105,7 +268,6 @@
     startAnimating();
     window.addEventListener('resize', setPreCharSize);
   };
-
   var pre = document.getElementById('trace');
   var i = -1;
   var dir = 'inc';
@@ -132,7 +294,6 @@
     requestAnimationFrame(animate);
     now = Date.now();
     elapsed = now - then;
-
     if (elapsed > fpsInterval) {
       then = now - (elapsed % fpsInterval);
       step();
@@ -155,10 +316,8 @@
         i--;
       }
     }
-
     document.getElementById('trace-chars').innerText = frames[i];
   }
 </script>
-
 </body>
 </html>

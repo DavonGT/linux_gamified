@@ -16,36 +16,38 @@
         <!-- Game Header -->
         <header class="game-header">
             <div class="header-content">
-                <h1>{{ mode|title }} Mode</h1>
-                <div class="player-info">
-                    <span class="username">{{ player.username }}</span>
-                    <button class="back-button" onclick="window.location.href='{% url 'select_mode' %}'">
-                        <i class="fas fa-arrow-left"></i> Back to Modes
-                    </button>
+                <h1>{{ mode|title }}</h1>
                 </div>
-            </div>
-            <div class="game-stats">
-                {% if time != None %}
-                    <div class="stat-item">
-                        <i class="fas fa-clock"></i>
-                        <span>Time Left: <span id="time-value">{{ time }}</span>s</span>
-                    </div>
-                {% endif %}
-                {% if mode == 'survival' or mode == 'hardcore_survival' %}
-                    <div class="stat-item">
-                        <i class="fas fa-trophy"></i>
-                        <span>Score: {{ survival_score|default_if_none:0 }}</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fas fa-heart"></i>
-                        <span>Lives: <span id="lives-value">{{ lives }}</span></span>
-                    </div>
-                {% elif mode == 'time_attack' or mode == 'hardcore_time_attack' %}
-                    <div class="stat-item">
-                        <i class="fas fa-trophy"></i>
-                        <span>Score: {{ time_attack_score|default_if_none:0 }}</span>
-                    </div>
-                {% endif %}
+            
+                <div class="game-stats">
+                    <!-- {% if time != None %}
+                        <div class="stat-item">
+                            <img src="{% static 'game/img/time.png' %}" alt="Time Left" class="stat-icon">
+                            <span id="time-value">{{ time }}</span>s
+                        </div>
+                    {% endif %} -->
+                    {% if mode == 'survival' or mode == 'hardcore_survival' %}
+                        <div class="stat-item">
+                            {% for _ in "012"|slice:":lives" %}
+                                <img src="{% static 'game/img/heart.png' %}" alt="Life" class="life-icon">
+                            {% endfor %}
+                        </div>
+                        <div class="stat-item">
+                            <img src="{% static 'game/img/trophy.png' %}" alt="Score" class="stat-icon">
+                            {{ survival_score|default_if_none:0 }}
+                        </div>
+                    {% elif mode == 'time_attack' or mode == 'hardcore_time_attack' %}
+                        <div class="stat-item">
+                            <img src="{% static 'game/img/time.png' %}" alt="Time Left" class="stat-icon">
+                            <span id="time-value">{{ time }}</span>s
+                        </div>
+                        <div class="stat-item">
+                            <img src="{% static 'game/img/trophy.png' %}" alt="Score" class="stat-icon">
+                            {{ time_attack_score|default_if_none:0 }}
+                        </div>
+                    {% endif %}
+                </div>
+
             </div>
         </header>
 
@@ -53,7 +55,7 @@
         <main class="game-main">
             <div class="game-sidebar">
                 <div class="task-info">
-                    <h2>Current Task</h2>
+                    <img src="{% static 'game/img/task.png' %}" alt="Task" class="task-icon">
                     <p class="task-description">{{ question.task }}</p>
                 </div>
             </div>
@@ -68,12 +70,10 @@
                                     placeholder="Type your command here..." 
                                     autocomplete="off" 
                                     autofocus>
-                        </div>
-                        <div id="feedback-container">
-                            <p id="feedback" class="feedback"></p>
-                            <p id="game-over-message" class="game-over" style="display: none;">
-                                <i class="fas fa-skull-crossbones"></i> GAME OVER
-                            </p>
+                            <div id="feedback-container">
+                                <p id="feedback" class="feedback"></p>
+                                <p id="game-over-message" class="game-over" style="display: none;"> GAME OVER</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -91,46 +91,51 @@
         <!-- Give Up Modal -->
         <div id="giveUpModal" class="modal">
             <div class="modal-content">
-                <button class="close-modal">
-                    <i class="fas fa-times"></i>
-                </button>
                 <div class="modal-header">
-                    <h2>Are you sure?</h2>
+                    <h2>Are you sure to go?</h2>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to give up? All progress will be lost.</p>
+                    <p>All progress made in this game will be lost.</p>
                 </div>
                 <div class="modal-footer">
-                    <button class="modal-button confirm" onclick="confirmGiveUp()">Give Up</button>
+                    <button class="modal-button cancel" onclick="closeGiveUpModal()">Cancel</button>
+                    <button class="modal-button confirm" onclick="confirmGiveUp()">Quit Game</button>
                 </div>
             </div>
         </div>
 
-    </div>
+        <script>
+            // Game state
+            const gameState = {
+                timer: null,
+                timeLeft: {{ time|default_if_none:0 }},
+                mode: "{{ mode }}",
+                csrfToken: "{{ csrf_token }}",
+                isGameOver: false
+            };
 
-    <script>
-        // Game state
-        const gameState = {
-            timer: null,
-            timeLeft: {{ time|default_if_none:0 }},
-            mode: "{{ mode }}",
-            csrfToken: "{{ csrf_token }}",
-            isGameOver: false
-        };
+            // DOM elements
+            const elements = {
+                timer: document.getElementById('time-value'),
+                survival_score: document.querySelector('.stat-item:has(i.fas.fa-trophy) span'),
+                time_attack_score: document.querySelector('.stat-item:has(i.fas.fa-trophy) span'),
+                lives: document.getElementById('lives-value'),
+                userCommand: document.getElementById('user_command'),
+                feedback: document.getElementById('feedback'),
+                gameOverMsg: document.getElementById('game-over-message'),
+                terminal: document.getElementById('terminal')
+            };
 
-        // DOM elements
-        const elements = {
-            timer: document.getElementById('time-value'),
-            survival_score: document.querySelector('.stat-item:has(i.fas.fa-trophy) span'),
-            time_attack_score: document.querySelector('.stat-item:has(i.fas.fa-trophy) span'),
-            lives: document.getElementById('lives-value'),
-            userCommand: document.getElementById('user_command'),
-            feedback: document.getElementById('feedback'),
-            gameOverMsg: document.getElementById('game-over-message'),
-            terminal: document.getElementById('terminal')
-        };
+            // Initialize game
+            document.addEventListener('DOMContentLoaded', initGame);
 
-        // Initialize game
-        document.addEventListener('DOMContentLoaded', initGame);
-    </script>
+            function showGiveUpModal() {
+                document.getElementById('giveUpModal').style.display = 'block';
+            }
+
+            function closeGiveUpModal() {
+                document.getElementById('giveUpModal').style.display = 'none';
+            }
+        </script>
+
 {% endblock %}

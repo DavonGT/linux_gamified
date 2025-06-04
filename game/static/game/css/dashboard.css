@@ -1,123 +1,304 @@
+/*----------------------------------------
+  Mode Selection Styles
+-----------------------------------------*/
+.mode-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.mode-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.mode-header h2 {
+  font-size: 36px;
+  color: rgb(55, 0, 255);
+  text-shadow: 0 0 10px #0f0;
+  margin-bottom: 20px;
+}
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 70px;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-bottom: 50px;
+  justify-items: center;
+}
+
+.mode-card {
+  border: none;
+  background: none;
+}
+
+.mode-button {
+  position: relative;
+  height: 120px;
+  width: 210px;
+  overflow: hidden;
+  padding: 5px;
+  background-color: #111;
+  border: 2px solid #4bf8d9;
+  color: rgb(254, 253, 255);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: 'VT323', monospace;
+  font-size: 30px;
+  transform-origin: center center;
+  position: relative;
+  white-space: normal;
+}
 
 
-/* Menu section styles */
+.mode-button:hover {
+  background-color: #222;
+  box-shadow: 0 0 10px #f130ee;
+  border: 2px solid #f130ee;
+  transform: scale(1.2);  /* Grows the button in place */
+  z-index: 1; /* Bring to front to avoid overlapping issues */
+}
+
+.mode-title,
+.mode-description {
+  position: absolute;
+  /* top: 8px;
+  left: 10px;
+  right: 10px; */
+  top: 50%;
+  left: 50%;
+  transition: opacity 0.3s ease;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  width: 80%;
+}
+
+.mode-title {
+  opacity: 1;
+}
+
+.mode-description {
+  opacity: 0;
+  font-size: 20px;
+  line-height: 1;
+  white-space: normal;
+}
+
+.mode-button:hover .mode-title {
+  opacity: 0;
+}
+
+.mode-button:hover .mode-description {
+  opacity: 1;
+}
+
+/* Hardcore mode colors */
+.mode-card.hardcore-survival .mode-button,
+.mode-card.hardcore-time-attack .mode-button {
+  border-color: #f00;
+  color: rgb(255, 169, 169);
+}
+
+.mode-card.hardcore-survival .mode-button:hover,
+.mode-card.hardcore-time-attack .mode-button:hover {
+  box-shadow: 0 0 10px #f00;
+}
+
+/*----------------------------------------
+  Menu Section Styles
+-----------------------------------------*/
 .menu-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: -25px;
+  margin-top: 80px;
 }
 
 .menu-section button {
-    width: 100%;
-    max-width: 300px;
-    font-size: 18px;
-    padding: 14px 20px;
-    border: none;
-    background-color: #000;
-    color: #0f0;
-    transition: all 0.3s ease;
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  font-size: 25px;
+  padding: 8px 5px;
+  border: none !important;
+  background: none !important;
+  color: rgb(255, 255, 255) !important;
+  text-align: center;
+  font-family: 'Brick Sans', sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: none !important;
 }
 
 .menu-section button:hover {
-    background-color: #111;
-    box-shadow: 0 0 10px #0f0;
-    border: 2px solid #0f0;
-    border-radius: 8px;
+  background: none !important;
+  box-shadow: none !important;
+  text-shadow: 0 0 15px #fffffe;
+}
+
+.menu-section button::before,
+.menu-section button::after {
+  content: "";
+  width: 35px;
+  height: 35px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: inline-block;
+}
+
+.menu-section button:hover::before,
+.menu-section button:hover::after {
+  opacity: 1;
+}
+
+.menu-section button::before {
+  background-image: url("/static/game/img/btn-in.png");
+  margin-right: 8px;
+}
+
+.menu-section button::after {
+  background-image: url("/static/game/img/btn-out.png");
+  margin-left: 8px;
 }
 
 .menu-section i {
-    margin-right: 8px;
+  margin-right: 8px;
 }
 
+/*----------------------------------------
+  Leaderboard Tabs
+-----------------------------------------*/
 .leaderboard-tabs {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .tab-btn {
-    margin: 10px;
+  margin: 10px;
 }
 
-/* Modal base styles */
+/*----------------------------------------
+  Modal Base Styles
+-----------------------------------------*/
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.85);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
 }
 
 .modal-content {
-    background-color: #000;
-    padding: 30px;
-    border: 2px solid #0f0;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 860px;
-    box-shadow: 0 0 20px #0f0;
-    color: #0f0;
-    position: relative;
-    max-height: 90vh;
-    overflow-y: auto;
+  background-color: #000000;
+  padding: 30px;
+  border: 2px solid #0f0;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 860px;
+  box-shadow: 0 0 20px #0f0;
+  color: #0f0;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-content-modes {
+  background-color: none;
+  padding: 30px;
+  border: 5px solid #fffc60;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 860px;
+  box-shadow: 0 0 10px #fffc60;
+  color: #0f0;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-content-modes .close {
+    color:#fffc60 !important;  
+}
+
+.modal-content-modes h1 {
+    font-family: 'Brick Sans', sans-serif;
+    color: #f130ee;
 }
 
 .modal-content-score {
-    background-color: #000;
-    padding: 30px;
-    border: 2px solid #0f0;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 300px;
-    box-shadow: 0 0 20px #0f0;
-    color: #0f0;
-    position: relative;
-    max-height: 90vh;
-    overflow-y: auto;
+  background-color: #000;
+  padding: 30px;
+  border: 2px solid #0f0;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 300px;
+  box-shadow: 0 0 20px #0f0;
+  color: #0f0;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
-.modal-content h2 {
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: 24px;
+.modal-content h1 {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 24px;
 }
 
 .modal-content h3 {
-    margin-top: 20px;
-    font-size: 20px;
-    border-bottom: 1px solid #0f0;
-    padding-bottom: 5px;
+  margin-top: 20px;
+  font-size: 20px;
+  border-bottom: 1px solid #0f0;
+  padding-bottom: 5px;
 }
 
 .modal .close {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 24px;
-    color: #0f0;
-    cursor: pointer;
-    background: transparent;
-    border: none;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  color: #0f0;
+  cursor: pointer;
+  background: transparent;
+  border: none;
 }
 
 /* Hide modals by default */
 .hidden {
-    display: none;
+  display: none;
 }
 
 /* Scrollable leaderboard modal content */
 .scrollable {
-    overflow-y: auto;
-    max-height: 90vh;
+  overflow-y: auto;
+  max-height: 90vh;
 }
 
+/*----------------------------------------
+  Animation Section
+-----------------------------------------*/
 .animation-stack {
   position: relative;
   display: inline-block;
@@ -129,7 +310,7 @@
 .text-base {
   font-size: 150px;
   text-align: center;
-  color: rgb(255, 255, 255); /* match your aesthetic */
+  color: rgb(255, 255, 255);
   position: relative;
   z-index: 1;
   padding: 40px 0;
@@ -148,7 +329,7 @@
   overflow: hidden;
   z-index: 2;
   animation: glowPulse 1.5s infinite ease-in-out;
-  pointer-events: none; /* Allows clicks to pass through */
+  pointer-events: none;
 }
 
 @keyframes glowPulse {
@@ -167,5 +348,3 @@
       0 0 32px #FF0C81;
   }
 }
-
-

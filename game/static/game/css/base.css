@@ -9,6 +9,14 @@ body {
     min-height: 100vh;
 }
 
+
+@font-face {
+  font-family: 'Brick Sans';
+  src: url('../fonts/NTBrickSans.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
 /* Typography */
 h1, h2, h3 {
     color: #4CAF50;
@@ -35,7 +43,7 @@ p {
 
 /* Buttons and Links */
 button, a {
-    background-color: #111;
+    background-color: none;
     color: #0f0;
     border: 2px solid #0f0;
     border-radius: 5px;
