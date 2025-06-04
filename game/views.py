@@ -164,6 +164,7 @@ def game_view(request):
         'lives': lives,
         'mode': mode,
         'player': request.user.username,
+        'life_range': range(get_session_lives(request.session)) if get_session_lives(request.session) is not None else range(0),
     }
     
     return render(request, 'game/game.html', context)
@@ -303,6 +304,7 @@ def time_up(request):
 def game_over(request):
     player = request.user
     final_score = get_session_score(request.session)
+    lives = get_session_lives(request.session)
     mode = request.session.get('mode')
 
     # Update the player's high score if current score is higher
@@ -322,7 +324,10 @@ def game_over(request):
     # Clear game session
     clear_game_session(request.session)
 
-    return render(request, 'game/game_over.html', {'score': final_score})
+    return render(request, 'game/game_over.html', {'score': final_score, 
+                                                   'mode': mode, 
+                                                   'player': player.username,
+                                                   'lives': lives})
 
 @login_required
 def practice_mode(request):
