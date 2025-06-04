@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.utils import timezone
 import json
 import random
-from .models import Question, StoryChapter, Mission, PlayerStoryProgress
+from .models import Question
 from accounts.models import Player
 from django.db import models
 from django.shortcuts import render, redirect
@@ -16,7 +16,7 @@ from django.http import JsonResponse, HttpRequest
 from django.views.decorators.csrf import csrf_exempt
 import json
 import random
-from .models import Question, Mission
+from .models import Question
 from accounts.models import Player
 from django.db import models
 from .constants import (
@@ -364,129 +364,4 @@ def validate_practice_answer(request):
 
 @login_required
 def story_mode(request):
-    # Get player's current progress
-    chapter, mission, total_score = PlayerStoryProgress.get_player_progress(request.user)
-    
-    # Get all chapters for the progress overview
-    chapters = StoryChapter.objects.filter(is_available=True).prefetch_related('missions')
-    
-    # Get completed missions for progress tracking
-    completed_missions = PlayerStoryProgress.objects.filter(
-        player=request.user,
-        completed=True
-    ).values_list('mission_id', flat=True)
-    
-    context = {
-        'current_chapter': chapter,
-        'current_mission': mission,
-        'total_score': total_score,
-        'chapters': chapters,
-        'completed_missions': list(completed_missions),
-        'player': request.user
-    }
-    
-    return render(request, 'game/story_mode.html', context)
-
-@login_required
-def play_mission(request, mission_id):
-    mission = Mission.objects.get(id=mission_id)
-    
-    # Check if player has completed prerequisites
-    if mission.order > 1:
-        # Get previous mission in the same chapter
-        prev_mission = Mission.objects.get(chapter=mission.chapter, order=mission.order - 1)
-        if not PlayerStoryProgress.objects.filter(player=request.user, mission=prev_mission, completed=True).exists():
-            messages.error(request, "You must complete the previous mission first!")
-            return redirect('story_mode')
-            
-    # Get or create progress record
-    progress, created = PlayerStoryProgress.objects.get_or_create(
-        player=request.user,
-        chapter=mission.chapter,
-        mission=mission
-    )
-    
-    # Get a question for this mission if not completed
-    current_question = None
-    if not progress.completed:
-        # Get a random question from the mission's questions
-        if mission.questions.exists():
-            current_question = random.choice(mission.questions.all())
-    
-    context = {
-        'mission': mission,
-        'question': current_question,
-        'progress': progress,
-        'player': request.user
-    }
-    
-    return render(request, 'game/play_mission.html', context)
-
-@login_required
-def validate_mission_answer(request, mission_id):
-    if request.method != 'POST':
-        return JsonResponse({'error': 'Invalid request method'}, status=405)
-    
-    print(f"Received mission answer validation request for mission {mission_id}")  # Debug log
-        
-    try:
-        # Validate request body
-        try:
-            data = json.loads(request.body)
-            print(f"Received data: {data}")  # Debug log
-        except json.JSONDecodeError as e:
-            print(f"JSON decode error: {str(e)}")  # Debug log
-            return JsonResponse({'error': 'Invalid JSON format'}, status=400)
-            
-        question_id = data.get('question_id')
-        user_command = data.get('user_command', '').strip()
-        
-        print(f"Question ID: {question_id}, Command: {user_command}")  # Debug log
-        
-        if not question_id:
-            return JsonResponse({'error': 'Missing question ID'}, status=400)
-        if not user_command:
-            return JsonResponse({'error': 'Missing command'}, status=400)
-            
-        question = Question.objects.get(id=question_id)
-        mission = Mission.objects.get(id=mission_id)
-        
-        # Validate the answer
-        if question.is_correct(user_command):
-            # Update progress
-            progress = PlayerStoryProgress.objects.get(
-                player=request.user,
-                mission=mission
-            )
-            points = question.get_points()
-            progress.score += points
-            
-            # Check if all required questions are answered
-            all_mission_questions = set(mission.questions.values_list('id', flat=True))
-            if len(all_mission_questions) == 1:
-                progress.completed = True
-                progress.completed_at = timezone.now()
-                
-            progress.save()
-            
-            return JsonResponse({
-                'result': 'correct',
-                'score': progress.score,
-                'completed': progress.completed,
-                'points_earned': points,
-                'message': 'Correct! You earned {} points.'.format(points)
-            })
-        else:
-            return JsonResponse({
-                'result': 'incorrect',
-                'message': 'That command is not correct. Try again!'
-            })
-            
-    except Question.DoesNotExist:
-        return JsonResponse({'error': 'Question not found'}, status=404)
-    except Mission.DoesNotExist:
-        return JsonResponse({'error': 'Question or mission not found'}, status=404)
-    except (ValueError, json.JSONDecodeError):
-        return JsonResponse({'error': 'Invalid input format'}, status=400)
-    except Exception as e:
-        return JsonResponse({'error': str(e)}, status=400)
+    return render(request, 'game/story_mode.html')
