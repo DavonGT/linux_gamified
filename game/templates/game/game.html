@@ -75,10 +75,12 @@
                     </div>
                 </div>
             </div>
-             <div id="feedback-container">
-                <p id="feedback" class="feedback"></p>
-                {% comment %} <p id="game-over-message" class="game-over" style="display: none;"> GAME OVER</p> {% endcomment %}
-            </div>
+            <center>
+                <div id="feedback-container">
+                    <p id="feedback" class="feedback"></p>
+                    {% comment %} <p id="game-over-message" class="game-over" style="display: none;"> GAME OVER</p> {% endcomment %}
+                </div>
+            </center>
         </main>
 
         <footer class="game-footer">
@@ -150,7 +152,7 @@
 
             function handleCorrectAnswer(data) {
                 console.log('Correct');
-                showFeedback('<img src="{% static "game/img/check.png" %}" alt="Correct Answer" style="width: 20px; height: 20px;">', 'success');
+                showFeedback('<img src="{% static "game/img/check.png" %}" alt="Correct Answer" style="width: 30px; height: 30px; background-color: #231949;">', 'success');
                 setTimeout(() => {
                     location.reload();
                 }, 1000);
@@ -159,7 +161,7 @@
 
             function handleIncorrectAnswer(data) {
                 console.log('Incorrect');
-                showFeedback('<img src="{% static "game/img/wrong.png" %}" alt="Wrong Answer" style="width: 20px; height: 20px;">', 'incorrect');
+                showFeedback('<img src="{% static "game/img/wrong.png" %}" alt="Wrong Answer" style="width: 30px; height: 30px; background-color: #231949;">', 'incorrect');
                 if (elements.lives && data.lives !== undefined) {
                     elements.lives.textContent = data.lives;
                 }

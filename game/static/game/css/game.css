@@ -263,10 +263,10 @@ body {
 
 
 .feedback {
-    width: 20px;
-    margin-top: 10px;
-    color: #0f0;
-    opacity: 0.9;
+    width: 0px;
+    height: 0px;
+    background-color:#231949;
+    opacity: 1;
 }
 
 /* Footer styles */
