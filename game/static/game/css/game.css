@@ -263,6 +263,7 @@ body {
 
 
 .feedback {
+    width: 20px;
     margin-top: 10px;
     color: #0f0;
     opacity: 0.9;

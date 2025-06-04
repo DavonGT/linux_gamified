@@ -70,13 +70,14 @@
                                     placeholder="Type your command here..." 
                                     autocomplete="off" 
                                     autofocus>
-                            <div id="feedback-container">
-                                <p id="feedback" class="feedback"></p>
-                                {% comment %} <p id="game-over-message" class="game-over" style="display: none;"> GAME OVER</p> {% endcomment %}
-                            </div>
+                           
                         </div>
                     </div>
                 </div>
+            </div>
+             <div id="feedback-container">
+                <p id="feedback" class="feedback"></p>
+                {% comment %} <p id="game-over-message" class="game-over" style="display: none;"> GAME OVER</p> {% endcomment %}
             </div>
         </main>
 
@@ -158,7 +159,7 @@
 
             function handleIncorrectAnswer(data) {
                 console.log('Incorrect');
-                showFeedback('<img src="{% static "game/img/wrong.png" %}" alt="Wrong Answer" style="width: 15px; height: 15px;">', 'incorrect');
+                showFeedback('<img src="{% static "game/img/wrong.png" %}" alt="Wrong Answer" style="width: 20px; height: 20px;">', 'incorrect');
                 if (elements.lives && data.lives !== undefined) {
                     elements.lives.textContent = data.lives;
                 }
