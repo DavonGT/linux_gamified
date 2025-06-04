@@ -28,7 +28,7 @@
                     {% endif %} -->
                     {% if mode == 'survival' or mode == 'hardcore_survival' %}
                         <div class="stat-item">
-                            {% for _ in "012"|slice:":lives" %}
+                            {% for _ in life_range %}
                                 <img src="{% static 'game/img/heart.png' %}" alt="Life" class="life-icon">
                             {% endfor %}
                         </div>

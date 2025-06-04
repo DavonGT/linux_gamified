@@ -1,3 +1,15 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse, HttpRequest, Http404
+from django.views.decorators.csrf import csrf_exempt
+from django.middleware.csrf import get_token
+from django.contrib import messages
+from django.utils import timezone
+import json
+import random
+from .models import Question
+from accounts.models import Player
+from django.db import models
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpRequest
@@ -152,6 +164,7 @@ def game_view(request):
         'lives': lives,
         'mode': mode,
         'player': request.user.username,
+        'life_range': range(get_session_lives(request.session)) if get_session_lives(request.session) is not None else range(0),
     }
     
     return render(request, 'game/game.html', context)
@@ -291,6 +304,7 @@ def time_up(request):
 def game_over(request):
     player = request.user
     final_score = get_session_score(request.session)
+    lives = get_session_lives(request.session)
     mode = request.session.get('mode')
 
     # Update the player's high score if current score is higher
@@ -310,7 +324,10 @@ def game_over(request):
     # Clear game session
     clear_game_session(request.session)
 
-    return render(request, 'game/game_over.html', {'score': final_score})
+    return render(request, 'game/game_over.html', {'score': final_score, 
+                                                   'mode': mode, 
+                                                   'player': player.username,
+                                                   'lives': lives})
 
 @login_required
 def practice_mode(request):
@@ -350,5 +367,6 @@ def validate_practice_answer(request):
 
 
 
+@login_required
 def story_mode(request):
-    return render(request,'game/story_mode.html')
+    return render(request, 'game/story_mode.html')
