@@ -72,7 +72,7 @@
                                     autofocus>
                             <div id="feedback-container">
                                 <p id="feedback" class="feedback"></p>
-                                <p id="game-over-message" class="game-over" style="display: none;"> GAME OVER</p>
+                                {% comment %} <p id="game-over-message" class="game-over" style="display: none;"> GAME OVER</p> {% endcomment %}
                             </div>
                         </div>
                     </div>
@@ -135,6 +135,52 @@
 
             function closeGiveUpModal() {
                 document.getElementById('giveUpModal').style.display = 'none';
+            }
+
+            function handleResponse(data) {
+                if (data.result === 'correct') {
+                    handleCorrectAnswer(data);
+                } else if (data.result === 'incorrect') {
+                    handleIncorrectAnswer(data);
+                } else if (data.result === 'game_over') {
+                    handleGameOver(data);
+                }
+            }
+
+            function handleCorrectAnswer(data) {
+                console.log('Correct');
+                showFeedback('<img src="{% static "game/img/check.png" %}" alt="Correct Answer" style="width: 20px; height: 20px;">', 'success');
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+                
+            }
+
+            function handleIncorrectAnswer(data) {
+                console.log('Incorrect');
+                showFeedback('<img src="{% static "game/img/wrong.png" %}" alt="Wrong Answer" style="width: 15px; height: 15px;">', 'incorrect');
+                if (elements.lives && data.lives !== undefined) {
+                    elements.lives.textContent = data.lives;
+                }
+                setTimeout(() => {
+                    elements.userCommand.value = '';
+                    enableInput();
+                    location.reload();
+                }, 1000);
+            }
+            function handleGameOver(data) {
+                gameState.isGameOver = true;
+                showFeedback('<img src="{% static "game/img/wrong.png" %}" alt="Wrong Answer" style="width: 20px; height: 20px;">', 'incorrect');
+                clearInterval(gameState.timer);
+                elements.feedback.style.display = 'none';
+                if (elements.lives) {
+                    elements.lives.textContent = '0';
+                }
+                disableInput();
+                
+                setTimeout(() => {
+                    location.href = '/game_over/';
+                }, 2000);
             }
         </script>
 

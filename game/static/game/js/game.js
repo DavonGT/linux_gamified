@@ -126,52 +126,8 @@ async function submitAnswer() {
     }
 }
 
-function handleResponse(data) {
-    if (data.result === 'correct') {
-        handleCorrectAnswer(data);
-    } else if (data.result === 'incorrect') {
-        handleIncorrectAnswer(data);
-    } else if (data.result === 'game_over') {
-        handleGameOver(data);
-    }
-}
 
-function handleCorrectAnswer(data) {
-    console.log('Correct');
-    showFeedback('Correct!', 'success');
-    setTimeout(() => {
-        location.reload();
-    }, 1000);
-    
-}
 
-function handleIncorrectAnswer(data) {
-    console.log('Incorrect');
-    showFeedback('Incorrect!', 'incorrect');
-    if (elements.lives && data.lives !== undefined) {
-        elements.lives.textContent = data.lives;
-    }
-    setTimeout(() => {
-        elements.userCommand.value = '';
-        enableInput();
-        location.reload();
-    }, 1000);
-}
-
-function handleGameOver(data) {
-    gameState.isGameOver = true;
-    clearInterval(gameState.timer);
-    elements.feedback.style.display = 'none';
-    elements.gameOverMsg.style.display = 'block';
-    if (elements.lives) {
-        elements.lives.textContent = '0';
-    }
-    disableInput();
-    
-    setTimeout(() => {
-        location.href = '/game_over/';
-    }, 2000);
-}
 
 function handleTimeUp() {
     fetch('/time_up/', {
@@ -201,8 +157,7 @@ function enableInput() {
 }
 
 function showFeedback(message, type) {
-    elements.feedback.textContent = message;
-    elements.feedback.className = `feedback ${type}`;
+    elements.feedback.innerHTML = message;
     elements.feedback.style.display = 'block';
 }
 
