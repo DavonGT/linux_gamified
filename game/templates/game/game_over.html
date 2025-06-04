@@ -1,66 +1,63 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Over - {{ mode|title }} Mode</title>
-    <link rel="stylesheet" href="{% static 'game/css/base.css' %}">
-    <link rel="stylesheet" href="{% static 'game/css/game_over.css' %}">
-    <link rel="stylesheet" href="{% static 'game/libs/fontawesome/css/all.min.css' %}">
-</head>
-<body>
-    <div class="game-over-container">
-        <div class="game-over-content">
-            <div class="game-over-header">
-                <h1><i class="fas fa-skull-crossbones"></i> Game Over</h1>
-                <div class="mode-info">
-                    <span class="mode">{{ mode|title }} Mode</span>
-                    <span class="player">{{ player.username }}</span>
-                </div>
-            </div>
 
-            <div class="final-stats">
-                <div class="stat-item">
-                    <i class="fas fa-trophy"></i>
-                    <div>
-                        <span class="stat-label">Final Score</span>
-                        <span class="stat-value">{{ score }}</span>
-                    </div>
-                </div>
-                {% if time != None %}
-                    <div class="stat-item">
-                        <i class="fas fa-clock"></i>
-                        <div>
-                            <span class="stat-label">Time Played</span>
-                            <span class="stat-value">{{ time }}s</span>
-                        </div>
-                    </div>
-                {% endif %}
-                {% if mode == 'survival' or mode == 'hardcore_survival' %}
-                    <div class="stat-item">
-                        <i class="fas fa-heart"></i>
-                        <div>
-                            <span class="stat-label">Lives Remaining</span>
-                            <span class="stat-value">{{ lives }}</span>
-                        </div>
-                    </div>
-                {% endif %}
-            </div>
+{% block title %}Game Over - {{ mode|title }} Mode{% endblock %}
 
-            <div class="action-buttons">
-                <button class="play-again" onclick="window.location.href='/set_mode/{{ mode }}/'">
-                    <i class="fas fa-undo"></i> Play Again
-                </button>
-                <button class="dashboard" onclick="window.location.href='{% url 'dashboard' %}'">
-                    <i class="fas fa-home"></i> Dashboard
-                </button>
-            </div>
-
-            <div class="game-over-footer">
-                <p>Don't worry, practice makes perfect! Try again with a different mode or continue learning in practice mode.</p>
+{% block content %}
+<div class="game-over-container">
+    <div class="game-over-content">
+        <div class="game-over-header">
+            <h1>GAME OVER</h1>
+            <div class="mode-info">
+                <span class="mode">{{ mode|title }} Mode</span>
             </div>
         </div>
+
+        <div class="final-stats">
+            <div class="stat-item">
+                <img src="{% static 'game/img/trophy.png' %}" alt="Trophy Icon" class="stat-icon">
+                <div>
+                    <span class="stat-value">{{ score }}</span>
+                </div>
+            </div>
+
+
+            <!-- Uncomment this block if time tracking is active
+            {% if time != None %}
+            <div class="stat-item">
+                <div>
+                    <span class="stat-label">Time Played</span>
+                    <span class="stat-value">{{ time }}s</span>
+                </div>
+            </div>
+            {% endif %}
+            {% if mode == 'survival' or mode == 'hardcore_survival' %}
+            <div class="stat-item">
+                <i class="fas fa-heart"></i>
+                <div>
+                    <span class="stat-label">Lives Remaining</span>
+                    <span class="stat-value">{{ lives }}</span>
+                </div>
+            </div>
+            {% endif %} -->
+        </div>
+
+        <div class="action-buttons">
+            <button class="play-again" onclick="window.location.href='{% url 'select_mode' %}'">
+                <i class="fas fa-undo"></i> Play Again
+            </button>
+            <button class="dashboard" onclick="window.location.href='{% url 'dashboard' %}'">
+                <i class="fas fa-home"></i> Dashboard
+            </button>
+        </div>
+
+        <div class="game-over-footer">
+            <p>Don't worry, practice makes perfect! Try again with a different mode or continue learning in practice mode.</p>
+        </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'game/css/game_over.css' %}">
+{% endblock %}

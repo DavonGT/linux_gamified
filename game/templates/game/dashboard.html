@@ -28,7 +28,7 @@
 <div class="dashboard-container">
   <header class="dashboard-header">
     <div class="animation-stack">
-      <div class="text-base">ARGHH</div>
+      <div class="text-base">LINUX</div>
       <pre id="trace"><span id="trace-chars"></span></pre>
     </div>
   </header>
@@ -100,17 +100,33 @@
   <div class="modal-content-score">
     <span class="close" onclick="toggleModal('scoresModal')">&times;</span>
     <h2>My Scores</h2>
-    <div class="stat-item"><i class="fas fa-gamepad"></i> Games Played: {{ player.games_played }}</div>
-    <div class="stat-item"><i class="fas fa-trophy"></i> Survival Score: {{ player.survival_score }}</div>
-    <div class="stat-item"><i class="fas fa-clock"></i> Time Attack Score: {{ player.time_attack_score }}</div>
-    <div class="stat-item"><i class="fas fa-skull-crossbones"></i> Hardcore Survival Score: {{ player.ha_score }}</div>
-    <div class="stat-item"><i class="fas fa-bolt"></i> Hardcore Time Attack Score: {{ player.hta_score }}</div>
+    <div class="stat-item">
+      <span class="label">Games Played</span>
+      <span class="value">{{ player.games_played }}</span>
+    </div>
+    <div class="stat-item">
+      <span class="label">Survival</span>
+      <span class="value">{{ player.survival_score }}</span>
+    </div>
+    <div class="stat-item">
+      <span class="label">Time Attack</span>
+      <span class="value">{{ player.time_attack_score }}</span>
+    </div>
+    <div class="stat-item">
+      <span class="label">Hardcore Survival</span>
+      <span class="value">{{ player.ha_score }}</span>
+    </div>
+    <div class="stat-item">
+      <span class="label">Hardcore Time Attack</span>
+      <span class="value">{{ player.hta_score }}</span>
+    </div>
   </div>
 </div>
 
+
 <!-- Leaderboard Modal -->
 <div id="leaderboardModal" class="modal hidden">
-  <div class="modal-content scrollable">
+  <div class="modal-content-leaderboard">
     <span class="close" onclick="toggleModal('leaderboardModal')">&times;</span>
     <h2>Leaderboards</h2>
 
