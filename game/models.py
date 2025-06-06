@@ -42,3 +42,20 @@ class Task(models.Model):
     def get_points(self):
         # Return points based on difficulty
         return int(dict(self.DIFFICULTY_CHOICES).get(self.difficulty, 10))
+
+
+class Chapter(models.Model):
+    name = models.CharField(max_length=100, unique=True)  # Unique name for the chapter
+    number = models.IntegerField(unique=True)  # Unique number for the chapter
+    missions = models.ManyToManyField(Task, through='Mission', related_name='chapters')  # One-to-many relationship with Task
+    description = models.TextField(blank=True, null=True)  # Optional description of the chapter
+    def __str__(self):
+        return self.name
+
+
+class Mission(models.Model):
+    chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE, related_name='chapter_missions')  # Link to Chapter
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='missions')  # Link to Task
+    is_completed = models.BooleanField(default=False)  # Track if the mission is completed
+    def __str__(self):
+        return f"{self.chapter.name} - {self.task.task}"

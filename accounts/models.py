@@ -7,5 +7,6 @@ class Player(AbstractUser):
     ha_score = models.IntegerField(default=0)  # Track player's hardcore survival score
     hta_score = models.IntegerField(default=0)  # Track player's hardcore time attack score
     games_played = models.IntegerField(default=0)  # Track games played
+    chapter_played = models.IntegerField(default=0)
    
 
