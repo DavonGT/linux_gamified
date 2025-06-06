@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.utils import timezone
 import json
 import random
-from .models import Question
+from .models import Task
 from accounts.models import Player
 from django.db import models
 from django.shortcuts import render, redirect
@@ -16,7 +16,7 @@ from django.http import JsonResponse, HttpRequest
 from django.views.decorators.csrf import csrf_exempt
 import json
 import random
-from .models import Question
+from .models import Task
 from accounts.models import Player
 from django.db import models
 from .constants import (
@@ -151,12 +151,12 @@ def game_view(request):
     if (mode in [SURVIVAL_MODE, HARDCORE_SURVIVAL_MODE] and lives <= 0):
         return redirect('game_over')
 
-    # Get a random question
-    question = random.choice(Question.objects.all())
+    # Get a random task
+    task = random.choice(Task.objects.all())
 
     context = {
         'time': time,
-        'question': question,
+        'task': task,
         'survival_score': score if mode == SURVIVAL_MODE else 0,
         'time_attack_score': score if mode == TIME_ATTACK_MODE else 0,
         'ha_score': score if mode == HARDCORE_SURVIVAL_MODE else 0,
@@ -178,21 +178,21 @@ def validate_answer(request):
     try:
         # Parse request data
         data = json.loads(request.body)
-        question_id = data.get('question_id')
+        task_id = data.get('task_id')
         user_command = data.get('user_command')
         current_time = data.get('current_time')
         
-        if not all([question_id, user_command]):
+        if not all([task_id, user_command]):
             return JsonResponse({'error': 'Missing required fields'}, status=400)
         
         # Update session time
         request.session['time'] = current_time
         
-        # Get and validate question
-        question = Question.objects.get(id=question_id)
-        if question.is_correct(user_command):
+        # Get and validate task
+        task = Task.objects.get(id=task_id)
+        if task.is_correct(user_command):
             # Calculate points and update score
-            points = question.get_points()
+            points = task.get_points()
             if 'hardcore' in request.session.get('mode', ''):
                 points += 10
             update_session_score(request.session, points)
@@ -221,8 +221,8 @@ def validate_answer(request):
                 'time': current_time
             })
             
-    except Question.DoesNotExist:
-        return JsonResponse({'error': 'Question not found'}, status=404)
+    except Task.DoesNotExist:
+        return JsonResponse({'error': 'Task not found'}, status=404)
     except json.JSONDecodeError:
         return JsonResponse({'error': 'Invalid JSON'}, status=400)
     except Exception as e:
@@ -331,9 +331,9 @@ def game_over(request):
 
 @login_required
 def practice_mode(request):
-    question = random.choice(Question.objects.all())
+    task = random.choice(Task.objects.all())
     return render(request, 'game/practice.html', {
-        'question': question,
+        'task': task,
         'player': request.user.username,
     })
 
@@ -344,22 +344,22 @@ def validate_practice_answer(request):
         
     try:
         data = json.loads(request.body)
-        question_id = int(data.get('question_id'))
+        task_id = int(data.get('task_id'))
         user_command = data.get('user_command', '').strip()
 
-        if not question_id or not user_command:
+        if not task_id or not user_command:
             return JsonResponse(
-                {'error': 'Missing or invalid question_id or user_command'}, 
+                {'error': 'Missing or invalid task_id or user_command'}, 
                 status=400
             )
 
-        question = Question.objects.get(id=question_id)
+        task = Task.objects.get(id=task_id)
         return JsonResponse({
-            'result': 'correct' if question.is_correct(user_command) else 'incorrect'
+            'result': 'correct' if task.is_correct(user_command) else 'incorrect'
         })
         
-    except Question.DoesNotExist:
-        return JsonResponse({'error': 'Question not found'}, status=404)
+    except Task.DoesNotExist:
+        return JsonResponse({'error': 'Task not found'}, status=404)
     except (ValueError, json.JSONDecodeError):
         return JsonResponse({'error': 'Invalid input format'}, status=400)
     except Exception as e:

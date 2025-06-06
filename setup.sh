@@ -20,7 +20,7 @@ python manage.py migrate
 echo "Creating superuser..."
 python manage.py createsuperuser
 
-echo "Populating database with sample questions..."
+echo "Populating database with sample tasks..."
 python manage.py populate_db
 
 echo "Development setup complete!"

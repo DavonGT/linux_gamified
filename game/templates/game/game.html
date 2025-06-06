@@ -56,7 +56,7 @@
             <div class="game-sidebar">
                 <div class="task-info">
                     <img src="{% static 'game/img/task.png' %}" alt="Task" class="task-icon">
-                    <p class="task-description">{{ question.task }}</p>
+                    <p class="task-description">{{ task.task }}</p>
                 </div>
             </div>
             <div class="terminal-container">
@@ -65,7 +65,7 @@
                         <div class="command-prompt">
                             <span class="username">{{ player }}@linux-gamified</span>
                             <span class="path">:~$</span>
-                            <input type="hidden" id="question_id" value="{{ question.id }}">
+                            <input type="hidden" id="task_id" value="{{ task.id }}">
                             <input type="text" id="user_command" 
                                     placeholder="Type your command here..." 
                                     autocomplete="off" 

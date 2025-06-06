@@ -1,6 +1,6 @@
 from django.db import models
 
-class Question(models.Model):
+class Task(models.Model):
     CATEGORY_CHOICES = [
         ('file_operations', 'File Operations'),
         ('process_management', 'Process Management'),
@@ -21,13 +21,13 @@ class Question(models.Model):
         max_length=20,
         choices=CATEGORY_CHOICES,
         default='other',
-        help_text='Category of the question'
+        help_text='Category of the task'
     )
 
-    task = models.TextField()  # The task/question for the player
+    task = models.TextField()  # The task/task for the player
     correct_commands = models.TextField()  # Store multiple correct commands as a comma-separated list
     difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES, default='easy')  # Difficulty level
-    hint = models.TextField(default='No hints for this task', blank=True)  # Optional hint for the question
+    hint = models.TextField(default='No hints for this task', blank=True)  # Optional hint for the task
     def __str__(self):
         return self.task
 

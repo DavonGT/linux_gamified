@@ -45,7 +45,7 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
-echo Populating database with sample questions...
+echo Populating database with sample tasks...
 python manage.py populate_db
 if %ERRORLEVEL% NEQ 0 (
     echo Failed to populate database

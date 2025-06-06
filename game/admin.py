@@ -2,13 +2,13 @@ from django.contrib import admin
 from django.urls import path
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Question
+from .models import Task
 from openpyxl import load_workbook
 
-@admin.register(Question)
-class QuestionAdmin(admin.ModelAdmin):
+@admin.register(Task)
+class TaskAdmin(admin.ModelAdmin):
     list_display = ('task', 'difficulty', 'category')  # Display task and difficulty
-    change_list_template = "admin/game/question_changelist.html"
+    change_list_template = "admin/game/task_changelist.html"
 
     def get_urls(self):
         urls = super().get_urls()
@@ -35,9 +35,9 @@ class QuestionAdmin(admin.ModelAdmin):
                 # Map column headers to indices
                 header_indices = {header: idx for idx, header in enumerate(headers)}
 
-                # Iterate through rows and create Question objects
+                # Iterate through rows and create Task objects
                 for row in sheet.iter_rows(min_row=2, values_only=True):
-                    Question.objects.create(
+                    Task.objects.create(
                         task=row[header_indices['task']],
                         correct_commands=row[header_indices['correct_commands']],
                         difficulty=row[header_indices['difficulty']],

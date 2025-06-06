@@ -29,7 +29,7 @@ Linux Gamified is a Django-based web application designed to teach users about L
 5. Make a super user account: `python manage.py createsuperuser`
 6. Start the development server: `python manage.py runserver`
 7. Go to admin page: `localhost:8000/admin/`
-8. Add Questions/Task(manually or via excel upload)
+8. Add Tasks/Task(manually or via excel upload)
 
 ## Project Structure
 

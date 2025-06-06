@@ -111,7 +111,7 @@ async function submitAnswer() {
                 'X-CSRFToken': gameState.csrfToken
             },
             body: JSON.stringify({
-                question_id: document.getElementById('question_id').value,
+                task_id: document.getElementById('task_id').value,
                 user_command: command,
                 current_time: gameState.timeLeft
             })

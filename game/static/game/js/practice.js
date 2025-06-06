@@ -7,7 +7,7 @@ function showHint() {
 }
 
 function submitPracticeAnswer() {
-    const questionId = document.getElementById('question_id').value;
+    const taskId = document.getElementById('task_id').value;
     const userCommandInput = document.getElementById('user_command');
     const userCommand = userCommandInput.value.trim();
 
@@ -26,7 +26,7 @@ function submitPracticeAnswer() {
             'Content-Type': 'application/json',
             'X-CSRFToken': '{{ csrf_token }}'
         },
-        body: JSON.stringify({ question_id: questionId, user_command: userCommand })
+        body: JSON.stringify({ task_id: taskId, user_command: userCommand })
     })
     .then(response => response.json())
     .then(data => {

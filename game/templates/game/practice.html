@@ -32,13 +32,13 @@
             <div class="practice-sidebar">
                 <div class="task-info">
                     <h2>Current Task</h2>
-                    <p class="task-description">{{ question.task }}</p>
+                    <p class="task-description">{{ task.task }}</p>
                 </div>
                 <div class="help-section">
                     <button id="hint-button" class="hint-button" onclick="showHint()">
                         <i class="fas fa-lightbulb"></i> Show Hint
                     </button>
-                    <p id="hint" class="hint-text" style="display: none;">Hint: {{ question.hint }}</p>
+                    <p id="hint" class="hint-text" style="display: none;">Hint: {{ task.hint }}</p>
                 </div>
             </div>
 
@@ -48,7 +48,7 @@
                         <div class="command-prompt">
                             <span class="username">{{ player }}@linux-gamified</span>
                             <span class="path">:~$</span>
-                            <input type="hidden" id="question_id" value="{{ question.id }}">
+                            <input type="hidden" id="task_id" value="{{ task.id }}">
                             <input type="text" id="user_command" 
                                    placeholder="Type your command here..." 
                                    autofocus 
