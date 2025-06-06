@@ -2,8 +2,11 @@ from django.contrib import admin
 from django.urls import path
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Task
+from .models import Task, Chapter,Mission
 from openpyxl import load_workbook
+
+admin.site.register(Chapter)
+admin.site.register(Mission)
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
