@@ -42,8 +42,6 @@ async function confirmGiveUp() {
     
     // Show game over message with fade effect
     elements.feedback.style.display = 'none';
-    elements.gameOverMsg.style.display = 'block';
-    elements.gameOverMsg.style.opacity = '0';
     
     // Fade in game over message
     setTimeout(() => {

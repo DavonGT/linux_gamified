@@ -124,6 +124,30 @@
         </div>
 
         <script>
+
+            // Game state
+            const gameState = {
+                timer: null,
+                timeLeft: {{ time|default_if_none:0 }},
+                mode: "{{ mode }}",
+                csrfToken: "{{ csrf_token }}",
+                isGameOver: false
+            };
+
+            // DOM elements
+            const elements = {
+                timer: document.getElementById('time-value'),
+                survival_score: document.querySelector('.stat-item:has(i.fas.fa-trophy) span'),
+                time_attack_score: document.querySelector('.stat-item:has(i.fas.fa-trophy) span'),
+                lives: document.getElementById('lives-value'),
+                userCommand: document.getElementById('user_command'),
+                feedback: document.getElementById('feedback'),
+                terminal: document.getElementById('terminal')
+            };
+
+            // Initialize game
+            document.addEventListener('DOMContentLoaded', initGame);
+            
             // Show the corresponding hint when clicked
             function showHint(index) {
                 // Get the hint text from the clicked element's data-hint attribute
