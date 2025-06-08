@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://unpkg.com/xterm/css/xterm.css" />
-    <script src="https://unpkg.com/xterm/lib/xterm.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
+    <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
     <title>Story Mode</title>
 
 </head>
@@ -15,8 +16,15 @@
 
     <script>
         function initializeTerminal() {
-            const term = new Terminal();
+            const term = new Terminal({
+                convertEol: true,
+                wordWrap: true,
+            });
+            const fitAddon = new window.FitAddon.FitAddon();
+            term.loadAddon(fitAddon);
             term.open(document.getElementById('terminal'));
+            fitAddon.fit();
+            window.addEventListener('resize', () => fitAddon.fit());;
             term.writeln('Welcome to the Story Mode!');
             return term;
         }
