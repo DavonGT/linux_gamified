@@ -348,7 +348,7 @@ def practice_mode(request):
 def validate_practice_answer(request):
     if request.method != 'POST':
         return JsonResponse({'error': 'Invalid request method'}, status=405)
-        
+            
     try:
         data = json.loads(request.body)
         task_id = int(data.get('task_id'))
