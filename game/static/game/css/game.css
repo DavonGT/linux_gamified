@@ -89,23 +89,26 @@ body {
     display: flex;
     padding: 20px;
     flex-direction: row;
-    align-items: baseline;
+    align-items: flex-start;
+    justify-content: space-between;  /* This ensures that elements are spaced out */
+    width: 100%;
 }
 
 .task-icon {
+    flex: 1;
     width: 80px;  /* Adjust as needed */
     height: auto;
     vertical-align: middle;  /* Align with text nicely */
-    margin-bottom: 8px;  /* Add spacing if desired */
+    margin-bottom: 8px;  
     object-fit: contain;
     display: inline-block;
 }
 
 .task-info {
-    display: flex;        /* lay out children horizontally */
-    flex-direction: row;  /* default; but explicit here for clarity */
-    align-items: center;  /* vertically align icon and text */
-    gap: 10px;            /* optional: space between icon and text */
+    display: flex;       
+    flex-direction: row;  
+    align-items: center;  
+    gap: 10px;            
 }
 
 
@@ -113,9 +116,51 @@ body {
     margin: 10px 0;
     color: #4bf8d9;
     opacity: 0.9;
-    font-size: 50px;
-    line-height: 1;
+    font-size: 40px;
+    line-height: 0.8;
+    max-width: 900px;
 }
+/* Hint icons */
+.hint-container {
+    display: flex;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.hint-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hint-icon {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.hint-icon:hover {
+    transform: scale(1.1);
+}
+
+.wrong-icon {
+    filter: grayscale(100%);
+}
+
+.hint-text {
+    font-size: 18px;
+    color: #444;
+    margin-top: 15px;
+    display: none;
+    text-align: center;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    max-width: 350px;
+}
+
 /* 
 /* Modal Styles */
 .modal {

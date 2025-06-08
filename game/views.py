@@ -14,11 +14,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpRequest
 from django.views.decorators.csrf import csrf_exempt
-import json
-import random
-from .models import Task
-from accounts.models import Player
-from django.db import models
+# Need ig import an chapter, mission, ngan task model for story mode
 from .constants import (
     SURVIVAL_MODE, TIME_ATTACK_MODE, 
     HARDCORE_SURVIVAL_MODE, HARDCORE_TIME_ATTACK_MODE,
@@ -131,12 +127,12 @@ def set_mode(request, mode):
         initialize_game_session(request.session, mode)
         return redirect('game')
     elif mode == PRACTICE_MODE:
-        return redirect('practice_mode')
+        request.session['mode'] = PRACTICE_MODE  # Set mode to practice
+        return redirect('game')  # Ensure this uses the main game template
     return redirect('select_mode')
 
 @login_required
 def game_view(request):
-    
     # Ensure the mode is set before starting the game
     if 'mode' not in request.session:
         return redirect('select_mode')
@@ -147,27 +143,34 @@ def game_view(request):
     mode = request.session['mode']
     score = get_session_score(request.session)
 
-    # Check for game over conditions
-    if (mode in [SURVIVAL_MODE, HARDCORE_SURVIVAL_MODE] and lives <= 0):
-        return redirect('game_over')
-
     # Get a random task
     task = random.choice(Task.objects.all())
+
+    # Initialize hint state in session if not already initialized
+    if 'hint_index' not in request.session:
+        request.session['hint_index'] = 0  # Track which hint has been used
+
+    # Get the available hint from the task (comma-separated, so split them)
+    hint = task.get_hint()  # Assuming `get_hint` splits the hint string
+    current_hint = hint[request.session['hint_index']] if request.session['hint_index'] < len(hint) else None
 
     context = {
         'time': time,
         'task': task,
-        'survival_score': score if mode == SURVIVAL_MODE else 0,
-        'time_attack_score': score if mode == TIME_ATTACK_MODE else 0,
-        'ha_score': score if mode == HARDCORE_SURVIVAL_MODE else 0,
-        'hta_score': score if mode == HARDCORE_TIME_ATTACK_MODE else 0,
+        'survival_score': score if mode == 'survival' else 0,
+        'time_attack_score': score if mode == 'time_attack' else 0,
+        'ha_score': score if mode == 'hardcore_survival' else 0,
+        'hta_score': score if mode == 'hardcore_time_attack' else 0,
         'lives': lives,
         'mode': mode,
         'player': request.user.username,
         'life_range': range(get_session_lives(request.session)) if get_session_lives(request.session) is not None else range(0),
+        'hint': hint,  # Pass all hint to the template
+        'hint_index': request.session['hint_index'],  # Pass the current hint index
     }
-    
+
     return render(request, 'game/game.html', context)
+
 
 @csrf_exempt
 def validate_answer(request):
@@ -331,11 +334,15 @@ def game_over(request):
 
 @login_required
 def practice_mode(request):
+    # Select a random task from the database
     task = random.choice(Task.objects.all())
-    return render(request, 'game/practice.html', {
-        'task': task,
-        'player': request.user.username,
-    })
+    
+    # Set the session mode to 'practice' to indicate that we're in practice mode
+    request.session['mode'] = PRACTICE_MODE
+
+    # Render the main game template with practice mode content
+    return redirect('game')  # This will render 'game.html' with practice mode logic
+
 
 @csrf_exempt
 def validate_practice_answer(request):
@@ -369,4 +376,26 @@ def validate_practice_answer(request):
 
 @login_required
 def story_mode(request):
-    return render(request, 'game/story_mode.html')
+
+    context = {
+        'chapter':'',
+        'mission':'',
+        'task':'',
+    }
+    return render(request, 'game/story_mode.html', context)
+
+@login_required
+@csrf_exempt  # Exempt CSRF for this Ajax endpoint (use with caution in production)
+def update_hint_index(request):
+    if request.method == 'POST':
+        # Get the new hint index from the Ajax request
+        data = json.loads(request.body)
+        new_hint_index = data.get('hint_index')
+
+        # Update the session with the new hint index
+        request.session['hint_index'] = new_hint_index
+        
+        # Return a JSON response indicating success
+        return JsonResponse({'status': 'success', 'hint_index': new_hint_index})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request'})
