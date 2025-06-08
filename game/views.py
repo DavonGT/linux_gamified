@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.utils import timezone
 import json
 import random
-from .models import Task
+from .models import Task, Chapter, Mission
 from accounts.models import Player
 from django.db import models
 from django.shortcuts import render, redirect
@@ -373,16 +373,62 @@ def validate_practice_answer(request):
         return JsonResponse({'error': str(e)}, status=400)
 
 
+def get_current_story_progress(player):
+    """
+    Helper function to get the current chapter, mission, and task for a player.
+    Returns a tuple (chapter, mission, task) or (None, None, None) if not found.
+    """
+    chapter = None
+    mission = None
+    task = None
+
+    try:
+        if player.chapters_played.count() == 0:
+            chapter = Chapter.objects.first()
+        else:
+            chapter = player.chapters_played.last()
+    except Chapter.DoesNotExist:
+        chapter = None
+
+    try:
+        if player.missions_played.count() == 0:
+            mission = Mission.objects.first()
+        else:
+            mission = player.missions_played.last()
+    except Mission.DoesNotExist:
+        mission = None
+
+    if mission:
+        task = getattr(mission, 'task', None)
+
+    return chapter, mission, task
 
 @login_required
 def story_mode(request):
+    return render(request, 'game/story_mode.html')
 
-    context = {
-        'chapter':'',
-        'mission':'',
-        'task':'',
+@login_required
+def story_mode_data(request):
+    player = request.user
+    chapter, mission, task = get_current_story_progress(player)
+
+    data = {
+        'chapter': {
+            'id': chapter.id,
+            'name': chapter.name,
+            'description': chapter.description,
+        } if chapter else None,
+        'mission': {
+            'id': mission.id,
+            'name': f'{mission.chapter.name} - {mission.task.task}',
+        } if mission else None,
+        'task': {
+            'id': task.id,
+            'task': task.task,
+        } if task else None,
     }
-    return render(request, 'game/story_mode.html', context)
+
+    return JsonResponse(data)
 
 @login_required
 @csrf_exempt  # Exempt CSRF for this Ajax endpoint (use with caution in production)

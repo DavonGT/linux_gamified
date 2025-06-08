@@ -13,4 +13,5 @@ urlpatterns = [
     path('practice/', views.practice_mode, name='practice_mode'),
     path('validate_practice_answer/', views.validate_practice_answer, name='validate_practice_answer'),
     path('story_mode/', views.story_mode, name='story_mode'),
+    path('story_mode_data/', views.story_mode_data, name='story_mode_data'),
 ]
