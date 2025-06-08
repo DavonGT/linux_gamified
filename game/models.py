@@ -35,6 +35,21 @@ class Task(models.Model):
     def __str__(self):
         return self.task
 
+    def get_hint(self):
+        return [hint.strip() for hint in self.hint.split(',')]
+
+    def is_correct(self, user_command):
+        # Check if the user's command matches any of the correct commands
+        correct_commands_list = [cmd.strip() for cmd in self.correct_commands.split(',')]
+        user_command = user_command.replace('"', '').replace("'", '')  # Remove quotes\
+        print(user_command, correct_commands_list)
+        return user_command.strip() in correct_commands_list
+
+    def get_points(self):
+        # Return points based on difficulty
+        return int(dict(self.DIFFICULTY_CHOICES).get(self.difficulty, 10))
+    
+
 
 class Mission(models.Model):
     chapter = models.ForeignKey(Chapter, on_delete=models.CASCADE)  # Connect mission to Chapter
