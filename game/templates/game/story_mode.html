@@ -1,56 +1,29 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
-    <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
-    <title>Story Mode</title>
-
+  {% load static %}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Story Mode</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
+  <link rel="stylesheet" href="{% static 'game/css/story_mode.css' %}" />
 </head>
 <body>
-    <h1>Story Mode</h1>
-    <div id="terminal" style="width: 100%; height: 400px;"></div>
+  <h1>Story Mode</h1>
+  <div id="container">
+    <div id="window-bar"></div>
+    <div id="terminals">
+      <div id="typed-terminal"></div>
+      <div id="static-terminal"></div>
+      <div id="input-terminal"></div>
+    </div>
+  </div>
 
-
-    <script>
-        function initializeTerminal() {
-            const term = new Terminal({
-                convertEol: true,
-                wordWrap: true,
-            });
-            const fitAddon = new window.FitAddon.FitAddon();
-            term.loadAddon(fitAddon);
-            term.open(document.getElementById('terminal'));
-            fitAddon.fit();
-            window.addEventListener('resize', () => fitAddon.fit());;
-            term.writeln('Welcome to the Story Mode!');
-            return term;
-        }
-        const term = initializeTerminal();
-        getData();
-
-        async function getData() {
-            fetch('/story_mode_data/')
-                .then(response => response.json())
-                .then(data => {
-
-                    if (data.chapter) {
-                    term.writeln(`Chapter: ${data.chapter.name}`);
-                    term.writeln(`Description: ${data.chapter.description}`);
-                    }
-                    if (data.mission) {
-                    term.writeln(`\nMission: ${data.mission.name}`);
-                    }
-                    if (data.task) {
-                    term.writeln(`\nTask: ${data.task.task}`);
-                    }
-                });
-        }
-    </script>
-
-
-
+  <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
+  <script src="{% static 'game/js/windowBar.js' %}"></script>
+  <script src="{% static 'game/js/terminals.js' %}"></script>
+  <script src="{% static 'game/js/story_mode.js' %}"></script>
 </body>
 </html>
