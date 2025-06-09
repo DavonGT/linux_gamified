@@ -28,12 +28,11 @@ body {
     display: flex;
     padding: 20px;
     flex-direction: row;
-    margin: 0 auto; /* Remove this if you added it earlier! */
+    margin: 0 auto;
     width: 100%;
-    box-sizing: border-box; /* ensures padding doesn’t exceed width */
-
+    box-sizing: border-box; 
     justify-content: space-between; /* spreads children evenly with space between */
-    align-items: baseline; /* vertically center children */
+    align-items: baseline; 
     font-family: 'Brick Sans', sans-serif;
 }
 
@@ -76,7 +75,6 @@ body {
     padding: 0;
 }
 
-/* Main game content */
 .game-main {
     display: flex;
     gap: 20px;
@@ -84,13 +82,13 @@ body {
     flex-direction: column;
 }
 
-/* Sidebar styles */
 .game-sidebar {
     display: flex;
     padding: 20px;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;  /* This ensures that elements are spaced out */
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+    justify-content: space-between;  
     width: 100%;
 }
 
@@ -107,8 +105,9 @@ body {
 .task-info {
     display: flex;       
     flex-direction: row;  
-    align-items: center;  
-    gap: 10px;            
+    justify-content: flex-start;  /* Ensures the elements are aligned from left to right */
+    align-items: center;  /* Keeps the icon and description vertically aligned */
+    gap: 10px;
 }
 
 
@@ -120,6 +119,61 @@ body {
     line-height: 0.8;
     max-width: 900px;
 }
+
+
+.story-mode-content {
+    width: 95%; /* Ensure the story content spans the full width */
+    text-align: center; 
+    margin: -65px;
+    margin-bottom: 3px;
+    align-items: center;
+}
+
+.chapter-description h2 {
+    font-size: 30px;
+    color: yellow;
+    font-family: 'Brick Sans', sans-serif;
+}
+
+.chapter-description p {
+    font-size: 20px;
+    color: #fff;
+    margin-top: 2px;
+    line-height: 1;
+    max-width: 85%;  
+    margin: 0 auto; 
+}
+
+.tux-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.tux-icon {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-right: 15px;
+}
+
+.tux-description {
+    background-color: #231949;
+    padding: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 30px;
+    border: 2px dashed #9c49f7;
+}
+
+.tux-dialogue {
+    font-size: 20px;
+    color: #9c49f7;
+    line-height: 0.8;
+}
+
+
 /* Hint icons */
 .hint-container {
     display: flex;
@@ -263,6 +317,7 @@ body {
     flex-direction: column;
     border-radius: 20px;
     height: 60px;
+    margin-top: -25px;
     border: 3px solid #4bf8d9;
 }
 
@@ -317,7 +372,6 @@ body {
 /* Footer styles */
 .game-footer {
     padding: 20px;
-    margin-top: 100px;
 }
 
 .footer-content {

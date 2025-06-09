@@ -43,6 +43,10 @@
                     </div>
                 {% elif mode == 'practice' %}
                     <!-- Practice mode does not have score, lives, or timer -->
+                {% elif mode == 'story' %}
+                    <div class="stat-item">
+                        Chapter 1 of 4
+                    </div>
                 {% endif %}
             </div>
         </header>
@@ -50,6 +54,23 @@
         <!-- Main Game Content -->
         <main class="game-main">
             <div class="game-sidebar">
+                {% if mode == 'story' %}
+                    <div class="story-mode-content">
+                        <div class="chapter-description">
+                            <h2>Networking</h2>
+                            <p>This chapter introduces users to their virtual 'home' within the Linux operating system. You'll explore your new environment, find out who you are, where you are, and how to interact with it.</p>
+                        </div>
+                        <div class="tux-panel">
+                            <img src="{% static 'game/img/tux.png' %}" alt="Tux Icon" class="tux-icon">
+                            <div class="tux-description">
+                                <p class="tux-dialogue">
+                                    Sometimes, you need to troubleshoot network issues. Let’s explore some tools to help diagnose network problems.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
                 <div class="task-info">
                     <img src="{% static 'game/img/task.png' %}" alt="Task" class="task-icon">
                     <p class="task-description">{{ task.task }}</p>
