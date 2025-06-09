@@ -420,12 +420,83 @@ def story_mode_data(request):
         } if chapter else None,
         'mission': {
             'id': mission.id,
-            'name': f'{mission.chapter.name} - {mission.task.task}',
+            'name': f'{mission.mission_name}',
+            'instructor_sentence':f'{mission.instructor_sentence}',
         } if mission else None,
         'task': {
             'id': task.id,
             'task': task.task,
+            'hints': task.get_hint()
         } if task else None,
+    }
+
+    return JsonResponse(data)
+
+@login_required
+@csrf_exempt
+def complete_mission(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
+    try:
+        player = request.user
+        data = json.loads(request.body)
+        mission_id = data.get('mission_id')
+
+        if not mission_id:
+            return JsonResponse({'error': 'Mission ID is required'}, status=400)
+
+        mission = Mission.objects.get(id=mission_id)
+        mission.is_completed = True
+        mission.save()
+
+        # Logic to progress to next mission or chapter
+        # For simplicity, get next mission by id
+        next_mission = Mission.objects.filter(id__gt=mission_id).order_by('id').first()
+
+        if next_mission:
+            # Update player's missions played
+            player.missions_played.add(next_mission)
+            player.save()
+            chapter = next_mission.chapter
+            task = next_mission.task
+        else:
+            # No more missions, end of story
+            chapter = None
+            task = None
+
+        response_data = {
+            'next_mission': {
+                'id': next_mission.id,
+                'name': next_mission.mission_name,
+                'instructor_sentence': next_mission.instructor_sentence,
+            } if next_mission else None,
+            'chapter': {
+                'id': chapter.id,
+                'name': chapter.name,
+                'description': chapter.description,
+            } if chapter else None,
+            'task': {
+                'id': task.id,
+                'task': task.task,
+                'hints': task.get_hint(),
+            } if task else None,
+        }
+
+        return JsonResponse(response_data)
+
+    except Mission.DoesNotExist:
+        return JsonResponse({'error': 'Mission not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+def validate_command_story_mode(request):
+    player = request.user
+    _, _, task = get_current_story_progress(player)
+    if not task:
+        return JsonResponse({'error': 'No task found for the current mission'}, status=404)
+    correct_commands = task.get_correct_commands_list()
+    data = {
+        'correct_commands': correct_commands
     }
 
     return JsonResponse(data)

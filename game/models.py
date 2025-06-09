@@ -37,11 +37,15 @@ class Task(models.Model):
 
     def get_hint(self):
         return [hint.strip() for hint in self.hint.split(',')]
-
+    
+    def get_correct_commands_list(self):
+        # Return a list of correct commands, removing any extra spaces
+        return [cmd.strip() for cmd in self.correct_commands.split(',')]
+    
     def is_correct(self, user_command):
         # Check if the user's command matches any of the correct commands
-        correct_commands_list = [cmd.strip() for cmd in self.correct_commands.split(',')]
-        user_command = user_command.replace('"', '').replace("'", '')  # Remove quotes\
+        correct_commands_list = self.get_correct_commands_list()
+        user_command = user_command.replace('"', '').replace("'", '')  # Remove quotes
         print(user_command, correct_commands_list)
         return user_command.strip() in correct_commands_list
 
