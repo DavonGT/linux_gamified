@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Mode</title>
+    <link rel="stylesheet" href="/static/game/css/base.css">
+    
+    <link rel="stylesheet" href="/static/game/css/game.css">
+
+    <link rel="stylesheet" href="/static/game/libs/fontawesome/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+    <script src="{% static 'game/js/story_mode.js' %}"></script>
+</head>
+<body>
+    
+    <div class="game-container">
+        <!-- Game Header -->
+        <header class="game-header">
+            <div class="header-content">
+                <h1>Story</h1>
+            </div>
+            <div class="game-stats">
+                <div class="stat-item">
+                    Chapter 1 of 4
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Game Content -->
+        <main class="game-main">
+            <div class="game-sidebar">
+                
+                    <div class="story-mode-content">
+                        <div class="chapter-description">
+                            {% comment %} Chapter Title and Description {% endcomment %}
+                            <h2>Networking</h2>
+                            <p>This chapter introduces users to their virtual 'home' within the Linux operating system. You'll explore your new environment, find out who you are, where you are, and how to interact with it.</p>
+                        </div>
+                        <div class="tux-panel">
+                            <img src="/static/game/img/tux.png" alt="Tux Icon" class="tux-icon">
+                            <div class="tux-description">
+                                <p class="tux-dialogue">
+                                    {% comment %} Mission Dialogue {% endcomment %}
+                                    Sometimes, you need to troubleshoot network issues. Let’s explore some tools to help diagnose network problems.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="task-info">
+                    <img src="/static/game/img/task.png" alt="Task" class="task-icon">
+                    {% comment %} Task Description {% endcomment %}
+                    <p class="task-description">Display basic system information using uname.</p>
+                </div>
+                
+                
+            </div>
+
+            <div class="terminal-container">
+                <div id="terminal" class="terminal-window">
+                    <div class="terminal-content">
+                        <div class="command-prompt">
+                            <span class="username">admin@linux-gamified</span>
+                            <span class="path">:~$</span>
+                            <input type="hidden" id="task_id" value="26">
+                            <input type="text" id="user_command" 
+                                   placeholder="Type your command here..." 
+                                   autocomplete="off" 
+                                   autofocus 
+                                   onkeydown="if(event.key === 'Enter') validate_sm_command()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <center>
+                <div id="feedback-container">
+                    <p id="feedback" class="feedback"></p>
+                </div>
+            </center>
+        </main>
+    
+</body>
+</html>

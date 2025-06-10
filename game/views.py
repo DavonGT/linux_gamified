@@ -405,8 +405,7 @@ def get_current_story_progress(player):
 
 @login_required
 def story_mode(request):
-    request.session['mode'] = STORY_MODE 
-    return redirect('game')
+    return render(request, 'game/story_mode.html')
 
 @login_required
 def story_mode_data(request):

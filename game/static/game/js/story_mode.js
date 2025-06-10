@@ -1,114 +1,177 @@
-initTerminals();
+document.addEventListener('DOMContentLoaded', () => {
+    const chapterTitleElem = document.querySelector('.chapter-description h2');
+    const chapterDescElem = document.querySelector('.chapter-description p');
+    const missionDialogueElem = document.querySelector('.tux-dialogue');
+    const taskDescElem = document.querySelector('.task-description');
+    const taskIdInput = document.getElementById('task_id');
+    const feedbackElem = document.getElementById('feedback');
 
-writeStatic("Welcome to Story Mode!");
+    let currentMissionId = null;
+    let mistakeCount = 0;
+    let currentHints = [];
+    let feedbackTimeout = null;
 
-let currentMissionId = null;
-let hintIndex = 0;
-let incorrectCount = 0;  // Track number of incorrect responses
+    async function fetchStoryModeData() {
+        try {
+            const response = await fetch('/story_mode_data/');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
 
-async function getData() {
-  try {
-    const res = await fetch('/story_mode_data/');
-    const data = await res.json();
+            if (data.chapter) {
+                chapterTitleElem.textContent = data.chapter.name || 'No Chapter Name';
+                chapterDescElem.textContent = data.chapter.description || '';
+            } else {
+                chapterTitleElem.textContent = 'No Chapter';
+                chapterDescElem.textContent = '';
+            }
 
-    if (data.chapter) {
-      typedTerm.writeln(`\r\n\x1b[36mChapter:\x1b[0m ${data.chapter.name}`);
-      typedTerm.writeln(`\x1b[36mDescription:\x1b[0m ${data.chapter.description}`);
-    }
-    if (data.mission) {
-      currentMissionId = data.mission.id;
-      await writeTyped(`\x1b[36mTux:\x1b[0m ${data.mission.instructor_sentence}`);
-    }
-    if (data.task) {
-      typedTerm.writeln(`\r\n\x1b[36mTask:\x1b[0m ${data.task.task}`);
-      // typedTerm.writeln(`\x1b[36mHint:\x1b[0m ${data.task.hints[hintIndex]}`);
-    }
-  } catch (err) {
-    writeStatic("\r\n\x1b[31mFailed to fetch story data.\x1b[0m");
-  }
-}
+            if (data.mission) {
+                missionDialogueElem.textContent = data.mission.instructor_sentence || '';
+                currentMissionId = data.mission.id || null;
+            } else {
+                missionDialogueElem.textContent = '';
+                currentMissionId = null;
+            }
 
-async function completeMission() {
-  try {
-    const res = await fetch('/complete_mission/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ mission_id: currentMissionId })
-    });
-    const data = await res.json();
-
-    if (data.next_mission) {
-      currentMissionId = data.next_mission.id;
-      hintIndex = 0;
-      incorrectCount = 0;  // Reset incorrect count on new mission
-      staticTerm.reset();
-      writeStatic("\r\n\x1b[32mMission completed! Loading next mission...\x1b[0m");
-      await getData();
-    } else {
-      staticTerm.reset();
-      writeStatic("\r\n\x1b[32mCongratulations! You have completed all missions.\x1b[0m");
-    }
-  } catch (err) {
-    writeStatic("\r\n\x1b[31mFailed to complete mission.\x1b[0m");
-  }
-}
-
-async function check_command(user_command){
-  try {
-    const res = await fetch('/validate_sm/'); 
-    const data = await res.json();
-
-      if (data.correct_commands){
-        if (data.correct_commands.includes(user_command)){
-          await writeTyped("\r\n\x1b[32mCorrect!\x1b[0m");
-          await new Promise(resolve => setTimeout(resolve, 500));  // Wait 0.5 seconds
-          typedTerm.reset();
-          await completeMission();
+            if (data.task) {
+                taskDescElem.textContent = data.task.task || '';
+                taskIdInput.value = data.task.id || '';
+                currentHints = data.task.hints || [];
+            } else {
+                taskDescElem.textContent = '';
+                taskIdInput.value = '';
+                currentHints = [];
+            }
+            mistakeCount = 0; // reset mistake count on new task
+            clearFeedback();
+        } catch (error) {
+            console.error('Failed to fetch story mode data:', error);
+            showFeedback('Failed to load story data.', false, true);
         }
-        else{
-          incorrectCount++;  // Increment incorrect count
-          await writeTyped("\r\n\x1b[31mIncorrect!\x1b[0m");
-          if (incorrectCount === 2) {
-            staticTerm.writeln(`\r\n\x1b[33mYou can now use the 'hint' command to get a hint.\x1b[0m`);
-          }
+    }
+
+    function showFeedback(message, isHint = false, isPersistent = false) {
+        if (feedbackTimeout) {
+            clearTimeout(feedbackTimeout);
+            feedbackTimeout = null;
         }
-      }
-  }
-  catch (err){  
-    writeStatic("\r\n\x1b[31mFailed to check your command. Reload the page\x1b[0m");
-  }
-}
+        feedbackElem.textContent = message;
+        if (isHint) {
+            feedbackElem.style.color = 'orange';
+        } else {
+            feedbackElem.style.color = 'green';
+        }
+        if (!isPersistent) {
+            // Clear feedback after 3 seconds
+            feedbackTimeout = setTimeout(() => {
+                clearFeedback();
+            }, 3000);
+        }
+    }
 
-getData();
+    function clearFeedback() {
+        feedbackElem.textContent = '';
+        feedbackElem.style.color = '';
+        if (feedbackTimeout) {
+            clearTimeout(feedbackTimeout);
+            feedbackTimeout = null;
+        }
+    }
 
-onInputKey(async input => {
-  if (input === 'clear'){
-      staticTerm.reset();
-      writeStatic('\r\n\x1b[36mWelcome to Story Mode!\x1b[0m');
-      inputTerm.write('> ');
-  }
-  else if (input === 'hint'){
-      if (incorrectCount >= 2){
-          // Show hint if available
-          const res = await fetch('/story_mode_data/');
-          const data = await res.json();
-          if (data.task && data.task.hints && hintIndex < data.task.hints.length){
-              staticTerm.writeln(`\r\n\x1b[33mHint:\x1b[0m ${data.task.hints[hintIndex]}`);
-              hintIndex++;
-          } else {
-              staticTerm.writeln(`\r\n\x1b[33mNo more hints available.\x1b[0m`);
-          }
-      } else {
-          staticTerm.writeln(`\r\n\x1b[33mHint command is only available after 2 incorrect responses.\x1b[0m`);
-      }
-  }
-  else if (input !== 'clear'){
-      writeStatic('\r\n> ' + input);
-      await check_command(input);
-  }
-  else {
-    writeStatic('\r\n> ' + input);
-  }
+    async function validate_sm_command() {
+        const userCommandInput = document.getElementById('user_command');
+        const userCommand = userCommandInput.value.trim();
+        const taskId = taskIdInput.value;
+
+        if (!userCommand) {
+            showFeedback('Please enter a command.');
+            return;
+        }
+        if (!taskId) {
+            showFeedback('Task ID is missing.');
+            return;
+        }
+        if (!currentMissionId) {
+            showFeedback('Mission ID is missing.');
+            return;
+        }
+
+        try {
+            // Fetch correct commands from validate_sm endpoint
+            const validateResponse = await fetch('/validate_sm/');
+            if (!validateResponse.ok) {
+                throw new Error('Failed to validate command');
+            }
+            const validateData = await validateResponse.json();
+            const correctCommands = validateData.correct_commands || [];
+
+            // Check if user command matches any correct command (case-insensitive)
+            const isCorrect = correctCommands.some(cmd => cmd.trim().toLowerCase() === userCommand.toLowerCase());
+
+            if (isCorrect) {
+                // Call complete_mission endpoint with mission_id
+                const completeResponse = await fetch('/complete_mission/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify({ mission_id: currentMissionId }),
+                });
+
+                if (!completeResponse.ok) {
+                    throw new Error('Failed to complete mission');
+                }
+
+                const completeData = await completeResponse.json();
+
+                // Update UI with success message and load next mission data if available
+                showFeedback('Correct! Mission completed. Loading next mission...', false, true);
+
+                // Refetch all story mode data to update UI dynamically
+                await fetchStoryModeData();
+
+                userCommandInput.value = '';
+            } else {
+                mistakeCount++;
+                userCommandInput.value = '';
+                if (mistakeCount >= 2 && currentHints.length > 0) {
+                    // Calculate hint index based on mistakeCount (start showing from 2 mistakes)
+                    let hintIndex = mistakeCount - 2;
+                    if (hintIndex >= currentHints.length) {
+                        hintIndex = currentHints.length - 1; // show last hint if out of range
+                    }
+                    showFeedback('Hint: ' + currentHints[hintIndex], true);
+                } else {
+                    showFeedback('Incorrect command. Please try again.', false, true);
+                }
+            }
+        } catch (error) {
+            console.error('Error during command validation:', error);
+            showFeedback('An error occurred during validation. Please try again.', false, true);
+        }
+    }
+
+    // Helper function to get CSRF token from cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Expose validate_sm_command globally so it can be called from inline onkeydown
+    window.validate_sm_command = validate_sm_command;
+
+    fetchStoryModeData();
 });
