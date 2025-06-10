@@ -4,6 +4,7 @@ TIME_ATTACK_MODE = 'time_attack'
 HARDCORE_SURVIVAL_MODE = 'hardcore_survival'
 HARDCORE_TIME_ATTACK_MODE = 'hardcore_time_attack'
 PRACTICE_MODE = 'practice'
+STORY_MODE = 'story'
 
 GAME_MODES = [
     SURVIVAL_MODE,

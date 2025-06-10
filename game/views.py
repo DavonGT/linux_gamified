@@ -18,7 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .constants import (
     SURVIVAL_MODE, TIME_ATTACK_MODE, 
     HARDCORE_SURVIVAL_MODE, HARDCORE_TIME_ATTACK_MODE,
-    PRACTICE_MODE, GAME_MODES
+    PRACTICE_MODE, STORY_MODE, GAME_MODES
 )
 from .utils import (
     initialize_game_session, clear_game_session,
@@ -405,7 +405,8 @@ def get_current_story_progress(player):
 
 @login_required
 def story_mode(request):
-    return render(request, 'game/story_mode.html')
+    request.session['mode'] = STORY_MODE 
+    return redirect('game')
 
 @login_required
 def story_mode_data(request):
