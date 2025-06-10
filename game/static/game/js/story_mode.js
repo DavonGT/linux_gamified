@@ -70,6 +70,9 @@ async function check_command(user_command){
         else{
           incorrectCount++;  // Increment incorrect count
           await writeTyped("\r\n\x1b[31mIncorrect!\x1b[0m");
+          if (incorrectCount === 2) {
+            staticTerm.writeln(`\r\n\x1b[33mYou can now use the 'hint' command to get a hint.\x1b[0m`);
+          }
         }
       }
   }
