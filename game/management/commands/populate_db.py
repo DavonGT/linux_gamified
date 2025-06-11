@@ -17,12 +17,13 @@ def clear_existing_data():
 
 def create_task_from_data(task_data):
     """Create and save a Task object from task data dictionary."""
+    fields = task_data.get('fields', {})
     task = Task(
-        task=task_data['task'],
-        correct_commands=task_data['commands'],
-        difficulty=task_data['difficulty'],
-        category=task_data['category'],
-        hint=task_data['hint']
+        task=fields.get('task'),
+        correct_commands=fields.get('correct_commands') or fields.get('commands'),
+        difficulty=fields.get('difficulty'),
+        category=fields.get('category'),
+        hint=fields.get('hint')
     )
     task.save()
     return task
