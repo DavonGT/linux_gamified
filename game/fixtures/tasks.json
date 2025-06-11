@@ -64,5 +64,27 @@
       "category": "networking",
       "hint": "Use ip addr or ifconfig to display network interfaces."
     }
+  },
+  {
+    "model": "game.task",
+    "pk": 7,
+    "fields": {
+      "task": "Use advanced file management commands like find and grep.",
+      "correct_commands": "find, grep",
+      "difficulty": "hard",
+      "category": "advanced_file_operations",
+      "hint": "Use find and grep commands for advanced file searching."
+    }
+  },
+  {
+    "model": "game.task",
+    "pk": 8,
+    "fields": {
+      "task": "Monitor system performance using top and vmstat.",
+      "correct_commands": "top, vmstat",
+      "difficulty": "hard",
+      "category": "system_monitoring",
+      "hint": "Use top and vmstat to monitor system performance."
+    }
   }
 ]

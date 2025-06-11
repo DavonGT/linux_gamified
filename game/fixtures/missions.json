@@ -64,5 +64,27 @@
       "instructor_sentence": "Learn basic networking commands and concepts.",
       "is_completed": false
     }
+  },
+  {
+    "model": "game.mission",
+    "pk": 7,
+    "fields": {
+      "chapter": 7,
+      "task": 7,
+      "mission_name": "Advanced File Operations",
+      "instructor_sentence": "Learn advanced file management commands.",
+      "is_completed": false
+    }
+  },
+  {
+    "model": "game.mission",
+    "pk": 8,
+    "fields": {
+      "chapter": 8,
+      "task": 8,
+      "mission_name": "System Monitoring",
+      "instructor_sentence": "Learn how to monitor system performance.",
+      "is_completed": false
+    }
   }
 ]

@@ -4,8 +4,8 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from game.models import Task, Chapter, Mission
 
-def load_tasks_from_json(json_file):
-    """Load tasks from a JSON file."""
+def load_json(json_file):
+    """Load data from a JSON file."""
     with open(json_file, 'r') as f:
         return json.load(f)
 
@@ -30,32 +30,28 @@ def create_task_from_data(task_data):
 
 def create_chapters_and_missions():
     """
-    Create sample chapters and missions linking existing tasks.
-    This function creates Chapter objects and links Tasks via Mission objects.
+    Create chapters and missions linking existing tasks.
+    This function creates Chapter objects from chapters.json and links Tasks via Mission objects.
     """
-    # Sample chapters data
-    chapters_data = [
-        {'name': 'Introduction to File Operations', 'number': 1, 'description': 'Basic file management tasks.'},
-        {'name': 'Process Management', 'number': 2, 'description': 'Managing system processes.'},
-        {'name': 'Text Processing', 'number': 3, 'description': 'Working with text files and commands.'},
-    ]
+    chapters_file = os.path.join(settings.BASE_DIR, 'game', 'fixtures', 'chapters.json')
+    chapters_data = load_json(chapters_file)
 
     # Create chapters
     chapters = []
     for ch_data in chapters_data:
+        fields = ch_data.get('fields', {})
         chapter = Chapter.objects.create(
-            name=ch_data['name'],
-            number=ch_data['number'],
-            description=ch_data['description']
+            name=fields.get('name'),
+            number=fields.get('number'),
+            description=fields.get('description')
         )
         chapters.append(chapter)
 
-    # Assign tasks to chapters by category mapping
-    category_to_chapter = {
-        'file_operations': chapters[0],
-        'process_management': chapters[1],
-        'text_processing': chapters[2],
-    }
+    # Map categories to chapters by chapter name lowercased and underscores
+    category_to_chapter = {}
+    for chapter in chapters:
+        category_key = chapter.name.lower().replace(' ', '_')
+        category_to_chapter[category_key] = chapter
 
     # Sample mission names and instructor sentences (can be customized)
     default_mission_name = "Mission for task"
@@ -78,10 +74,10 @@ class Command(BaseCommand):
     help = 'Populates the database with sample tasks, chapters, and missions'
 
     def handle(self, *args, **options):
-        json_file = os.path.join(settings.BASE_DIR, 'game', 'fixtures', 'tasks.json')
+        tasks_file = os.path.join(settings.BASE_DIR, 'game', 'fixtures', 'tasks.json')
 
         try:
-            tasks = load_tasks_from_json(json_file)
+            tasks = load_json(tasks_file)
             clear_existing_data()
             self.stdout.write(self.style.SUCCESS('Deleted existing tasks, chapters, and missions'))
 
@@ -90,14 +86,14 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS(f'Added task: {task.task}'))
 
             create_chapters_and_missions()
-            self.stdout.write(self.style.SUCCESS('Created sample chapters and missions'))
+            self.stdout.write(self.style.SUCCESS('Created chapters and missions'))
 
-            self.stdout.write(self.style.SUCCESS(f'Successfully populated database with {len(tasks)} tasks from {json_file}'))
+            self.stdout.write(self.style.SUCCESS(f'Successfully populated database with {len(tasks)} tasks from {tasks_file}'))
 
         except FileNotFoundError:
-            self.stdout.write(self.style.ERROR(f'Error: Could not find tasks file at {json_file}'))
+            self.stdout.write(self.style.ERROR(f'Error: Could not find tasks file at {tasks_file}'))
         except json.JSONDecodeError:
-            self.stdout.write(self.style.ERROR(f'Error: Invalid JSON format in {json_file}'))
+            self.stdout.write(self.style.ERROR(f'Error: Invalid JSON format in {tasks_file}'))
         except KeyError as e:
             self.stdout.write(self.style.ERROR(f'Error: Missing required field in task data: {e}'))
         except Exception as e:
