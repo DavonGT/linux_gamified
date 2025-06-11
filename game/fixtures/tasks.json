@@ -1,72 +1,68 @@
 [
   {
-    "task": "List all files in the current directory",
-    "commands": "ls, dir",
-    "difficulty": "easy",
-    "category": "file_operations",
-    "hint": "Use the command that lists directory contents"
+    "model": "game.task",
+    "pk": 1,
+    "fields": {
+      "task": "Display basic system information using uname.",
+      "correct_commands": "uname",
+      "difficulty": "easy",
+      "category": "system_info",
+      "hint": "Use the uname command to display system information."
+    }
   },
   {
-    "task": "Create a new directory called \"test\"",
-    "commands": "mkdir test",
-    "difficulty": "easy",
-    "category": "file_operations",
-    "hint": "Use the make directory command"
+    "model": "game.task",
+    "pk": 2,
+    "fields": {
+      "task": "List all files in the current directory.",
+      "correct_commands": "ls",
+      "difficulty": "easy",
+      "category": "file_operations",
+      "hint": "Use the ls command to list files."
+    }
   },
   {
-    "task": "Change to the parent directory",
-    "commands": "cd .., cd..",
-    "difficulty": "easy",
-    "category": "file_operations",
-    "hint": "Use cd with two dots to go up one directory"
+    "model": "game.task",
+    "pk": 3,
+    "fields": {
+      "task": "Find the process ID of a running process.",
+      "correct_commands": "pidof",
+      "difficulty": "medium",
+      "category": "process_management",
+      "hint": "Use the pidof command followed by the process name."
+    }
   },
   {
-    "task": "Display the current working directory",
-    "commands": "pwd",
-    "difficulty": "easy",
-    "category": "system_info",
-    "hint": "Use the command that prints working directory"
+    "model": "game.task",
+    "pk": 4,
+    "fields": {
+      "task": "Change directory to the home directory.",
+      "correct_commands": "cd ~, cd $HOME",
+      "difficulty": "easy",
+      "category": "file_system_navigation",
+      "hint": "Use cd ~ or cd $HOME to go to the home directory."
+    }
   },
   {
-    "task": "Create a file named \"example.txt\"",
-    "commands": "touch example.txt",
-    "difficulty": "easy",
-    "category": "file_operations",
-    "hint": "Use the touch command to create an empty file"
+    "model": "game.task",
+    "pk": 5,
+    "fields": {
+      "task": "Check the permissions of a file named 'example.txt'.",
+      "correct_commands": "ls -l example.txt",
+      "difficulty": "medium",
+      "category": "permissions",
+      "hint": "Use ls -l to view file permissions."
+    }
   },
   {
-    "task": "Display the contents of a file called \"data.txt\"",
-    "commands": "cat data.txt, type data.txt, more data.txt, less data.txt",
-    "difficulty": "medium",
-    "category": "text_processing",
-    "hint": "Use commands that can display file contents"
-  },
-  {
-    "task": "Find all .txt files in the current directory and subdirectories",
-    "commands": "find . -name \"*.txt\"",
-    "difficulty": "medium",
-    "category": "file_operations",
-    "hint": "Use the find command with appropriate arguments"
-  },
-  {
-    "task": "Count the number of lines in a file called \"data.txt\"",
-    "commands": "wc -l data.txt",
-    "difficulty": "medium",
-    "category": "text_processing",
-    "hint": "Use the word count command with the line option"
-  },
-  {
-    "task": "Search for the word \"error\" in all .log files",
-    "commands": "grep error *.log",
-    "difficulty": "hard",
-    "category": "text_processing",
-    "hint": "Use grep to search for text patterns"
-  },
-  {
-    "task": "List all running processes",
-    "commands": "ps aux, ps -ef, top, htop",
-    "difficulty": "hard",
-    "category": "process_management",
-    "hint": "Use process status or task manager commands"
+    "model": "game.task",
+    "pk": 6,
+    "fields": {
+      "task": "Display the IP address of the system.",
+      "correct_commands": "ip addr, ifconfig",
+      "difficulty": "medium",
+      "category": "networking",
+      "hint": "Use ip addr or ifconfig to display network interfaces."
+    }
   }
 ]

@@ -1,0 +1,68 @@
+[
+  {
+    "model": "game.mission",
+    "pk": 1,
+    "fields": {
+      "chapter": 1,
+      "task": 1,
+      "mission_name": "Basic System Info",
+      "instructor_sentence": "Learn how to display system information.",
+      "is_completed": false
+    }
+  },
+  {
+    "model": "game.mission",
+    "pk": 2,
+    "fields": {
+      "chapter": 1,
+      "task": 2,
+      "mission_name": "List Files",
+      "instructor_sentence": "Learn how to list files in a directory.",
+      "is_completed": false
+    }
+  },
+  {
+    "model": "game.mission",
+    "pk": 3,
+    "fields": {
+      "chapter": 2,
+      "task": 3,
+      "mission_name": "Find Process ID",
+      "instructor_sentence": "Learn how to find the process ID of a running process.",
+      "is_completed": false
+    }
+  },
+  {
+    "model": "game.mission",
+    "pk": 4,
+    "fields": {
+      "chapter": 4,
+      "task": 4,
+      "mission_name": "Navigate Home",
+      "instructor_sentence": "Learn how to navigate to your home directory.",
+      "is_completed": false
+    }
+  },
+  {
+    "model": "game.mission",
+    "pk": 5,
+    "fields": {
+      "chapter": 5,
+      "task": 5,
+      "mission_name": "File Permissions",
+      "instructor_sentence": "Understand file permissions and how to check them.",
+      "is_completed": false
+    }
+  },
+  {
+    "model": "game.mission",
+    "pk": 6,
+    "fields": {
+      "chapter": 6,
+      "task": 6,
+      "mission_name": "Networking Basics",
+      "instructor_sentence": "Learn basic networking commands and concepts.",
+      "is_completed": false
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "model": "game.chapter",
+    "pk": 1,
+    "fields": {
+      "number": 1,
+      "name": "Introduction to File Operations",
+      "description": "Basic file management tasks."
+    }
+  },
+  {
+    "model": "game.chapter",
+    "pk": 2,
+    "fields": {
+      "number": 2,
+      "name": "Process Management",
+      "description": "Managing system processes."
+    }
+  },
+  {
+    "model": "game.chapter",
+    "pk": 3,
+    "fields": {
+      "number": 3,
+      "name": "Text Processing",
+      "description": "Working with text files and commands."
+    }
+  },
+  {
+    "model": "game.chapter",
+    "pk": 4,
+    "fields": {
+      "number": 4,
+      "name": "File System Navigation",
+      "description": "Learn how to navigate the Linux file system."
+    }
+  },
+  {
+    "model": "game.chapter",
+    "pk": 5,
+    "fields": {
+      "number": 5,
+      "name": "Permissions and Ownership",
+      "description": "Understanding file permissions and ownership."
+    }
+  },
+  {
+    "model": "game.chapter",
+    "pk": 6,
+    "fields": {
+      "number": 6,
+      "name": "Networking Basics",
+      "description": "Introduction to networking commands and concepts."
+    }
+  }
+]
