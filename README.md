@@ -1,5 +1,4 @@
 # Linux Gamified
-================
 
 ## Project Overview
 
